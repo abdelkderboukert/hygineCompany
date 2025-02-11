@@ -124,6 +124,17 @@ export default function Home() {
           <div className="h-full w-1/5"></div>
         </motion.div>
       </section>
+      <section className="w-full h-screen flex flex-row">
+        <div className="h-full w-2/5 bg-black"></div>
+        <div
+          className="h-full w-3/5 bg-covert"
+          style={{ backgroundImage: "url('/p3.jpg')" }}
+        >
+          <div className="size-full bg-[#000000] opacity-95">
+            <div className="w-full h-full flex justify-start items-center p-5">sdgnsfdgn</div>
+          </div>
+        </div>
+      </section>
     </>
   );
 }

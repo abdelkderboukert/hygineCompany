@@ -12,6 +12,10 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      backgroundImage: {
+        blackOverlay:
+          "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,10) 100%)",
+      },
     },
   },
   plugins: [],
