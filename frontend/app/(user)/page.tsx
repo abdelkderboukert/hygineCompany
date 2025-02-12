@@ -1,5 +1,5 @@
 "use client";
-import * as motion from "motion/react-client";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRef, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,6 +17,7 @@ import { collection, getDocs } from "firebase/firestore";
 interface EquipementType {
   id: string;
   typeName: string;
+  url: string;
   image?: string;
 }
 
@@ -57,6 +58,20 @@ export default function Home() {
   };
   useEffect(() => {
     fetchEquipementTypes();
+  }, []);
+
+  const [EquipementTypes, setEquipementTypes] = useState<EquipementType[]>([]);
+
+  const fetchEquipement = async () => {
+    const querySnapshot = await getDocs(collection(db, "products"));
+    const types = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as EquipementType[];
+    setEquipementTypes(types);
+  };
+  useEffect(() => {
+    fetchEquipement();
   }, []);
   return (
     <>
@@ -309,6 +324,7 @@ export default function Home() {
                       id: sev.id,
                       name: sev.typeName,
                       images: [sev.image],
+                      url: `/secteur-d-activites/${sev.typeName}`,
                     };
                     return (
                       <CarouselItem
@@ -330,7 +346,44 @@ export default function Home() {
           </div>
         </motion.div>
       </section>
-      <section className="w-full h-max"></section>
+      <section
+        className="w-full h-[50dvh] bg-black bg-cover  bg-no-repeat"
+        style={{ backgroundImage: "url('/p5.jpg')" }}
+      >
+        <div className="w-full h-full bg-black opacity-80"></div>
+      </section>
+      <section className="w-full h-max flex justify-center items-center flex-col">
+        <motion.h1
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75 }}
+          className="flex mt-14 justify-center mx-auto lg:text-7xl md:text-4xl text-[#0e012d] font-semibold"
+        >
+          <Link href="/No-Equipements">Nos&nbsp;Equipements</Link>
+        </motion.h1>
+        <div className="w-full h-max grid grid-rows-5 sm:grid-rows-2 sm:grid-cols-3 gap-3 p-5 md:pr-16">
+          {EquipementTypes.map((serve, index) => {
+            const valeu = {
+              id: serve.id,
+              name: serve.typeName,
+              images: [serve.image],
+            };
+            return (
+              <Link
+                href={`/No-Equipements/${serve.typeName}`}
+                className=""
+                key={index}
+              >
+                <Item
+                  key={index}
+                  //@ts-expect-error id type
+                  produits={valeu}
+                />
+              </Link>
+            );
+          })}
+        </div>
+      </section>
     </>
   );
 }

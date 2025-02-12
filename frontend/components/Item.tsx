@@ -7,7 +7,7 @@ import Link from "next/link";
 const Item = ({ produits }: { produits: Product }) => {
   const [isHover, setIsHover] = useState<boolean>(false);
   return (
-    <Link href={"/"}>
+    
       <motion.div className="w-full flex flex-col bg-black min-h-64 rounded-b-2xl shadow-lg overflow-hidden ">
         <motion.div
           onHoverStart={() => setIsHover(true)}
@@ -15,9 +15,7 @@ const Item = ({ produits }: { produits: Product }) => {
           className={`w-full h-[204.8px] bg-black bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
             isHover ? "scale-110" : "scale-100"
           }`}
-          style={{
-            backgroundImage: "url('/p3.jpg')",
-          }}
+          style={{ backgroundImage: `url(${produits.images[0]})` }}
         >
           {isHover ? <div className="size-full bg-blackOverlay"></div> : null}
         </motion.div>
@@ -32,7 +30,7 @@ const Item = ({ produits }: { produits: Product }) => {
           <p>{produits.description}</p>
         </div>
       </motion.div>
-    </Link>
+  
   );
 };
 
