@@ -8,6 +8,6 @@ export interface Product {
   description?: string;
   images: string[];
   url?: string;
-  ref: number;
+  ref?: number;
   subtitle?: string;
 }

@@ -1,7 +1,7 @@
 "use client";
 import * as motion from "motion/react-client";
 import Link from "next/link";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Carousel,
@@ -10,6 +10,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import Item from "@/components/Item";
+import { db } from "@/firebase";
+import { collection, getDocs } from "firebase/firestore";
+
+interface EquipementType {
+  id: string;
+  typeName: string;
+  image?: string;
+}
 
 const Servises = [
   {
@@ -36,10 +45,19 @@ const Servises = [
 
 export default function Home() {
   const ref = useRef(null);
-  // const {scrollYProgress} = useScroll({
-  //   target: ref,
-  //   effect:["start start","start end"]
-  // })
+  const [Sec, setSec] = useState<EquipementType[]>([]);
+
+  const fetchEquipementTypes = async () => {
+    const querySnapshot = await getDocs(collection(db, "products"));
+    const types = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as EquipementType[];
+    setSec(types);
+  };
+  useEffect(() => {
+    fetchEquipementTypes();
+  }, []);
   return (
     <>
       <section className="w-full h-screen grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 select-none">
@@ -212,7 +230,10 @@ export default function Home() {
                           key={index}
                           className="basis-2/3 lg:basis-2/3"
                         >
-                          <div className="mx-5">
+                          <motion.div
+                            whileHover={{ scale: 1.1 }}
+                            className="mx-5"
+                          >
                             <Card className="w-56  border-none h-full bg-transparent">
                               <Link href={sev.url}>
                                 {" "}
@@ -228,7 +249,7 @@ export default function Home() {
                                 </CardContent>
                               </Link>
                             </Card>
-                          </div>
+                          </motion.div>
                         </CarouselItem>
                       ))}
                     </CarouselContent>
@@ -241,6 +262,75 @@ export default function Home() {
           </div>
         </motion.div>
       </section>
+      <section className="w-full h-screen flex flex-row">
+        <motion.div
+          initial={{ width: "100%" }}
+          whileInView={{ width: "40%", transition: { duration: 0.75 } }}
+          className="h-full w-2/5 flex justify-center items-center"
+        >
+          <div className="lg:w-3/5 sm:w-4/5 flex justify-start items-start flex-col">
+            <motion.h1
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="text-[#0e012d] text-5xl font-bold mt-2"
+            >
+              Our
+              <br />
+              Secture
+              <span className="text-blue-600">D&apos;Activites</span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="text-black my-5"
+            >
+              The cotton gin, invented by Eli Whitney in 1793, revolutionized
+              the cotton industry by mechanizing the labor-intensive process of
+              separating cotton fibers from seeds.
+            </motion.p>
+          </div>
+        </motion.div>
+        <motion.div
+          initial={{ width: 0 }}
+          whileInView={{ width: "60%", transition: { duration: 0.75 } }}
+          className="h-full w-full bg-white flex justify-end items-center"
+        >
+          <div className="bg-gray-950 flex justify-end items-center  w-5/6 h-3/5 rounded-tl-[50px]">
+            <div className="absolute h-64 w-[60%] flex">
+              <Carousel
+                opts={{
+                  align: "end",
+                }}
+                className="w-[90%]"
+              >
+                <CarouselContent>
+                  {Sec.map((sev, index) => {
+                    const valeu = {
+                      id: sev.id,
+                      name: sev.typeName,
+                      images: [sev.image],
+                    };
+                    return (
+                      <CarouselItem
+                        key={index}
+                        className="basis-1/2 lg:basis-1/3 h-full m-5"
+                      >
+                        <Item
+                          //@ts-expect-error id type
+                          produits={valeu}
+                        />
+                      </CarouselItem>
+                    );
+                  })}
+                </CarouselContent>
+                <CarouselPrevious className="bg-[#001439] border-none hover:bg-blue-900 text-white" />
+                <CarouselNext className="bg-[#001439] border-none hover:bg-blue-900 text-white" />
+              </Carousel>
+            </div>
+          </div>
+        </motion.div>
+      </section>
+      <section className="w-full h-max"></section>
     </>
   );
 }
