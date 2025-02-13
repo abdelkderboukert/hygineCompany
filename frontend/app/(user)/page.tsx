@@ -44,6 +44,19 @@ const Servises = [
   },
 ];
 
+const Fornisure = [
+  "/forni/heute-removebg-preview.png",
+  "/forni/Lechler_Company-Logo-removebg-preview.png",
+  "/forni/Logo_CFSBrands-Jofel-2023Curvas-01.webp",
+  "/forni/Logo_DELABIE.png",
+  "/forni/logo-ocene.svg",
+  "/forni/Logos-Prago_profilgate.webp",
+  "/forni/ramix-removebg-preview.png",
+  "/forni/Tork-Logo-700x394.webp",
+  "/forni/Vikan_logo.png",
+  "",
+];
+
 export default function Home() {
   const ref = useRef(null);
   const [Sec, setSec] = useState<EquipementType[]>([]);
@@ -354,10 +367,10 @@ export default function Home() {
       </section>
       <section className="w-full h-max flex justify-center items-center flex-col">
         <motion.h1
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75 }}
-          className="flex mt-14 justify-center mx-auto lg:text-7xl md:text-4xl text-[#0e012d] font-semibold"
+          className="flex mt-14 justify-center min-h-screen mx-auto lg:text-7xl md:text-4xl text-[#0e012d] font-semibold"
         >
           <Link href="/No-Equipements">Nos&nbsp;Equipements</Link>
         </motion.h1>
@@ -382,6 +395,69 @@ export default function Home() {
               </Link>
             );
           })}
+        </div>
+      </section>
+      <section className="w-full h-[80dvh] bg-gray-950 grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-3 gap-3">
+        <div className="sm:col-span-1 flex justify-center items-center size-full">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0, transition: { duration: 0.75 } }}
+            className="size-4/5 flex font-forum  items-center justify-start flex-col text-white"
+          >
+            <h1 className="text-4xl font-bold">
+              They give Us <br />
+              Their trust to serve you
+            </h1>
+            <br />
+            <p className=" mt-5 text-sm text-gray-500">
+              Fornisure is dedicated to building trust with our customers
+              through quality craftsmanship and exceptional service. <br />{" "}
+              <br /> We understand that purchasing furniture is a significant
+              investment, and we strive to ensure that every piece meets the
+              highest standards. <br /> <br />
+              Our commitment to transparency and integrity means you can rely on
+              us for honest communication and support.
+            </p>
+          </motion.div>
+        </div>
+        <div className="sm:col-span-2 size-full flex justify-center items-center">
+          <div className="size-4/5 flex flex-col items-center justify-center p-5">
+            <motion.div
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.5,
+                  },
+                },
+              }}
+              initial="hidden"
+              whileInView="show"
+              exit="hidden"
+              className="size-full grid grid-cols-2 lg:grid-cols-3 gap-2"
+            >
+              {Fornisure.map((map, index) => (
+                <motion.div
+                  variants={{
+                    hidden: { y: 48, opacity: 0 },
+                    show: {
+                      opacity: 1,
+                      y: 0,
+                      transition: {
+                        staggerChildren: 0.25,
+                      },
+                    },
+                  }}
+                  key={index}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                  className="size-full flex justify-center bg-center bg-contain bg-no-repeat items-center"
+                  style={{ backgroundImage: `url(${map})` }}
+                ></motion.div>
+              ))}
+            </motion.div>
+          </div>
         </div>
       </section>
     </>
