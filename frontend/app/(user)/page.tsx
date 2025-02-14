@@ -132,8 +132,13 @@ export default function Home() {
               animate={{ opacity: 1, y: 0 }}
               className="w-2/5 h-14 flex bg-[#3995EC] rounded-lg justify-center items-center text-blue-50 font-bold select-none"
             >
-              Contact As&nbsp;&nbsp;
-              <img src="i.svg" alt="My Icon" width={30} height={30} />
+              <Link
+                className="flex justify-center items-center size-full"
+                href={"/#contact"}
+              >
+                Contact As&nbsp;&nbsp;
+                <img src="i.svg" alt="My Icon" width={30} height={30} />
+              </Link>
             </motion.div>
           </div>
         </div>
@@ -665,13 +670,63 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <section className="w-full h-screen flex flex-row">
+      <section className="w-full h-screen flex flex-row" id="contact">
         <motion.div
           initial={{ width: "100%" }}
           className="h-full w-full bg-covert"
           style={{ backgroundImage: "url('/p3.jpg')" }}
         >
-          <div className="size-full bg-[#000000] opacity-95"></div>
+          <div className="size-full bg-[#000000] bg-opacity-95 grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-3">
+            <div className="size-full lg:col-span-2 flex">
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{
+                  width: "83.333333%",
+                  transition: { duration: 1.05 },
+                }}
+                className="size-full lg:h-4/5 lg:w-5/6 mt-auto bg-gray-950 lg:rounded-tr-[35px]"
+              >
+                <h1 className="text-7xl text-white">b sdbgsdgbsdgb</h1>
+              </motion.div>
+            </div>
+            <div className="size-full justify-center items-start p-10 lg:p-0 flex flex-col">
+              <img
+                src="/logo/logo_hygindust-removebg-preview.png"
+                alt="hygindust logo"
+                className="w-4/5 mr-auto"
+              />
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-blue-50 my-5"
+              >
+                <div className="flex flex-row justify-center items-center">
+                  <img src="/gmail.png" alt="" className="size-5" />
+                  &nbsp;&nbsp;hygindust@gmail.com
+                </div>
+                <div className="flex flex-row justify-center items-center">
+                  <img src="/phone.png" alt="" className="size-5" />
+                  &nbsp;&nbsp;+213&nbsp;(0)&nbsp;5&nbsp;50&nbsp;11&nbsp;18&nbsp;01
+                </div>
+                <div className="flex flex-row justify-center items-center">
+                  <img src="/gps.png" alt="" className="size-5" />
+                  &nbsp;&nbsp;hygindust@gmail.com
+                </div>
+              </motion.div>
+              <div className="">
+                <motion.h1
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="text-blue-50 text-5xl font-bold mt-2"
+                >
+                  Feel Free
+                  <br />
+                  To&nbsp;
+                  <span className="text-blue-600">Contacting</span> US
+                </motion.h1>
+              </div>
+            </div>
+          </div>
         </motion.div>
       </section>
     </>
