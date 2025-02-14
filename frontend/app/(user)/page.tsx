@@ -50,7 +50,7 @@ const Fornisure = [
   "/forni/Logo_CFSBrands-Jofel-2023Curvas-01.webp",
   "/forni/Logo_DELABIE.png",
   "/forni/logo-ocene.svg",
-  "/forni/Logos-Prago_profilgate.webp",
+  "/forni/Logos-Prago_profilgate.png",
   "/forni/ramix-removebg-preview.png",
   "/forni/Tork-Logo-700x394.webp",
   "/forni/Vikan_logo.png",
@@ -86,6 +86,16 @@ export default function Home() {
   useEffect(() => {
     fetchEquipement();
   }, []);
+
+  const [hoveredDiv, setHoveredDiv] = useState<number | null>(null);
+
+  const handleMouseEnter = (id: number) => {
+    setHoveredDiv(id);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredDiv(null);
+  };
   return (
     <>
       <section className="w-full h-screen grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 select-none">
@@ -365,36 +375,231 @@ export default function Home() {
       >
         <div className="w-full h-full bg-black opacity-80"></div>
       </section>
-      <section className="w-full h-max flex justify-center items-center flex-col">
+      <section className="w-full h-min flex flex-col justify-center items-center p-6 lg:p-20">
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75 }}
-          className="flex mt-14 justify-center min-h-screen mx-auto lg:text-7xl md:text-4xl text-[#0e012d] font-semibold"
+          className="flex mt-10 mb-5 justify-center mx-auto lg:text-7xl md:text-4xl text-[#0e012d] font-semibold"
         >
-          <Link href="/No-Equipements">Nos&nbsp;Equipements</Link>
+          <Link href="/No-Equipements" className="h-20">
+            Nos&nbsp;Equipements
+          </Link>
         </motion.h1>
-        <div className="w-full h-max grid grid-rows-5 sm:grid-rows-2 sm:grid-cols-3 gap-3 p-5 md:pr-16">
-          {EquipementTypes.map((serve, index) => {
-            const valeu = {
-              id: serve.id,
-              name: serve.typeName,
-              images: [serve.image],
-            };
-            return (
-              <Link
-                href={`/No-Equipements/${serve.typeName}`}
-                className=""
-                key={index}
+        <div className="size-full grid grid-flow-row gap-3">
+          <div className="grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-4 gap-3">
+            <motion.div
+              initial={{ x: -30, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1, transition: { duration: 1.05 } }}
+              className="w-full h-[80dvh] bg-red-500 col-span-2 overflow-hidden relative"
+            >
+              <motion.div
+                onMouseEnter={() => handleMouseEnter(1)}
+                onMouseLeave={handleMouseLeave}
+                className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
+                  hoveredDiv === 1 ? "scale-110" : "scale-100"
+                }`}
+                style={{ backgroundImage: `url(/p1.jpg)` }}
               >
-                <Item
-                  key={index}
-                  //@ts-expect-error id type
-                  produits={valeu}
-                />
+                {hoveredDiv === 1 && (
+                  <div className="size-full bg-blackOverlay"></div>
+                )}
+              </motion.div>
+              <Link
+                href={""}
+                className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
+              >
+                Your Text Here
               </Link>
-            );
-          })}
+            </motion.div>
+            <motion.div
+              initial={{ y: -30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1, transition: { duration: 1.05 } }}
+              className="w-full h-[80dvh] bg-black col-span-1 overflow-hidden relative"
+            >
+              <motion.div
+                onMouseEnter={() => handleMouseEnter(2)}
+                onMouseLeave={handleMouseLeave}
+                className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
+                  hoveredDiv === 2 ? "scale-110" : "scale-100"
+                }`}
+                style={{ backgroundImage: `url(/p1.jpg)` }}
+              >
+                {hoveredDiv === 2 && (
+                  <div className="size-full bg-blackOverlay"></div>
+                )}
+              </motion.div>
+              <Link
+                href={""}
+                className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
+              >
+                Your Text Here
+              </Link>
+            </motion.div>
+            <motion.div
+              initial={{ y: -30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1, transition: { duration: 1.05 } }}
+              className="w-full h-[80dvh] bg-black col-span-1 overflow-hidden relative"
+            >
+              <motion.div
+                onMouseEnter={() => handleMouseEnter(3)}
+                onMouseLeave={handleMouseLeave}
+                className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
+                  hoveredDiv === 3 ? "scale-110" : "scale-100"
+                }`}
+                style={{ backgroundImage: `url(/p1.jpg)` }}
+              >
+                {hoveredDiv === 3 && (
+                  <div className="size-full bg-blackOverlay"></div>
+                )}
+              </motion.div>
+              <Link
+                href={""}
+                className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
+              >
+                Your Text Here
+              </Link>
+            </motion.div>
+          </div>
+          <div className="grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-4 gap-3">
+            <motion.div
+              initial={{ y: -30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1, transition: { duration: 1.05 } }}
+              className="w-full h-[80dvh] bg-black col-span-1 overflow-hidden  relative"
+            >
+              <motion.div
+                onMouseEnter={() => handleMouseEnter(4)}
+                onMouseLeave={handleMouseLeave}
+                className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
+                  hoveredDiv === 4 ? "scale-110" : "scale-100"
+                }`}
+                style={{ backgroundImage: `url(/p1.jpg)` }}
+              >
+                {hoveredDiv === 4 && (
+                  <div className="size-full bg-blackOverlay"></div>
+                )}
+              </motion.div>
+              <Link
+                href={""}
+                className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
+              >
+                Your Text Here
+              </Link>
+            </motion.div>
+            <motion.div
+              initial={{ y: -30, opacity: 0 }}
+              whileInView={{ y: 0, opacity: 1, transition: { duration: 1.05 } }}
+              className="w-full h-[80dvh] bg-black col-span-1 overflow-hidden relative"
+            >
+              <motion.div
+                onMouseEnter={() => handleMouseEnter(5)}
+                onMouseLeave={handleMouseLeave}
+                className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
+                  hoveredDiv === 5 ? "scale-110" : "scale-100"
+                }`}
+                style={{ backgroundImage: `url(/p1.jpg)` }}
+              >
+                {hoveredDiv === 5 && (
+                  <div className="size-full bg-blackOverlay"></div>
+                )}
+              </motion.div>
+              <Link
+                href={""}
+                className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
+              >
+                Your Text Here
+              </Link>
+            </motion.div>
+            <motion.div
+              initial={{ x: 30, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1, transition: { duration: 1.05 } }}
+              className="w-full h-[80dvh] bg-red-500 col-span-2 overflow-hidden relative"
+            >
+              <motion.div
+                onMouseEnter={() => handleMouseEnter(6)}
+                onMouseLeave={handleMouseLeave}
+                className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
+                  hoveredDiv === 6 ? "scale-110" : "scale-100"
+                }`}
+                style={{ backgroundImage: `url(/p1.jpg)` }}
+              >
+                {hoveredDiv === 6 && (
+                  <div className="size-full bg-blackOverlay"></div>
+                )}
+              </motion.div>
+              <Link
+                href={""}
+                className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
+              >
+                Your Text Here
+              </Link>
+            </motion.div>
+          </div>
+          <div className="grid grid-rows-2 md:grid-rows-1 md:grid-cols-2 gap-3">
+            <motion.div className="w-full h-[30dvh] bg-black overflow-hidden  relative">
+              <motion.div
+                onMouseEnter={() => handleMouseEnter(7)}
+                onMouseLeave={handleMouseLeave}
+                className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
+                  hoveredDiv === 7 ? "scale-110" : "scale-100"
+                }`}
+                style={{ backgroundImage: `url(/p1.jpg)` }}
+              >
+                {hoveredDiv === 7 && (
+                  <div className="size-full bg-blackOverlay"></div>
+                )}
+              </motion.div>
+              <Link
+                href={""}
+                className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
+              >
+                Your Text Here
+              </Link>
+            </motion.div>
+            <motion.div className="w-full h-[30dvh] bg-black overflow-hidden  relative">
+              <motion.div
+                onMouseEnter={() => handleMouseEnter(8)}
+                onMouseLeave={handleMouseLeave}
+                className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
+                  hoveredDiv === 8 ? "scale-110" : "scale-100"
+                }`}
+                style={{ backgroundImage: `url(/p1.jpg)` }}
+              >
+                {hoveredDiv === 8 && (
+                  <div className="size-full bg-blackOverlay"></div>
+                )}
+              </motion.div>
+              <Link
+                href={""}
+                className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
+              >
+                Your Text Here
+              </Link>
+            </motion.div>
+          </div>
+          <div className="grid grid-rows-1 md:grid-rows-1 lg:grid-cols-4 gap-3">
+            <motion.div className="w-full h-[30dvh] bg-black col-span-3 overflow-hidden relative">
+              <motion.div
+                onMouseEnter={() => handleMouseEnter(9)}
+                onMouseLeave={handleMouseLeave}
+                className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
+                  hoveredDiv === 9 ? "scale-110" : "scale-100"
+                }`}
+                style={{ backgroundImage: `url(/p1.jpg)` }}
+              >
+                {hoveredDiv === 9 && (
+                  <div className="size-full bg-blackOverlay"></div>
+                )}
+              </motion.div>
+              <Link
+                href={""}
+                className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
+              >
+                Your Text Here
+              </Link>
+            </motion.div>
+            <motion.div className="w-full h-[30dvh] bg-black col-span-1"></motion.div>
+          </div>
         </div>
       </section>
       <section className="w-full h-[80dvh] bg-gray-950 grid grid-rows-2 sm:grid-rows-1 sm:grid-cols-3 gap-3">
@@ -459,6 +664,15 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
+      </section>
+      <section className="w-full h-screen flex flex-row">
+        <motion.div
+          initial={{ width: "100%" }}
+          className="h-full w-full bg-covert"
+          style={{ backgroundImage: "url('/p3.jpg')" }}
+        >
+          <div className="size-full bg-[#000000] opacity-95"></div>
+        </motion.div>
       </section>
     </>
   );
