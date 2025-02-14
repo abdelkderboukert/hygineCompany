@@ -55,21 +55,28 @@ const Header = () => {
   ];
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [isAtTop, setIsAtTop] = useState(true);
 
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < 768;
+      const mobile = window.innerWidth <= 770;
       setIsMobile(mobile);
       if (!mobile) {
         setIsOpen(false);
       }
     };
 
+    const handleScroll = () => {
+      setIsAtTop(window.scrollY === 0); // Check if at the top
+    };
+
     handleResize(); // Set initial value
     window.addEventListener("resize", handleResize); // Update on resize
+    window.addEventListener("scroll", handleScroll); // U
 
     return () => {
       window.removeEventListener("resize", handleResize); // Cleanup
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -95,12 +102,17 @@ const Header = () => {
     checkAuth();
   }, []);
 
-  return (
-    <header
-      className={`font-bold p-4 fixed w-full z-50  bg-white${
+  const c = isAtTop
+    ? `text-white  bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-transparent ${
         isOpen ? "divBlur" : ""
-      }`}
-    >
+      }`
+    : `text-white  bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-white ${
+        isOpen ? "divBlur" : ""
+      }`;
+  console.log(c);
+
+  return (
+    <header className={c}>
       <div className="container mx-auto flex items-center">
         <Link
           href={"/"}
@@ -295,7 +307,7 @@ const Header = () => {
                 ) : (
                   <a
                     href={item.url}
-                    className="relative text-black z-10 hover:text-green-300 px-4 py-2"
+                    className="relative text-black z-10 hover:text-gray-950 px-4 py-2"
                     onClick={() => setIsOpen(false)}
                   >
                     {item.name}

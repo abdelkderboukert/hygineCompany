@@ -686,7 +686,7 @@ export default function Home() {
                 }}
                 className="size-full lg:h-4/5 lg:w-5/6 mt-auto bg-gray-950 lg:rounded-tr-[35px]"
               >
-                <h1 className="text-7xl text-white">b sdbgsdgbsdgb</h1>
+                <h1 className="text-3xl text-white">b sdbgsdgbsdgb</h1>
               </motion.div>
             </div>
             <div className="size-full justify-center items-start p-10 lg:p-0 flex flex-col">
