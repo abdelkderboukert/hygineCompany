@@ -11,8 +11,10 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import Item from "@/components/Item";
+import Client from "@/components/Clients";
 import { db } from "@/firebase";
 import { collection, getDocs } from "firebase/firestore";
+import { TextReveal } from "@/components/magicui/text-reveal";
 
 interface EquipementType {
   id: string;
@@ -60,6 +62,7 @@ const Fornisure = [
 export default function Home() {
   const ref = useRef(null);
   const [Sec, setSec] = useState<EquipementType[]>([]);
+  const [EquipementTypes, setEquipementTypes] = useState<EquipementType[]>([]);
 
   const fetchEquipementTypes = async () => {
     const querySnapshot = await getDocs(collection(db, "products"));
@@ -73,10 +76,8 @@ export default function Home() {
     fetchEquipementTypes();
   }, []);
 
-  const [EquipementTypes, setEquipementTypes] = useState<EquipementType[]>([]);
-
   const fetchEquipement = async () => {
-    const querySnapshot = await getDocs(collection(db, "products"));
+    const querySnapshot = await getDocs(collection(db, "Equipements"));
     const types = querySnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -136,7 +137,7 @@ export default function Home() {
                 className="flex justify-center items-center size-full"
                 href={"/#contact"}
               >
-                Contact As&nbsp;&nbsp;
+                Contact Us&nbsp;&nbsp;
                 <img src="i.svg" alt="My Icon" width={30} height={30} />
               </Link>
             </motion.div>
@@ -147,7 +148,10 @@ export default function Home() {
           style={{ backgroundImage: "url('/main1.jpg')" }}
         ></div>
       </section>
-      <section className="w-full h-screen bg-gradient-to-b from-blue-200 to-white"></section>
+      <div className="z-10 flex min-h-64 items-center justify-center rounded-lg border bg-gradient-to-b from-blue-200 to-white dark:bg-black">
+        <TextReveal text="We Offer the best quality on the market at the best price you can find." />
+      </div>
+      {/* <section className="w-full h-screen bg-gradient-to-b from-blue-200 to-white"></section> */}
       <section
         ref={ref}
         className="w-full h-screen bg-white flex justify-center items-center flex-row lg:px-24"
@@ -378,7 +382,8 @@ export default function Home() {
         className="w-full h-[50dvh] bg-black bg-cover  bg-no-repeat"
         style={{ backgroundImage: "url('/p5.jpg')" }}
       >
-        <div className="w-full h-full bg-black opacity-80"></div>
+        {/* <div className="w-full h-full bg-black opacity-80"></div> */}
+        <Client />
       </section>
       <section className="w-full h-min flex flex-col justify-center items-center p-6 lg:p-20">
         <motion.h1
@@ -404,17 +409,17 @@ export default function Home() {
                 className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
                   hoveredDiv === 1 ? "scale-110" : "scale-100"
                 }`}
-                style={{ backgroundImage: `url(/p1.jpg)` }}
+                style={{ backgroundImage: `url(${EquipementTypes[0]?.image})` }}
               >
                 {hoveredDiv === 1 && (
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
               <Link
-                href={""}
+                href={`/No-Equipements/${EquipementTypes[0]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
-                Your Text Here
+                {EquipementTypes[0]?.typeName}
               </Link>
             </motion.div>
             <motion.div
@@ -428,17 +433,17 @@ export default function Home() {
                 className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
                   hoveredDiv === 2 ? "scale-110" : "scale-100"
                 }`}
-                style={{ backgroundImage: `url(/p1.jpg)` }}
+                style={{ backgroundImage: `url(${EquipementTypes[1]?.image})` }}
               >
                 {hoveredDiv === 2 && (
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
               <Link
-                href={""}
+                href={`/No-Equipements/${EquipementTypes[1]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
-                Your Text Here
+                {EquipementTypes[1]?.typeName}
               </Link>
             </motion.div>
             <motion.div
@@ -452,17 +457,17 @@ export default function Home() {
                 className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
                   hoveredDiv === 3 ? "scale-110" : "scale-100"
                 }`}
-                style={{ backgroundImage: `url(/p1.jpg)` }}
+                style={{ backgroundImage: `url(${EquipementTypes[2]?.image})` }}
               >
                 {hoveredDiv === 3 && (
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
               <Link
-                href={""}
+                href={`/No-Equipements/${EquipementTypes[2]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
-                Your Text Here
+                {EquipementTypes[2]?.typeName}
               </Link>
             </motion.div>
           </div>
@@ -478,17 +483,17 @@ export default function Home() {
                 className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
                   hoveredDiv === 4 ? "scale-110" : "scale-100"
                 }`}
-                style={{ backgroundImage: `url(/p1.jpg)` }}
+                style={{ backgroundImage: `url(${EquipementTypes[3]?.image})` }}
               >
                 {hoveredDiv === 4 && (
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
               <Link
-                href={""}
+                href={`/No-Equipements/${EquipementTypes[3]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
-                Your Text Here
+                {EquipementTypes[3]?.typeName}
               </Link>
             </motion.div>
             <motion.div
@@ -502,17 +507,17 @@ export default function Home() {
                 className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
                   hoveredDiv === 5 ? "scale-110" : "scale-100"
                 }`}
-                style={{ backgroundImage: `url(/p1.jpg)` }}
+                style={{ backgroundImage: `url(${EquipementTypes[4]?.image})` }}
               >
                 {hoveredDiv === 5 && (
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
               <Link
-                href={""}
+                href={`/No-Equipements/${EquipementTypes[4]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
-                Your Text Here
+                {EquipementTypes[4]?.typeName}
               </Link>
             </motion.div>
             <motion.div
@@ -526,17 +531,17 @@ export default function Home() {
                 className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
                   hoveredDiv === 6 ? "scale-110" : "scale-100"
                 }`}
-                style={{ backgroundImage: `url(/p1.jpg)` }}
+                style={{ backgroundImage: `url(${EquipementTypes[5]?.image})` }}
               >
                 {hoveredDiv === 6 && (
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
               <Link
-                href={""}
+                href={`/No-Equipements/${EquipementTypes[5]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
-                Your Text Here
+                {EquipementTypes[5]?.typeName}
               </Link>
             </motion.div>
           </div>
@@ -548,17 +553,17 @@ export default function Home() {
                 className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
                   hoveredDiv === 7 ? "scale-110" : "scale-100"
                 }`}
-                style={{ backgroundImage: `url(/p1.jpg)` }}
+                style={{ backgroundImage: `url(${EquipementTypes[6]?.image})` }}
               >
                 {hoveredDiv === 7 && (
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
               <Link
-                href={""}
+                href={`/No-Equipements/${EquipementTypes[6]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
-                Your Text Here
+                {EquipementTypes[6]?.typeName}
               </Link>
             </motion.div>
             <motion.div className="w-full h-[30dvh] bg-black overflow-hidden  relative">
@@ -568,17 +573,17 @@ export default function Home() {
                 className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
                   hoveredDiv === 8 ? "scale-110" : "scale-100"
                 }`}
-                style={{ backgroundImage: `url(/p1.jpg)` }}
+                style={{ backgroundImage: `url(${EquipementTypes[7]?.image})` }}
               >
                 {hoveredDiv === 8 && (
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
               <Link
-                href={""}
+                href={`/No-Equipements/${EquipementTypes[7]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
-                Your Text Here
+                {EquipementTypes[7]?.typeName}
               </Link>
             </motion.div>
           </div>
@@ -590,17 +595,17 @@ export default function Home() {
                 className={`size-full bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
                   hoveredDiv === 9 ? "scale-110" : "scale-100"
                 }`}
-                style={{ backgroundImage: `url(/p1.jpg)` }}
+                style={{ backgroundImage: `url(${EquipementTypes[8]?.image})` }}
               >
                 {hoveredDiv === 9 && (
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
               <Link
-                href={""}
+                href={`/No-Equipements/${EquipementTypes[8]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
-                Your Text Here
+                {EquipementTypes[8]?.typeName}
               </Link>
             </motion.div>
             <motion.div className="w-full h-[30dvh] bg-black col-span-1"></motion.div>
@@ -684,9 +689,13 @@ export default function Home() {
                   width: "83.333333%",
                   transition: { duration: 1.05 },
                 }}
-                className="size-full lg:h-4/5 lg:w-5/6 mt-auto bg-gray-950 lg:rounded-tr-[35px]"
+                className="size-full lg:h-4/5 lg:w-5/6 mt-auto bg-gray-950 p-5 lg:rounded-tr-[35px]"
               >
-                <h1 className="text-3xl text-white">b sdbgsdgbsdgb</h1>
+                <h1 className="text-5xl text-white">Contact</h1>
+                <p className="text-gray-300 text-sm">
+                  Enter Your information <br />
+                  to contact you
+                </p>
               </motion.div>
             </div>
             <div className="size-full justify-center items-start p-10 lg:p-0 flex flex-col">

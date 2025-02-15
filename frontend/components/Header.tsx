@@ -51,7 +51,7 @@ const Header = () => {
         { name: "Service apres vente", url: "/serves/Service-apres-vente" },
       ],
     },
-    { name: "Contact", url: "/" },
+    { name: "Contact", url: "/#contact" },
   ];
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -109,7 +109,6 @@ const Header = () => {
     : `text-white  bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-white ${
         isOpen ? "divBlur" : ""
       }`;
-  console.log(c);
 
   return (
     <header className={c}>
@@ -132,13 +131,7 @@ const Header = () => {
             }}
           ></motion.div>
         </Link>
-        <Link
-          href={"/"}
-          className="w-32 h-10 mr-5 bg-cover bg-bottom"
-          // style={{
-          //   backgroundImage: "url('/logo_hygindust-removebg-preview.png')",
-          // }}
-        >
+        <Link href={"/"} className="w-32 h-10 mr-5 bg-cover bg-bottom">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0, transition: { duration: 0.5 } }}
@@ -154,7 +147,7 @@ const Header = () => {
         <div className="md:hidden">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="text-black flex ml-auto mr-0 focus:outline-none"
+            className="flex ml-auto mr-0 focus:outline-none"
           >
             {isOpen ? (
               <svg
@@ -228,8 +221,21 @@ const Header = () => {
                 {Array.isArray(item.url) ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger className="text-black px-4 py-2 select-none">
-                      <a href={item.url1} onClick={() => setIsOpen(false)}>
-                        {item.name}
+                      <a
+                        href={item.url1}
+                        className="flex justify-center items-center"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {item.name}&nbsp;
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          height="24px"
+                          viewBox="0 -960 960 960"
+                          width="24px"
+                          fill="#000000"
+                        >
+                          <path d="M480-200 240-440l56-56 184 183 184-183 56 56-240 240Zm0-240L240-680l56-56 184 183 184-183 56 56-240 240Z" />
+                        </svg>
                       </a>
                     </DropdownMenuTrigger>
                     <DropdownMenuPortal></DropdownMenuPortal>
