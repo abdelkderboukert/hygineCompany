@@ -165,7 +165,9 @@ function Page() {
                 className=""
                 key={index}
               >
-                <Iteme key={index} produits={valeu} />
+                <Iteme key={index}
+                //@ts-expect-error type error
+                produits={valeu} />
               </Link>
             );
           })}

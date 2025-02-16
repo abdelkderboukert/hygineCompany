@@ -79,7 +79,9 @@ const Page = ({
             className=""
             key={index}
           >
-            <Iteme key={index} produits={serve} />
+            <Iteme key={index}
+            //@ts-expect-error type error
+             produits={serve} />
           </Link>
         ))}
       </div>

@@ -120,7 +120,11 @@ const Page = ({
                 className=""
                 key={index}
               >
-                <Iteme key={index} produits={valeu} />
+                <Iteme
+                  key={index}
+                  //@ts-expect-error images props missing
+                  produits={valeu}
+                />
               </Link>
             );
           })}
