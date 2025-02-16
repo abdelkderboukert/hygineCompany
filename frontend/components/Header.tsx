@@ -43,12 +43,12 @@ const Header = () => {
     { name: "Nos Equipements", url: "/No-Equipements" },
     {
       name: "services",
-      url1: "/serves",
+      url1: "/service",
       url: [
-        { name: "Conseil", url: "/serves/Conseil" },
-        { name: "Mise en Route", url: "/serves/mise-en-route" },
-        { name: "Formation", url: "/serves/Formation" },
-        { name: "Service apres vente", url: "/serves/Service-apres-vente" },
+        { name: "Conseil", url: "/service/Conseil" },
+        { name: "Mise en Route", url: "/service/mise-en-route" },
+        { name: "Formation", url: "/service/Formation" },
+        { name: "Service apres vente", url: "/service/Service-apres-vente" },
       ],
     },
     { name: "Contact", url: "/#contact" },

@@ -35,7 +35,6 @@ const Page = ({
   const [Prod, setProd] = useState<Product>();
 
   const fetchProductSubTypeByName = async (type: string, name: string) => {
-    console.log(name);
     try {
       const querySnapshot = await getDocs(
         collection(db, "Equipements", type, "Equipements-subType")
@@ -44,7 +43,6 @@ const Page = ({
         id: doc.id,
         ...doc.data(),
       })) as EquipementType[];
-      console.log(types);
       // Find the product type by name
       const foundType = types.find((type) => type.typeName === name);
       setEquipementSubType(foundType || null);
@@ -120,7 +118,7 @@ const Page = ({
           <h1 className="text-5xl sm:text-7xl text-[#0e012d] font-bold ">
             {Prod?.name}
           </h1>
-          <p className="w-full h-max p-4 justify-start ">{Prod?.ref}</p>
+          <p className="w-full h-max p-4 justify-start">{Prod?.ref}</p>
         </div>
         <h2 className="text-xl mt-3">{Prod?.subtitle}</h2>
         <h1 className="text-3xl my-5">description:</h1>

@@ -15,6 +15,8 @@ import Client from "@/components/Clients";
 import { db } from "@/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { TextReveal } from "@/components/magicui/text-reveal";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 interface EquipementType {
   id: string;
@@ -75,6 +77,38 @@ export default function Home() {
   useEffect(() => {
     fetchEquipementTypes();
   }, []);
+
+  interface FormData {
+    name: string;
+    prename: string;
+    message: string;
+    email: string;
+  }
+
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    prename: "",
+    message: "",
+    email: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // Handle form submission (e.g., send data to an API)
+    console.log("Form submitted:", formData);
+    // Reset form
+    setFormData({ name: "", email: "", prename: "", message: "" });
+  };
 
   const fetchEquipement = async () => {
     const querySnapshot = await getDocs(collection(db, "Equipements"));
@@ -681,7 +715,7 @@ export default function Home() {
           className="h-full w-full bg-covert"
           style={{ backgroundImage: "url('/p3.jpg')" }}
         >
-          <div className="size-full bg-[#000000] bg-opacity-95 grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-3">
+          <div className="size-full bg-[#000000] bg-opacity-95 grid grid-rows-2 lg:grid-rows-1 lg:grid-cols-3 overflow-hidden">
             <div className="size-full lg:col-span-2 flex">
               <motion.div
                 initial={{ width: 0 }}
@@ -696,6 +730,57 @@ export default function Home() {
                   Enter Your information <br />
                   to contact you
                 </p>
+                <form onSubmit={handleSubmit} className="size-full mt-5">
+                  <div className="w-full grid grid-rows-2 lg:grid-cols-2 gap-6">
+                    <Input
+                      type="text"
+                      id="name"
+                      name="name"
+                      className="text-white/50"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      placeholder="Name"
+                    />
+                    <Input
+                      type="text"
+                      id="prename"
+                      name="prename"
+                      className="text-white/50"
+                      value={formData.prename}
+                      onChange={handleChange}
+                      required
+                      placeholder="pre-name"
+                    />
+                    <Input
+                      type="email"
+                      id="email"
+                      name="email"
+                      className="text-white/50"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      placeholder="Email"
+                    />
+                    <div className="size-full">
+                      <button
+                        type="submit"
+                        className="bg-cyan-800 text-white font-bold size-full rounded-lg"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                  <Textarea
+                    id="message"
+                    name="message"
+                    className="text-white/50 size-full mt-6"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
+                    placeholder="Type your message here."
+                  />
+                </form>
               </motion.div>
             </div>
             <div className="size-full justify-center items-start p-10 lg:p-0 flex flex-col">

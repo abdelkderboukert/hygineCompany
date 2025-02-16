@@ -1,40 +1,44 @@
 "use client";
-import React, { useState } from "react";
-import { motion } from "framer-motion";
+import React from "react";
 import { Product } from "@/types";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Lens } from "@/components/magicui/lens";
 
 const Iteme = ({ produits }: { produits: Product }) => {
-  const [isHover, setIsHover] = useState<boolean>(false);
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.75 }}
-      className="w-full h-72 justify-center overflow-hidden"
-    >
-      <motion.div
-        onHoverStart={() => setIsHover(true)}
-        onHoverEnd={() => setIsHover(false)}
-        className={`w-full h-2/3 bg-slate-400 bg-cover shadow-xl transition-transform duration-300 ease-in-out ${
-          isHover ? "scale-110" : "scale-100"
-        }`}
-        style={{ backgroundImage: `url(${produits.images[0]})` }}
-      >
-        {isHover ? <div className="size-full bg-blackOverlay"></div> : null}
-      </motion.div>
-      <div className="relative -top-5 flex items-start justify-center bg-white mx-auto h-2/5 w-5/6 p-3 flex-col shadow-xl">
-        <h1 className="text-2xl text-slate-600 select-none">
-          {produits.url ? (
-            <Link href={produits.url}>{produits.name}</Link>
-          ) : (
-            <p className="">{produits.name}</p>
-          )}
-        </h1>
-        <p>{produits.description}</p>
-      </div>
-    </motion.div>
+    <Card className="relative max-w-md shadow-none bg-white">
+      <CardHeader>
+        <Lens
+          zoomFactor={1}
+          lensSize={150}
+          isStatic={false}
+          ariaLabel="Zoom Area"
+        >
+          <img
+            src={produits?.images[0]}
+            // "https://images.unsplash.com/photo-1736606355698-5efdb410fe93?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="image placeholder"
+            width={500}
+            height={500}
+          />
+        </Lens>
+      </CardHeader>
+      <CardContent>
+        <CardTitle className="text-2xl">{produits.name}</CardTitle>
+        <CardDescription>{produits.subtitle}</CardDescription>
+      </CardContent>
+      <CardFooter className="space-x-4">
+        <Button>Let&apos;s go</Button>
+      </CardFooter>
+    </Card>
   );
 };
 
