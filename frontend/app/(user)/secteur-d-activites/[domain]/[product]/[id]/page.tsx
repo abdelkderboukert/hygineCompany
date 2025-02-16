@@ -66,6 +66,7 @@ const Page = ({
   useEffect(() => {
     if (id && products) {
       const p = products.find((pro) => pro.id === id);
+      //@ts-expect-error ggg
       setProd(p);
     }
   }, [id, products]);

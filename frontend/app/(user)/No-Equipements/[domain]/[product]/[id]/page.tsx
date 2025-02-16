@@ -32,7 +32,7 @@ const Page = ({
 
   const [EquipementSubType, setEquipementSubType] =
     useState<EquipementType | null>(null);
-  const [Prod, setProd] = useState<Product>();
+  const [Prod, setProd] = useState<Product | null>(null);
 
   const fetchProductSubTypeByName = async (type: string, name: string) => {
     try {
@@ -64,6 +64,7 @@ const Page = ({
   useEffect(() => {
     if (id && products) {
       const p = products.find((pro) => pro.id === id);
+      //@ts-expect-error ggg
       setProd(p);
     }
   }, [id, products]);

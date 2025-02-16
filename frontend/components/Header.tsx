@@ -56,6 +56,7 @@ const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
+  console.log(isMobile)
 
   useEffect(() => {
     const handleResize = () => {

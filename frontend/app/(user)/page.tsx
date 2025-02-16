@@ -794,17 +794,17 @@ export default function Home() {
                 animate={{ opacity: 1, x: 0 }}
                 className="text-blue-50 my-5"
               >
-                <div className="flex flex-row justify-center items-center">
+                <div className="flex flex-row justify-start items-center">
                   <img src="/gmail.png" alt="" className="size-5" />
-                  &nbsp;&nbsp;hygindust@gmail.com
+                  &nbsp;&nbsp;contact@hygindust.com
                 </div>
-                <div className="flex flex-row justify-center items-center">
+                <div className="flex flex-row justify-start items-center">
                   <img src="/phone.png" alt="" className="size-5" />
-                  &nbsp;&nbsp;+213&nbsp;(0)&nbsp;5&nbsp;50&nbsp;11&nbsp;18&nbsp;01
+                  &nbsp;&nbsp;+213&nbsp;(0)&nbsp;7&nbsp;70&nbsp;10&nbsp;51&nbsp;21
                 </div>
-                <div className="flex flex-row justify-center items-center">
+                <div className="flex flex-row justify-start items-center">
                   <img src="/gps.png" alt="" className="size-5" />
-                  &nbsp;&nbsp;hygindust@gmail.com
+                  &nbsp;&nbsp;village benramdan lot 102 n°2 chbli blida
                 </div>
               </motion.div>
               <div className="">
