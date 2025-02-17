@@ -27,6 +27,8 @@ interface Equipement {
   description: string;
   images: string[];
   imageFiles?: File[];
+  file?: string; // Store URL as string
+  fileFile?: File; // Temporary file object for upload
 }
 
 const EquipementsManager: React.FC = () => {
@@ -45,6 +47,7 @@ const EquipementsManager: React.FC = () => {
   const [subTypeImageFile, setSubTypeImageFile] = useState<File | null>(null); // State for subtype image
 
   const storage = getStorage();
+  const router = useRouter();
 
   // Fetch Equipement types
   const fetchEquipementTypes = async () => {
@@ -56,7 +59,6 @@ const EquipementsManager: React.FC = () => {
     setEquipementTypes(types);
   };
 
-  // Fetch subtypes for selected type
   const fetchEquipementSubTypes = async (typeId: string) => {
     try {
       const subtypesRef = collection(
@@ -71,7 +73,6 @@ const EquipementsManager: React.FC = () => {
         ...doc.data(),
       })) as SubType[];
       setEquipementSubTypes(subtypes);
-      console.log(subtypes);
     } catch (error) {
       console.error("Error fetching subtypes:", error);
       setEquipementSubTypes([]);
@@ -83,24 +84,29 @@ const EquipementsManager: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (selectedType) {
-      fetchEquipementSubTypes(selectedType);
-    }
+    if (selectedType) fetchEquipementSubTypes(selectedType);
   }, [selectedType]);
 
-  // Image upload handler
+  // Upload handlers
   const uploadImage = async (file: File): Promise<string> => {
-    try {
-      const storageRef = ref(storage, `Equipements/${Date.now()}_${file.name}`);
-      await uploadBytes(storageRef, file);
-      return await getDownloadURL(storageRef);
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      throw error;
-    }
+    const storageRef = ref(
+      storage,
+      `Equipements/images/${Date.now()}_${file.name}`
+    );
+    await uploadBytes(storageRef, file);
+    return getDownloadURL(storageRef);
   };
 
-  // Add Equipement type
+  const uploadFile = async (file: File): Promise<string> => {
+    const storageRef = ref(
+      storage,
+      `Equipements/files/${Date.now()}_${file.name}`
+    );
+    await uploadBytes(storageRef, file);
+    return getDownloadURL(storageRef);
+  };
+
+  // Form handlers
   const handleAddType = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (EquipementTypes.some((type) => type.typeName === newTypeName)) {
@@ -109,15 +115,11 @@ const EquipementsManager: React.FC = () => {
     }
 
     try {
-      let image = "";
-      if (typeImageFile) {
-        image = await uploadImage(typeImageFile);
-      }
-
+      const image = typeImageFile ? await uploadImage(typeImageFile) : "";
       const typeRef = doc(collection(db, "Equipements"), newTypeName);
       await setDoc(typeRef, { typeName: newTypeName, image });
       setNewTypeName("");
-      setTypeImageFile(null); // Reset the image file
+      setTypeImageFile(null);
       await fetchEquipementTypes();
       setSuccessMessage("Type added successfully!");
     } catch (error) {
@@ -126,7 +128,6 @@ const EquipementsManager: React.FC = () => {
     }
   };
 
-  // Add subtype
   const handleAddSubType = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (EquipementSubTypes.some((st) => st.typeName === newSubTypeName)) {
@@ -135,11 +136,7 @@ const EquipementsManager: React.FC = () => {
     }
 
     try {
-      let image = "";
-      if (subTypeImageFile) {
-        image = await uploadImage(subTypeImageFile);
-      }
-
+      const image = subTypeImageFile ? await uploadImage(subTypeImageFile) : "";
       const subtypesRef = collection(
         db,
         "Equipements",
@@ -148,7 +145,7 @@ const EquipementsManager: React.FC = () => {
       );
       await addDoc(subtypesRef, { typeName: newSubTypeName, image });
       setNewSubTypeName("");
-      setSubTypeImageFile(null); // Reset the image file
+      setSubTypeImageFile(null);
       await fetchEquipementSubTypes(selectedType);
       setSuccessMessage("Subtype added successfully!");
     } catch (error) {
@@ -157,7 +154,6 @@ const EquipementsManager: React.FC = () => {
     }
   };
 
-  // Add Equipement with multiple images
   const handleAddEquipement = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -179,18 +175,27 @@ const EquipementsManager: React.FC = () => {
       }
 
       // Process all Equipements
-      const EquipementsWithImages = await Promise.all(
-        Equipements.map(async (Equipement) => {
-          if (!Equipement.imageFiles) throw new Error("Missing images");
+      const processedEquipements = await Promise.all(
+        Equipements.map(async (equip) => {
+          if (!equip.imageFiles) throw new Error("Missing images");
 
+          // Upload images
           const imageUrls = await Promise.all(
-            Equipement.imageFiles.map(uploadImage)
+            equip.imageFiles.map(uploadImage)
           );
 
+          // Upload file if exists
+          let fileUrl = "";
+          if (equip.fileFile) {
+            fileUrl = await uploadFile(equip.fileFile);
+          }
+
           return {
-            ...Equipement,
+            ...equip,
             images: imageUrls,
+            file: fileUrl,
             imageFiles: undefined,
+            fileFile: undefined,
           };
         })
       );
@@ -206,26 +211,21 @@ const EquipementsManager: React.FC = () => {
       );
 
       await Promise.all(
-        EquipementsWithImages.map((Equipement) =>
+        processedEquipements.map((equip) =>
           addDoc(EquipementsRef, {
-            name: Equipement.name,
-            subtitle: Equipement.subtitle,
-            ref: Equipement.ref,
-            description: Equipement.description,
-            images: Equipement.images,
+            name: equip.name,
+            subtitle: equip.subtitle,
+            ref: equip.ref,
+            description: equip.description,
+            images: equip.images,
+            file: equip.file,
           })
         )
       );
 
       // Reset form
       setEquipements([
-        {
-          name: "",
-          subtitle: "",
-          ref: 0,
-          description: "",
-          images: [],
-        },
+        { name: "", subtitle: "", ref: 0, description: "", images: [] },
       ]);
       setSuccessMessage("Equipements added successfully!");
     } catch (error) {
@@ -236,7 +236,6 @@ const EquipementsManager: React.FC = () => {
     }
   };
 
-  // Handle Equipement input changes
   const handleEquipementChange = (
     index: number,
     field: keyof Equipement,
@@ -251,16 +250,12 @@ const EquipementsManager: React.FC = () => {
     setEquipements(newEquipements);
   };
 
-  // Handle image uploads
   const handleImageChange = (index: number, files: FileList | null) => {
     if (!files) return;
-
     const newEquipements = [...Equipements];
     newEquipements[index].imageFiles = Array.from(files);
     setEquipements(newEquipements);
   };
-
-  const router = useRouter();
 
   const handleLogout = async () => {
     const res = await fetch("/api/logout", { method: "POST" });
@@ -449,6 +444,23 @@ const EquipementsManager: React.FC = () => {
                     ))}
                   </div>
                 )}
+              </div>
+              <div className="space-y-2">
+                <label className="block text-sm font-medium">
+                  Equipement File
+                </label>
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const newEquipements = [...Equipements];
+                      newEquipements[index].fileFile = file; // Assign to fileFile
+                      setEquipements(newEquipements);
+                    }
+                  }}
+                />
               </div>
             </div>
           ))}

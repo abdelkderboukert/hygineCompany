@@ -10,4 +10,5 @@ export interface Product {
   url?: string;
   ref?: number;
   subtitle?: string;
+  file?: string;
 }

@@ -56,7 +56,7 @@ const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
-  console.log(isMobile)
+  console.log(isMobile);
 
   useEffect(() => {
     const handleResize = () => {
@@ -219,6 +219,7 @@ const Header = () => {
                   isOpen ? " divBlur" : ""
                 }`}
               >
+                 
                 {Array.isArray(item.url) ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger className="text-black px-4 py-2 select-none">
