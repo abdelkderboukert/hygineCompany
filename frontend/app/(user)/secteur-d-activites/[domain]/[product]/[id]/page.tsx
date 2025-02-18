@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import * as motion from "motion/react-client";
 import { useFirestoreP } from "@/_utils/useFirestore";
 import { db } from "@/firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -14,6 +13,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 interface EquipementType {
   id: string;
@@ -35,7 +36,6 @@ const Page = ({
   const [Prod, setProd] = useState<Product>();
 
   const fetchProductSubTypeByName = async (type: string, name: string) => {
-    console.log(name);
     try {
       const querySnapshot = await getDocs(
         collection(db, "products", type, "Equipements-subType")
@@ -44,7 +44,6 @@ const Page = ({
         id: doc.id,
         ...doc.data(),
       })) as EquipementType[];
-      console.log(types);
       // Find the product type by name
       const foundType = types.find((type) => type.typeName === name);
       setEquipementSubType(foundType || null);
@@ -66,10 +65,62 @@ const Page = ({
   useEffect(() => {
     if (id && products) {
       const p = products.find((pro) => pro.id === id);
-      //@ts-expect-error ggg
-      setProd(p);
+      if (p) {
+        //@ts-expect-error hur
+        setProd(p);
+        setFormData((prev) => ({
+          ...prev,
+          ref: p.ref, // Update ref in form data when Prod is set
+        }));
+      }
     }
   }, [id, products]);
+
+  interface FormData {
+    name: string;
+    company: string;
+    message: string;
+    email: string;
+    ref: number | undefined;
+  }
+
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    company: "",
+    message: "",
+    email: "",
+    ref: 0,
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  // Update handleSubmit
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const response = await fetch("/api/sendEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert("Email sent successfully!");
+    } else {
+      alert("Error sending email: " + data.error);
+    }
+  };
 
   if (loading) return <div>Loading...</div>;
   //@ts-expect-error ggg
@@ -126,15 +177,57 @@ const Page = ({
         <h2 className="text-xl mt-3">{Prod?.subtitle}</h2>
         <h1 className="text-3xl my-5">description:</h1>
         <p className="mt-6 w-full h-max ">{Prod?.description}</p>
-        <motion.a
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          className="w-32 h-12 bg-cyan-600 flex justify-center items-center text-white font-semibold mt-5 rounded-2xl shadow-lg"
-          href="/path/to/your/file.pdf"
-          download={`${Prod?.name}.pdf`}
-        >
-          Download File
-        </motion.a>
+        <form onSubmit={handleSubmit} className="size-full mt-5">
+          <div className="w-full grid grid-rows-2 lg:grid-cols-2 gap-6">
+            <Input
+              type="text"
+              id="name"
+              name="name"
+              className="text-black"
+              value={formData.name}
+              onChange={handleChange}
+              required
+              placeholder="Name"
+            />
+            <Input
+              type="text"
+              id="company"
+              name="company"
+              className="text-black"
+              value={formData.company}
+              onChange={handleChange}
+              required
+              placeholder="company name"
+            />
+            <Input
+              type="email"
+              id="email"
+              name="email"
+              className="text-black"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              placeholder="Email"
+            />
+            <div className="size-full">
+              <button
+                type="submit"
+                className="bg-cyan-800 text-white font-bold size-full rounded-lg"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+          <Textarea
+            id="message"
+            name="message"
+            className="text-black size-full mt-6"
+            value={formData.message}
+            onChange={handleChange}
+            required
+            placeholder="Type your message here."
+          />
+        </form>
       </div>
     </div>
   );

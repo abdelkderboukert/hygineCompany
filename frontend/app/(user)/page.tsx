@@ -80,16 +80,18 @@ export default function Home() {
 
   interface FormData {
     name: string;
-    prename: string;
+    company: string;
     message: string;
     email: string;
+    ref: number | undefined;
   }
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
-    prename: "",
+    company: "",
     message: "",
     email: "",
+    ref: 0,
   });
 
   const handleChange = (
@@ -102,12 +104,24 @@ export default function Home() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // Update handleSubmit
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission (e.g., send data to an API)
-    console.log("Form submitted:", formData);
-    // Reset form
-    setFormData({ name: "", email: "", prename: "", message: "" });
+
+    const response = await fetch("/api/sendEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert("Email sent successfully!");
+    } else {
+      alert("Error sending email: " + data.error);
+    }
   };
 
   const fetchEquipement = async () => {
@@ -744,13 +758,13 @@ export default function Home() {
                     />
                     <Input
                       type="text"
-                      id="prename"
-                      name="prename"
+                      id="company"
+                      name="company"
                       className="text-white/50"
-                      value={formData.prename}
+                      value={formData.company}
                       onChange={handleChange}
                       required
-                      placeholder="pre-name"
+                      placeholder="company name"
                     />
                     <Input
                       type="email"
