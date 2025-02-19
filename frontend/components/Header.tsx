@@ -26,16 +26,16 @@ const Header = () => {
       url: [
         {
           name: "Entreprise de proprete",
-          url: "/secteur-d-activites/Entreprise-de-proprete",
+          url: "/secteur-d-activites/Entreprise%20de%20proprete",
         },
         { name: "HoReCa", url: "/secteur-d-activites/HoReCa" },
         {
           name: "Industries agroalimentaire",
-          url: "/secteur-d-activites/Industries-agroalimentaire",
+          url: "/secteur-d-activites/Industries%20agroalimentaire",
         },
         {
           name: "industries pharmacique et cosmetique",
-          url: "/secteur-d-activites/industries-pharmacique-et-cosmetique",
+          url: "/secteur-d-activites/industries%20pharmacique%20et%20cosmetique",
         },
         { name: "Sante", url: "/secteur-d-activites/Sante" },
       ],
@@ -219,7 +219,6 @@ const Header = () => {
                   isOpen ? " divBlur" : ""
                 }`}
               >
-                 
                 {Array.isArray(item.url) ? (
                   <DropdownMenu>
                     <DropdownMenuTrigger className="text-black px-4 py-2 select-none">
