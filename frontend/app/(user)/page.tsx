@@ -55,7 +55,7 @@ const Fornisure = [
   "/forni/Logo_DELABIE.png",
   "/forni/logo-ocene.svg",
   "/forni/Logos-Prago_profilgate.png",
-  "/forni/ramix-removebg-preview.png",
+  "/forni/ramix.png",
   "/forni/Tork-Logo-700x394.webp",
   "/forni/Vikan_logo.png",
   "",
