@@ -24,7 +24,7 @@ const reviews = [
     img: "/cliens/lu.webp",
   },
   {
-    img: "/cliens/nestle.svg",
+    img: "/cliens/nestle.webp",
   },
   {
     img: "/cliens/danone.webp",
