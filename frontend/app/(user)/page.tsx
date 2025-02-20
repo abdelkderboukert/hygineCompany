@@ -242,7 +242,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             className="w-3/5 mx-5 h-11 flex bg-[#3995EC] rounded-lg justify-center items-center text-blue-50 font-bold select-none"
           >
-            Rede More
+            <Link href={"/about"}>Rede More</Link>
           </motion.div>
         </motion.div>
         <motion.div
