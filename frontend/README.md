@@ -1,4 +1,38 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hygine Company
+
+## Overview
+
+Hygine Company is a web application designed to provide users with a comprehensive platform for managing hygiene-related services and products. The application features a user-friendly interface and is built using modern web technologies.
+
+## Features
+
+- User authentication and authorization
+- Product management (add, edit, delete)
+- Service management
+- User-friendly interface
+- Responsive design for mobile and desktop
+- Integration with Firebase for backend services
+
+## Technologies Used
+
+- **Frontend**: React, Next.js, TypeScript
+- **Backend**: Firebase
+- **Styling**: Tailwind CSS
+- **Version Control**: Git
+
+## Installation
+
+### Prerequisites
+
+- Node.js (version 14 or higher)
+- npm (Node Package Manager)
+- Firebase account
+
+### Clone the Repository
+
+````bash
+git clone https://github.com/abdelkderboukert/hygineCompany.git
+cd hygineCompany
 
 ## Getting Started
 
@@ -12,7 +46,7 @@ yarn dev
 pnpm dev
 # or
 bun dev
-```
+````
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
