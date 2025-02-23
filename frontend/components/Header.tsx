@@ -28,7 +28,7 @@ const Header = () => {
           name: "Entreprise de proprete",
           url: "/secteur-d-activites/Entreprise%20de%20proprete",
         },
-        { name: "HoReCa", url: "/secteur-d-activites/HoReCa" },
+        { name: "HoReCa", url: "/secteur%20d%20activites/HoReCa" },
         {
           name: "Industries agroalimentaire",
           url: "/secteur-d-activites/Industries%20agroalimentaire",
@@ -40,13 +40,50 @@ const Header = () => {
         { name: "Sante", url: "/secteur-d-activites/Sante" },
       ],
     },
-    { name: "Nos Equipements", url: "/No-Equipements" },
+    {
+      name: "Nos Equipements",
+      url1: "/No-Equipements",
+      url: [
+        {
+          name: "Hygiene des personnes",
+          url: "/No-Equipements/Hygiene des personnes",
+        },
+        {
+          name: "Essuyage et sechage des mains",
+          url: "/No-Equipements/Essuyage et sechage des mains",
+        },
+        {
+          name: "Hygiene des sanitaires",
+          url: "/No-Equipements/Hygiene des sanitaires",
+        },
+        {
+          name: "Hygiene et entretien des sols",
+          url: "/No-Equipements/Hygiene et entretien des sols",
+        },
+        {
+          name: "Equipements pour abottoirs",
+          url: "/No-Equipements/Equipements pour abottoirs",
+        },
+        {
+          name: "Cireuser a choussures",
+          url: "/No-Equipements/Cireuser a choussures/Equipements",
+        },
+        {
+          name: "Brosserie et recurage",
+          url: "/No-Equipements/Brosserie et recurage/Equipements",
+        },
+        {
+          name: "Industrie agroalimentaire",
+          url: "/No-Equipements/Industrie agroalimentaire/Equipements",
+        },
+      ],
+    },
     {
       name: "services",
       url1: "/service",
       url: [
         { name: "Conseil", url: "/service/Conseil" },
-        { name: "Mise en Route", url: "/service/mise-en-route" },
+        { name: "Mise en Route", url: "/service/Mise-en-route" },
         { name: "Formation", url: "/service/Formation" },
         { name: "Service apres vente", url: "/service/Service-apres-vente" },
       ],
@@ -104,16 +141,16 @@ const Header = () => {
   }, []);
 
   const c = isAtTop
-    ? `text-white  bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-transparent ${
+    ? `text-blue-700  bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-white ${
         isOpen ? "divBlur" : ""
       }`
-    : `text-white  bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-white ${
+    : `text-blue-700  bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-white ${
         isOpen ? "divBlur" : ""
       }`;
 
   return (
     <header className={c}>
-      <div className="container mx-auto flex items-center">
+      <div className="container text-blue-700 mx-auto flex items-center">
         <Link
           href={"/"}
           className="w-32 h-10 mr-5 bg-cover bg-bottom"
@@ -145,7 +182,7 @@ const Header = () => {
           ></motion.div>
         </Link>
         {/* Mobile Menu Button */}
-        <div className="md:hidden">
+        <div className="md:hidden text-blue-700">
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="flex ml-auto mr-0 focus:outline-none"
@@ -183,7 +220,11 @@ const Header = () => {
         </div>
 
         {/* Navigation Links */}
-        <nav className={`md:flex ${isOpen ? "block" : "hidden"} md:block`}>
+        <nav
+          className={`md:flex text-blue-600 ${
+            isOpen ? "block" : "hidden"
+          } md:block`}
+        >
           <motion.ul
             variants={{
               hidden: { opacity: 0 },
@@ -221,7 +262,7 @@ const Header = () => {
               >
                 {Array.isArray(item.url) ? (
                   <DropdownMenu>
-                    <DropdownMenuTrigger className="text-black px-4 py-2 select-none">
+                    <DropdownMenuTrigger className="text-blue-700 px-4 py-2 select-none">
                       <a
                         href={item.url1}
                         className="flex justify-center items-center"
