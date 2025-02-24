@@ -58,7 +58,7 @@ const Fornisure = [
   "/forni/ramix.png",
   "/forni/Tork-Logo-700x394.webp",
   "/forni/Vikan_logo.png",
-  "",
+  "/forni/scm.png",
 ];
 
 export default function Home() {
@@ -170,9 +170,11 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               className="text-blue-50 my-5"
             >
-              The cotton gin, invented by Eli Whitney in 1793, revolutionized
-              the cotton industry by mechanizing the labor-intensive process of
-              separating cotton fibers from seeds.
+              Entreprise de développement, fabrication et commercialisation de
+              produits chimiques pour l’hygiène industrielle,
+              l’agro-alimentaire, les collectivités, l’entretien d’équipement,
+              le traitement des eaux, etc. Destinés à différents secteurs
+              d’activité.
             </motion.p>
             <motion.div
               whileHover={{ scale: 1.1 }}
@@ -210,12 +212,12 @@ export default function Home() {
           className="w-1/5 h-4/6 grid grid-rows-2"
         >
           <div
-            className="w-full h-full bg-cover bg-no-repeat bg-right bg-black"
+            className="w-full h-full bg-cover bg-no-repeat bg-right"
             style={{ backgroundImage: "url('/p1.jpg')" }}
           ></div>
           <div
-            className="w-full h-full bg-cover bg-no-repeat bg-right bg-red-900 mt-1"
-            style={{ backgroundImage: "url('/p2.jpg')" }}
+            className="w-full h-full bg-cover bg-no-repeat bg-right mt-1"
+            style={{ backgroundImage: "url('/IMG_4530.jpg')" }}
           ></div>
         </motion.div>
         <motion.div

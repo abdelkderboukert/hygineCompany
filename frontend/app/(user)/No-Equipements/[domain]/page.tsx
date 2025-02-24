@@ -24,6 +24,7 @@ const Page = ({
   params: Promise<{ domain: string; product: string }>;
 }) => {
   const { domain } = React.use(params);
+  const CLDomain = domain.replace(/%20/g, " ");
 
   const [EquipementType, setEquipementType] = useState<EquipementType | null>(
     null
@@ -68,10 +69,10 @@ const Page = ({
   };
 
   useEffect(() => {
-    if (domain) {
-      fetchProductTypeByName(domain);
+    if (CLDomain) {
+      fetchProductTypeByName(CLDomain);
     }
-  }, [domain]);
+  }, [CLDomain]);
   useEffect(() => {
     if (EquipementType) {
       fetchEquipementSubTypes(EquipementType.id);

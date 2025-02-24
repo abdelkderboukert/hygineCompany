@@ -28,7 +28,7 @@ const Header = () => {
           name: "Entreprise de proprete",
           url: "/secteur-d-activites/Entreprise%20de%20proprete",
         },
-        { name: "HoReCa", url: "/secteur%20d%20activites/HoReCa" },
+        { name: "HoReCa", url: "/secteur-d-activites/HoReCa" },
         {
           name: "Industries agroalimentaire",
           url: "/secteur-d-activites/Industries%20agroalimentaire",
