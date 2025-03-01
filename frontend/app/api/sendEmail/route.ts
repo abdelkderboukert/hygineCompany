@@ -8,13 +8,20 @@ interface EmailRequestBody {
   company: string;
   message: string;
   email: string;
+  phoneNumber: number | undefined;
   ref: number | undefined;
 }
 
 export async function POST(req: Request) {
   try {
-    const { name, company, message, email, ref }: EmailRequestBody =
-      await req.json();
+    const {
+      name,
+      company,
+      message,
+      email,
+      ref,
+      phoneNumber,
+    }: EmailRequestBody = await req.json();
 
     console.log(process.env.EMAIL_USER, process.env.EMAIL_PASS);
     // Create a transporter
@@ -33,7 +40,22 @@ export async function POST(req: Request) {
       from: process.env.EMAIL_USER, // sender address
       to: "abdelkaderboukart@gmail.com", // list of receivers
       subject: `Message from ${name}`, // Subject line
-      text: `Email from ${name} who works at ${company} about: ${message}. Product reference: ${ref}.  Email: ${email}`,
+      // react: `Email from ${name} who works at ${company} about: ${message}. Product reference: ${ref}.  Email: ${email}. Phone: ${phoneNumber}`,
+      html: `
+        <h1>Message from ${name}</h1>
+        <p><strong>Company:</strong> ${company}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Phone:</strong> ${
+          phoneNumber !== undefined ? phoneNumber : "N/A"
+        }</p>
+        ${
+          ref !== undefined && ref !== 0
+            ? `<p><strong>Product Reference:</strong> ${ref}</p>`
+            : ""
+        }
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
     };
 
     // Send mail

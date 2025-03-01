@@ -27,8 +27,8 @@ interface EquipementType {
 
 const Servises = [
   {
-    name: "Carousel",
-    url: "/service/Carousel",
+    name: "Conseil",
+    url: "/service/Conseil",
     imageUrl: "/serves-conseil.webp",
   },
   {
@@ -83,6 +83,7 @@ export default function Home() {
     company: string;
     message: string;
     email: string;
+    phoneNumber: number | undefined;
     ref: number | undefined;
   }
 
@@ -91,6 +92,7 @@ export default function Home() {
     company: "",
     message: "",
     email: "",
+    phoneNumber: undefined,
     ref: 0,
   });
 
@@ -756,7 +758,7 @@ export default function Home() {
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      placeholder="Name"
+                      placeholder="Nom et prénom"
                     />
                     <Input
                       type="text"
@@ -766,7 +768,7 @@ export default function Home() {
                       value={formData.company}
                       onChange={handleChange}
                       required
-                      placeholder="company name"
+                      placeholder="Entreprise"
                     />
                     <Input
                       type="email"
@@ -778,10 +780,20 @@ export default function Home() {
                       required
                       placeholder="Email"
                     />
+                    <Input
+                      type="number"
+                      id="phoneNumber"
+                      name="phoneNumber"
+                      className="text-white/50"
+                      value={formData.phoneNumber}
+                      onChange={handleChange}
+                      required
+                      placeholder="phoneNumber"
+                    />
                     <div className="size-full">
                       <button
                         type="submit"
-                        className="bg-cyan-800 text-white font-bold size-full rounded-lg"
+                        className="bg-cyan-800 text-white font-bold h-10 w-full rounded-lg"
                       >
                         Submit
                       </button>
@@ -790,7 +802,7 @@ export default function Home() {
                   <Textarea
                     id="message"
                     name="message"
-                    className="text-white/50 size-full mt-6"
+                    className="text-white/50 w-full h-max mt-6"
                     value={formData.message}
                     onChange={handleChange}
                     required
@@ -829,10 +841,10 @@ export default function Home() {
                   animate={{ opacity: 1, x: 0 }}
                   className="text-blue-50 text-5xl font-bold mt-2"
                 >
-                  Feel Free
+                  Sentez-Vous Libre
                   <br />
-                  To&nbsp;
-                  <span className="text-blue-600">Contacting</span> US
+                  Pour&nbsp;
+                  <span className="text-blue-600">NOUS CONTACTER</span>
                 </motion.h1>
               </div>
             </div>
