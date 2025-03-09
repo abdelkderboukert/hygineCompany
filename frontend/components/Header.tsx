@@ -37,7 +37,8 @@ const Header = () => {
           name: "industries pharmacique et cosmetique",
           url: "/secteur-d-activites/industries%20pharmacique%20et%20cosmetique",
         },
-        { name: "Sante", url: "/secteur-d-activites/Sante" },
+        { name: "Hospitalier", url: "/secteur-d-activites/Hospitalier" },
+        { name: "Agricole", url: "/secteur-d-activites/Agricole" },
       ],
     },
     {
@@ -61,8 +62,8 @@ const Header = () => {
           url: "/No-Equipements/Hygiene et entretien des sols",
         },
         {
-          name: "Equipements pour abottoirs",
-          url: "/No-Equipements/Equipements pour abottoirs",
+          name: "Divers equipements",
+          url: "/No-Equipements/Divers equipements",
         },
         {
           name: "Cireuser a choussures",
@@ -141,10 +142,10 @@ const Header = () => {
   }, []);
 
   const c = isAtTop
-    ? `text-blue-700  bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-white ${
+    ? `text-blue-700 bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-white ${
         isOpen ? "divBlur" : ""
       }`
-    : `text-blue-700  bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-white ${
+    : `text-blue-700 bg-opacity-35 font-bold p-4 fixed w-full z-50 bg-white ${
         isOpen ? "divBlur" : ""
       }`;
 
