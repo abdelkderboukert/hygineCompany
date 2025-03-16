@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import * as motion from "motion/react-client";
-import Iteme1 from "@/components/Iteme1";
+import Iteme from "@/components/Iteme";
 import { db } from "@/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Link from "next/link";
@@ -121,7 +121,7 @@ const Page = ({
                 className=""
                 key={index}
               >
-                <Iteme1
+                <Iteme
                   key={index}
                   //@ts-expect-error image props missing
                   produits={valeu}
