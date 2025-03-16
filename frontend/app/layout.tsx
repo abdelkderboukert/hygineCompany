@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Header from "@/components/Header";
+{
+  /*import Header from "@/components/Header";*/
+}
 import "./globals.css";
 
 const geistSans = Geist({
@@ -18,18 +20,36 @@ export const metadata: Metadata = {
   description: "hyginène industrielle",
 };
 
-export default function RootLayout({
+export default function RootLayout(
+  {
+    /*{
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>*/
+  }
+) {
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Header />
-        {children}
+        {/*<Header />
+        {children}*/}
+        <div
+          className="w-full h-screen bg-cover bg-center"
+          style={{ backgroundImage: "url(/IMG_4530.jpg)" }}
+        >
+          <div className="size-full bg-black bg-opacity-65 flex justify-center items-center">
+            <div className="text-white text-4xl md:text-6xl font-bold">
+              <h1 className="text-center">Hygindust</h1>
+              <p className="text-center text-gray-300">hygiène industrielle</p>
+              <p className="text-center text-gray-500 text-xl">
+                Website under development Thank you for your patience
+              </p>
+            </div>
+          </div>
+        </div>
       </body>
     </html>
   );
