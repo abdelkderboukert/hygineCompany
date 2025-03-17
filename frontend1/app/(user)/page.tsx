@@ -50,16 +50,24 @@ const Servises = [
 ];
 
 const Fornisure = [
-  "/forni/heute-removebg-preview.png",
-  "/forni/Lechler_Company-Logo-removebg-preview.png",
-  "/forni/Logo_CFSBrands-Jofel-2023Curvas-01.webp",
-  "/forni/Logo_DELABIE.png",
-  "/forni/logo-ocene.svg",
-  "/forni/Logos-Prago_profilgate.png",
-  "/forni/ramex.jpg",
-  "/forni/Tork-Logo-700x394.webp",
-  "/forni/Vikan_logo.png",
-  "/forni/scm.jpg",
+  {
+    img: "/forni/heute-removebg-preview.png",
+    url: "https://www.heute-solecleaning.com/fr/pagedaccueil/",
+  },
+  {
+    img: "/forni/Lechler_Company-Logo-removebg-preview.png",
+    url: "https://www.lechler.de/",
+  },
+  {
+    img: "/forni/Logo_CFSBrands-Jofel-2023Curvas-01.webp",
+    url: "https://www.jofel.com/",
+  },
+  { img: "/forni/Logo_DELABIE.png", url: "https://www.delabie.com/" },
+  { img: "/forni/logo-ocene.svg", url: "https://www.ocene.fr/" },
+  { img: "/forni/Logos-Prago_profilgate.png", url: "www.profilgate.com/fr/" },
+  { img: "/forni/ramex.jpg", url: "https://www.ramex.it/" },
+  { img: "/forni/Tork-Logo-700x394.webp", url: "https://www.tork.fr/" },
+  { img: "/forni/Vikan_logo.png", url: "https://www.vikan.com/fr" },
 ];
 
 export default function Home() {
@@ -143,13 +151,6 @@ export default function Home() {
       <section className="w-full h-screen grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 select-none">
         <div className="flex justify-center items-center h-screen w-full bg-[#001439]">
           <div className="lg:size-3/5 sm:w-4/5 flex justify-start items-start flex-col">
-            <motion.p
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="text-blue-100"
-            >
-              HGINDUST HGINE INDUSTRAL
-            </motion.p>
             <motion.h1
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
@@ -181,7 +182,7 @@ export default function Home() {
                 className="flex justify-center items-center size-full"
                 href={"/#contact"}
               >
-                Contact Us&nbsp;&nbsp;
+                Contact Nous&nbsp;&nbsp;
                 <img src="i.svg" alt="My Icon" width={30} height={30} />
               </Link>
             </motion.div>
@@ -289,22 +290,22 @@ export default function Home() {
                   animate={{ opacity: 1, x: 0 }}
                   className="text-blue-50 text-5xl font-bold mt-2 lg:w-3/5 sm:w-4/5"
                 >
-                  We Offer The
-                  <br />
-                  Best&nbsp;
-                  <span className="text-blue-600">Servises</span>You <br />
-                  Can Find It
+                  Nous Offrons&nbsp;
+                  <span className="text-blue-600">Les Meilleurs Services</span>
+                  &nbsp;Que Vous
+                  <br /> Peut Le Trouver We Offer The
                 </motion.h1>
                 <motion.p
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   className="text-blue-50 my-5 lg:w-3/5 sm:w-4/5"
                 >
-                  At Hygindust, we are dedicated to providing top-notch services
-                  tailored to meet the unique needs of our clients. Our team of
-                  experienced professionals is committed to delivering
-                  exceptional results, ensuring that you receive the highest
-                  level of satisfaction
+                  Chez Hygienedust, nous nous engageons à fournir des services
+                  de premier ordre sur mesure pour répondre aux besoins uniques
+                  de nos clients. Notre équipe de des professionnels
+                  expérimentés s&apos;engagent à livrer des résultats
+                  exceptionnels, garantissant que vous recevez le meilleur
+                  niveau de satisfaction
                 </motion.p>
                 <div className="w-full h-full grid grid-flow-row lg:grid-cols-2 lg:grid-rows-2 gap-10">
                   {Servises.map((serve, index) => (
@@ -489,23 +490,24 @@ export default function Home() {
               className="size-full grid grid-cols-2 lg:grid-cols-3 gap-2"
             >
               {Fornisure.map((map, index) => (
-                <motion.div
-                  variants={{
-                    hidden: { y: 48, opacity: 0 },
-                    show: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        staggerChildren: 0.25,
+                <Link href={map.url} key={index}>
+                  <motion.div
+                    variants={{
+                      hidden: { y: 48, opacity: 0 },
+                      show: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          staggerChildren: 0.25,
+                        },
                       },
-                    },
-                  }}
-                  key={index}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="size-full flex justify-center bg-center bg-contain bg-no-repeat items-center"
-                  style={{ backgroundImage: `url(${map})` }}
-                ></motion.div>
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="size-full flex justify-center bg-center bg-contain bg-no-repeat items-center"
+                    style={{ backgroundImage: `url(${map.img})` }}
+                  ></motion.div>
+                </Link>
               ))}
             </motion.div>
           </div>

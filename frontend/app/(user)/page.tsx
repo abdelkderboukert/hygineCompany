@@ -705,23 +705,24 @@ export default function Home() {
               className="size-full grid grid-cols-2 lg:grid-cols-3 gap-2"
             >
               {Fornisure.map((map, index) => (
-                <motion.div
-                  variants={{
-                    hidden: { y: 48, opacity: 0 },
-                    show: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        staggerChildren: 0.25,
+                <Link href={""} key={index}>
+                  <motion.div
+                    variants={{
+                      hidden: { y: 48, opacity: 0 },
+                      show: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          staggerChildren: 0.25,
+                        },
                       },
-                    },
-                  }}
-                  key={index}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="size-full flex justify-center bg-center bg-contain bg-no-repeat items-center"
-                  style={{ backgroundImage: `url(${map})` }}
-                ></motion.div>
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="size-full flex justify-center bg-center bg-contain bg-no-repeat items-center"
+                    style={{ backgroundImage: `url(${map})` }}
+                  ></motion.div>
+                </Link>
               ))}
             </motion.div>
           </div>
