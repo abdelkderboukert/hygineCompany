@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import * as motion from "motion/react-client";
 {
   /*import Header from "@/components/Header";*/
 }
@@ -44,9 +45,13 @@ export default function RootLayout(
             <div className="text-white text-4xl md:text-6xl font-bold">
               <h1 className="text-center">Hygindust</h1>
               <p className="text-center text-gray-300">hygiène industrielle</p>
-              <p className="text-center text-gray-500 text-xl">
+              <motion.p
+                initial={{ y: 10, opacity: 0 }}
+                animate={{ y: 0, opacity: 1, transition: { duration: 0.7 } }}
+                className="text-center text-gray-500 text-sm mt-5"
+              >
                 Website under development Thank you for your patience
-              </p>
+              </motion.p>
             </div>
           </div>
         </div>
