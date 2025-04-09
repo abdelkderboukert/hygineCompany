@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import * as motion from "motion/react-client";
 {
-  /*import Header from "@/components/Header";*/
+  /*import Header from "@/components/Header";k*/
 }
 import "./globals.css";
 
