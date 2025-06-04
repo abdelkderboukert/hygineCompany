@@ -293,7 +293,7 @@ export default function Home() {
                   Nous Offrons&nbsp;
                   <span className="text-blue-600">Les Meilleurs Services</span>
                   &nbsp;Que Vous
-                  <br /> Peut Le Trouver We Offer The
+                  <br /> Peut Le Trouver
                 </motion.h1>
                 <motion.p
                   initial={{ opacity: 0, x: -30 }}
