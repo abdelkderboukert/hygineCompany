@@ -611,12 +611,12 @@ export default function Home() {
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
-              <Link
+              <LinGek
                 href={`/No-Equipements/${EquipementTypes[6]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
                 {EquipementTypes[6]?.typeName}
-              </Link>
+              </LinGek>
             </motion.div>
             <motion.div className="w-full h-[30dvh] bg-black overflow-hidden  relative">
               <motion.div
@@ -705,23 +705,24 @@ export default function Home() {
               className="size-full grid grid-cols-2 lg:grid-cols-3 gap-2"
             >
               {Fornisure.map((map, index) => (
-                <motion.div
-                  variants={{
-                    hidden: { y: 48, opacity: 0 },
-                    show: {
-                      opacity: 1,
-                      y: 0,
-                      transition: {
-                        staggerChildren: 0.25,
+                <Link href={""} key={index}>
+                  <motion.div
+                    variants={{
+                      hidden: { y: 48, opacity: 0 },
+                      show: {
+                        opacity: 1,
+                        y: 0,
+                        transition: {
+                          staggerChildren: 0.25,
+                        },
                       },
-                    },
-                  }}
-                  key={index}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="size-full flex justify-center bg-center bg-contain bg-no-repeat items-center"
-                  style={{ backgroundImage: `url(${map})` }}
-                ></motion.div>
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="size-full flex justify-center bg-center bg-contain bg-no-repeat items-center"
+                    style={{ backgroundImage: `url(${map})` }}
+                  ></motion.div>
+                </Link>
               ))}
             </motion.div>
           </div>
