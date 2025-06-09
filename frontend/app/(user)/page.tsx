@@ -611,12 +611,12 @@ export default function Home() {
                   <div className="size-full bg-blackOverlay"></div>
                 )}
               </motion.div>
-              <LinGek
+              <Link
                 href={`/No-Equipements/${EquipementTypes[6]?.typeName}`}
                 className="absolute text-5xl font-bold bottom-5 left-5 p-4 text-white"
               >
                 {EquipementTypes[6]?.typeName}
-              </LinGek>
+              </Link>
             </motion.div>
             <motion.div className="w-full h-[30dvh] bg-black overflow-hidden  relative">
               <motion.div
