@@ -661,7 +661,7 @@ const Page = () => {
               animate={{ y: 0, opacity: 1, transition: { duration: 0.7 } }}
               className="text-center text-gray-500 text-sm mt-5"
             >
-              site Web est en construction
+              site Web est en construction 1
             </motion.p>
           </div>
         </div>
