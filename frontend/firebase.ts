@@ -5,6 +5,7 @@ import { getAuth, connectAuthEmulator } from "firebase/auth";
 import { getStorage, connectStorageEmulator } from "firebase/storage";
 import { collection, addDoc } from "firebase/firestore"; // Corrected import
 
+console.log(process.env.NEXT_PUBLIC_API_KEY);
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
