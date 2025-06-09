@@ -80,8 +80,10 @@ const Page = ({
             key={index}
           >
             <Iteme
-            //@ts-expect-error image props missing
-             key={index} produits={serve} />
+              key={index}
+              //@ts-expect-error type error
+              produits={serve}
+            />
           </Link>
         ))}
       </div>

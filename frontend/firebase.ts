@@ -1,11 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
-import { getAuth, connectAuthEmulator } from "firebase/auth";
-import { getStorage, connectStorageEmulator } from "firebase/storage";
+import { getFirestore } from "firebase/firestore"; //, connectFirestoreEmulator
+import { getAuth } from "firebase/auth"; //, connectAuthEmulator
+import { getStorage } from "firebase/storage"; //, connectStorageEmulator
 import { collection, addDoc } from "firebase/firestore"; // Corrected import
 
-console.log(process.env.NEXT_PUBLIC_API_KEY);
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
@@ -22,11 +21,11 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-// Connect to emulators in development mode
-if (process.env.NODE_ENV === "development") {
-  connectFirestoreEmulator(db, "localhost", 8080);
-  connectAuthEmulator(auth, "http://localhost:9099");
-  connectStorageEmulator(storage, "localhost", 9199);
-}
+// // Connect to emulators in development mode
+// if (process.env.NODE_ENV === "development") {
+//   connectFirestoreEmulator(db, "localhost", 8080);
+//   connectAuthEmulator(auth, "http://localhost:9099");
+//   connectStorageEmulator(storage, "localhost", 9199);
+// }
 
 export { db, auth, storage, collection, addDoc };

@@ -38,7 +38,7 @@ export async function POST(req: Request) {
     // Set up email data
     const mailOptions = {
       from: process.env.EMAIL_USER, // sender address
-      to: "abdelkaderboukart@gmail.com", // list of receivers
+      to: ["commercial1@hygindust.com", "commercial2@hygindust.com"], // list of receivers
       subject: `Message from ${name}`, // Subject line
       // react: `Email from ${name} who works at ${company} about: ${message}. Product reference: ${ref}.  Email: ${email}. Phone: ${phoneNumber}`,
       html: `

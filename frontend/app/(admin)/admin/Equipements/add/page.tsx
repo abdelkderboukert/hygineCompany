@@ -12,6 +12,7 @@ interface EquipementType {
   id: string;
   typeName: string;
   image?: string; // Added imageUrl field
+  contry?: string;
 }
 
 interface SubType {
@@ -44,6 +45,7 @@ const EquipementsManager: React.FC = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [typeImageFile, setTypeImageFile] = useState<File | null>(null); // State for type image
+  const [typeImageContry, setTypeImageContry] = useState<File | null>(null);
   const [subTypeImageFile, setSubTypeImageFile] = useState<File | null>(null); // State for subtype image
 
   const storage = getStorage();
@@ -116,10 +118,12 @@ const EquipementsManager: React.FC = () => {
 
     try {
       const image = typeImageFile ? await uploadImage(typeImageFile) : "";
+      const contry = typeImageContry ? await uploadImage(typeImageContry) : "";
       const typeRef = doc(collection(db, "Equipements"), newTypeName);
-      await setDoc(typeRef, { typeName: newTypeName, image });
+      await setDoc(typeRef, { typeName: newTypeName, image, contry });
       setNewTypeName("");
       setTypeImageFile(null);
+      setTypeImageContry(null);
       await fetchEquipementTypes();
       setSuccessMessage("Type added successfully!");
     } catch (error) {
@@ -276,6 +280,13 @@ const EquipementsManager: React.FC = () => {
             onChange={(e) => setNewTypeName(e.target.value)}
             placeholder="New Type Name"
             className="flex-1 p-2 border rounded"
+            required
+          />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setTypeImageContry(e.target.files?.[0] || null)}
+            className="p-2 border rounded"
             required
           />
           <input

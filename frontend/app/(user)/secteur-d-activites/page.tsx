@@ -1,5 +1,5 @@
 "use client";
-import Iteme from "@/components/Iteme";
+import Iteme1 from "@/components/Iteme1";
 import React, { useEffect, useState } from "react";
 import * as motion from "motion/react-client";
 import { db } from "@/firebase";
@@ -99,7 +99,7 @@ function Page() {
                 className=""
                 key={index}
               >
-                <Iteme
+                <Iteme1
                   key={index}
                   //@ts-expect-error type error
                   produits={valeu}

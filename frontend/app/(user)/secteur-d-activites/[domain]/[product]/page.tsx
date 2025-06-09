@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import * as motion from "motion/react-client";
-import Iteme from "@/components/Iteme";
+import Iteme1 from "@/components/Iteme1";
 import { useFirestoreP } from "@/_utils/useFirestore";
 import { db } from "@/firebase";
 import { collection, getDocs } from "firebase/firestore";
@@ -79,9 +79,11 @@ const Page = ({
             className=""
             key={index}
           >
-            <Iteme key={index}
-            //@ts-expect-error type error
-             produits={serve} />
+            <Iteme1
+              key={index}
+              //@ts-expect-error type error
+              produits={serve}
+            />
           </Link>
         ))}
       </div>

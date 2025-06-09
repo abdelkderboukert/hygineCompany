@@ -97,6 +97,7 @@ const Page: React.FC = () => {
 
   // Fetch Equipements for selected subtype
   const fetchEquipements = async (typeId: string, subtypeId: string) => {
+    console.log(typeId, subtypeId);
     try {
       const EquipementsRef = collection(
         db,
@@ -104,9 +105,10 @@ const Page: React.FC = () => {
         typeId,
         "Equipements-subType",
         subtypeId,
-        "Equipements"
+        "products"
       );
       const querySnapshot = await getDocs(EquipementsRef);
+      console.log(querySnapshot);
       const EquipementsData = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         name: doc.data().name || "",
@@ -120,6 +122,7 @@ const Page: React.FC = () => {
       console.error("Error fetching Equipements:", error);
       setError("Error fetching Equipements.");
     }
+    console.log(Equipements);
   };
 
   useEffect(() => {
@@ -137,6 +140,7 @@ const Page: React.FC = () => {
 
   useEffect(() => {
     if (selectedType && selectedSubType) {
+      console.log(selectedSubType, selectedType);
       fetchEquipements(selectedType.id, selectedSubType.id);
     } else {
       setEquipements([]);

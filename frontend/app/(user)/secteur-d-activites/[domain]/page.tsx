@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import * as motion from "motion/react-client";
-import Iteme from "@/components/Iteme";
+import Iteme1 from "@/components/Iteme1";
 import { db } from "@/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Link from "next/link";
@@ -25,6 +25,7 @@ const Page = ({
 }) => {
   const { domain } = React.use(params);
   const CLDomain = domain.replace(/%20/g, " ");
+  console.log(CLDomain);
 
   const [EquipementType, setEquipementType] = useState<EquipementType | null>(
     null
@@ -121,7 +122,7 @@ const Page = ({
                 className=""
                 key={index}
               >
-                <Iteme
+                <Iteme1
                   key={index}
                   //@ts-expect-error images props missing
                   produits={valeu}

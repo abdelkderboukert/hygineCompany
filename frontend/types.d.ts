@@ -11,4 +11,5 @@ export interface Product {
   ref?: number;
   subtitle?: string;
   file?: string;
+  contry?: string;
 }

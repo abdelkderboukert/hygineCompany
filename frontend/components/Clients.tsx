@@ -62,11 +62,11 @@ const ReviewCard = ({ img }: { img: string }) => {
   return (
     <figure
       className={cn(
-        "relative h-full w-64 cursor-pointer border p-4",
+        "relative h-full w-64 cursor-pointer p-4"
         // light styles
-        "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
-        // dark styles
-        "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
+        // "border-gray-950/[.1] bg-gray-950/[.01] hover:bg-gray-950/[.05]",
+        // // dark styles
+        // "dark:border-gray-50/[.1] dark:bg-gray-50/[.10] dark:hover:bg-gray-50/[.15]"
       )}
     >
       <div className="flex flex-row justify-center items-center gap-2">
@@ -84,7 +84,7 @@ const ReviewCard = ({ img }: { img: string }) => {
 
 export default function Client() {
   return (
-    <div className="relative h-full bg-black bg-opacity-80 flex w-full flex-col items-center justify-center overflow-hidden">
+    <div className="relative h-full bg-transparent bg-opacity-80 flex w-full flex-col items-center justify-center overflow-hidden">
       <Marquee pauseOnHover className="[--duration:20s]">
         {firstRow.map((review, index) => (
           <ReviewCard key={index} {...review} />
@@ -95,8 +95,8 @@ export default function Client() {
           <ReviewCard key={index} {...review} />
         ))}
       </Marquee>
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black"></div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-black"></div>
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-white"></div>
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-white"></div>
     </div>
   );
 }
