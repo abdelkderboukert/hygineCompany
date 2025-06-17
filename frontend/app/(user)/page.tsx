@@ -150,17 +150,16 @@ export default function Home() {
     <>
       <section className="w-full h-screen grid grid-rows-2 sm:grid-cols-2 sm:grid-rows-1 select-none">
         <div className="flex justify-center items-center h-screen w-full bg-[#001439]">
-          <div className="lg:size-3/5 sm:w-4/5 flex justify-start items-start flex-col">
+          <div className="lg:w-4/5 lg:h-3/5 sm:w-4/5 flex justify-start items-start flex-col">
             <motion.h1
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               className="text-blue-50 text-5xl font-bold mt-2"
             >
-              Nous offrons la meilleure
+              L’innovation
               <br />
-              <span className="text-blue-600">Qualité sur le marché</span>{" "}
-              <br />
-              au meilleur prix
+              <span className="text-blue-600">au cœur de l’hygiène</span> <br />
+              professionnelle
             </motion.h1>
             {/* <motion.p
               initial={{ opacity: 0, x: -30 }}
@@ -217,16 +216,15 @@ export default function Home() {
           whileInView={{ opacity: 1, y: 0, transition: { duration: 0.75 } }}
           className="w-2/3 md:w-1/2 lg:w-1/3 h-5/6 bg-[#001439] mx-1 p-4 flex flex-col justify-center"
         >
-          <h1 className="text-blue-100 text-2xl px-5">
+          <h1 className="text-blue-100 text-4xl px-5">
             A Propos de&nbsp;<span className="text-cyan-800">Nous</span>
           </h1>
           <p className="my-5 text-sm text-white px-5">
-            Hygindust (Hygiène industrielle) et Hyprotech (Hygiène
-            professionnelle et technologie), sont spécialisés dans le conseil et
-            la commercialisation de produits et de matériels de nettoyage et de
-            désinfection en industrie agroalimentaire, restauration collective,
-            industrie pharmaceutique et cosmétique. <br /> <br /> Par leur
-            politique de plus qu&apos;un fournisseur un réel partenaire
+            SARL HYGINDUST et SARL HYPROTECH, sont spécialisés dans le conseil
+            et la commercialisation de produits et de matériels de nettoyage et
+            de désinfection en industrie agroalimentaire, restauration
+            collective, industrie pharmaceutique et cosmétique. <br /> <br />{" "}
+            Par leur politique de plus qu&apos;un fournisseur un réel partenaire
             d&apos;hygiène;
           </p>
           <motion.div
@@ -253,9 +251,8 @@ export default function Home() {
             <div className="w-0 lg:w-full h-1/5 flex items-start justify-start mt-1 p-3">
               <p className="text-black">
                 <span className="text-[#001439] text-xl font-bold">
-                  localisation:
+                  Retrouvez nous sur la carte ci-dessus.
                 </span>
-                village benramdan lot 102 n°2 chebli blida
               </p>
             </div>
           </div>
@@ -288,22 +285,20 @@ export default function Home() {
                 <motion.h1
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
-                  className="text-blue-50 text-5xl font-bold mt-2 lg:w-3/5 sm:w-4/5"
+                  className="text-blue-50 text-5xl font-bold mt-2 lg:w-4/5 sm:w-4/5"
                 >
-                  Nous Offrons&nbsp;
-                  <span className="text-blue-600">Les Meilleurs Services</span>
-                  &nbsp;Que Vous
-                  <br /> Peut Le Trouver
+                  Performance, technologie
+                  <span className="text-blue-600"> Hygiéne</span>&nbsp;:
+                  <br />
+                  notre engagement pour
+                  <br />
+                  votre tranquillité.
                 </motion.h1>
                 <motion.p
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   className="text-blue-50 my-5 lg:w-3/5 sm:w-4/5"
-                >
-                  Chez Hygienedust, nous nous engageons à fournir des services
-                  de premier ordre sur mesure pour répondre aux besoins uniques
-                  de nos clients
-                </motion.p>
+                ></motion.p>
                 <div className="w-full h-full grid grid-flow-row lg:grid-cols-2 lg:grid-rows-2 gap-10">
                   {Servises.map((serve, index) => (
                     <motion.div
@@ -345,19 +340,18 @@ export default function Home() {
               animate={{ opacity: 1, x: 0 }}
               className="text-[#0e012d] text-5xl font-bold mt-2"
             >
-              Notre
+              Nos
               <br />
-              Secture
-              <span className="text-blue-600">D&apos;Activites</span>
+              Secteurs <br />
+              <span className="text-blue-600">D&apos;activités</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               className="text-black my-5"
             >
-              The cotton gin, invented by Eli Whitney in 1793, revolutionized
-              the cotton industry by mechanizing the labor-intensive process of
-              separating cotton fibers from seeds.
+              Des solutions fiables pour nettoyer, désinfecter et protéger vos
+              environnements.
             </motion.p>
           </div>
         </motion.div>
@@ -452,20 +446,20 @@ export default function Home() {
             className="size-4/5 flex font-forum  items-center justify-start flex-col text-white"
           >
             <h1 className="text-4xl font-bold">
-              Ils Nous donnent <br />
-              Leur confiance pour vous servir
+              Des partenaires de qualité pour un
+              <br />
+              service d’excellence.
             </h1>
             <br />
             <p className=" mt-5 text-sm text-gray-500">
-              Les meubles sont dédiés à établir la confiance avec nos clients
-              grâce à un savoir-faire de qualité et un service exceptionnel.{" "}
+              Nous travaillons main dans la main avec des partenaires leaders
+              dans leurs domaines, afin de garantir à nos clients des produits
+              et des équipements de nettoyage et de désinfection à la hauteur
+              des exigences les plus strictes.
               <br /> <br />
-              Nous comprenons que l&apos;achat de meubles est un investissement
-              important, et nous nous efforçons de nous assurer que chaque pièce
-              répond aux normes les plus élevées. <br /> <br /> Notre engagement
-              envers la transparence et l&apos;intégrité signifie que vous
-              pouvez compter sur nous pour une communication et un soutien
-              honnêtes.
+              Cette collaboration nous permet d’assurer une qualité de service
+              optimale, une veille technologique constante, et des solutions
+              toujours plus performantes.
             </p>
           </motion.div>
         </div>
