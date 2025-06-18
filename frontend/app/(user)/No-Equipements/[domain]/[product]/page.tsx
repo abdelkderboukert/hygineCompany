@@ -123,21 +123,9 @@ interface EquipementType {
   image?: string;
 }
 
-<<<<<<< HEAD
 const Page = ({ params }: { params: { domain: string; product: string } }) => {
   const domain = decodeURIComponent(params.domain);
   const product = decodeURIComponent(params.product);
-=======
-const Page = ({
-  params,
-}: {
-  params: Promise<{ domain: string; product: string }>;
-}) => {
-  const { domain, product } = React.use(params);
-  const CLDomain = domain.replace(/%20/g, " ");
-  const CLproduct = product.replace(/%20/g, " ");
-  console.log("product" + CLproduct);
->>>>>>> b59ba47b5ff03d019c96eba6c075a6c7fc687a1d
 
   const [equipementSubType, setEquipementSubType] =
     useState<EquipementType | null>(null);
@@ -165,13 +153,8 @@ const Page = ({
     if (domain && product) {
       fetchProductSubTypeByName(domain, product);
     }
-<<<<<<< HEAD
   }, [domain, product]);
 
-=======
-  }, [CLDomain, CLproduct]);
-  console.log(EquipementSubType);
->>>>>>> b59ba47b5ff03d019c96eba6c075a6c7fc687a1d
   const { products, loading, error } = useFirestore({
     selectedType: domain,
     selectedSubType: equipementSubType?.id || "", // empty string if not ready
