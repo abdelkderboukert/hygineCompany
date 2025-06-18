@@ -21,6 +21,7 @@ const Page = ({
   const { domain, product } = React.use(params);
   const CLDomain = domain.replace(/%20/g, " ");
   const CLproduct = product.replace(/%20/g, " ");
+  console.log("product" + CLproduct);
 
   const [EquipementSubType, setEquipementSubType] =
     useState<EquipementType | null>(null);
@@ -49,7 +50,7 @@ const Page = ({
       fetchProductSubTypeByName(CLDomain, CLproduct);
     }
   }, [CLDomain, CLproduct]);
-  console.log(CLDomain, EquipementSubType?.id);
+  console.log(EquipementSubType);
   const { products, loading, error } = useFirestore({
     selectedType: CLDomain,
     selectedSubType: EquipementSubType?.id,

@@ -93,7 +93,7 @@ const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
-  console.log(isMobile);
+  console.log(isMobile)
 
   useEffect(() => {
     const handleResize = () => {
@@ -169,7 +169,7 @@ const Header = () => {
             }}
           ></motion.div>
         </Link>
-        <Link href={"/"} className="w-32 h-10 mr-5 bg-cover bg-bottom">
+        {/* <Link href={"/"} className="w-32 h-10 mr-5 bg-cover bg-bottom">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0, transition: { duration: 0.5 } }}
@@ -180,7 +180,7 @@ const Header = () => {
                 "url('/logo/logo_hyprotech-removebg-preview-removebg-preview.png')",
             }}
           ></motion.div>
-        </Link>
+        </Link> */}
         {/* Mobile Menu Button */}
         <div className="md:hidden text-blue-700">
           <button
