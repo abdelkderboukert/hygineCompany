@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import React, { useEffect, useState } from "react";
 import * as motion from "motion/react-client";
 import Iteme from "@/components/Iteme";
@@ -16,48 +16,45 @@ interface EquipementType {
 const Page = ({
   params,
 }: {
-  params: Promise<{ domain: string; product: string }>;
+  params: { domain: string; product: string };
 }) => {
-  const { domain, product } = React.use(params);
-  const CLDomain = domain.replace(/%20/g, " ");
-  const CLproduct = product.replace(/%20/g, " ");
+  const domain = decodeURIComponent(params.domain);
+  const product = decodeURIComponent(params.product);
 
-  const [EquipementSubType, setEquipementSubType] =
-    useState<EquipementType | null>(null);
+  const [equipementSubType, setEquipementSubType] = useState<EquipementType | null>(null);
 
+  // Fetch all subTypes, then select the one matching the product name
   const fetchProductSubTypeByName = async (type: string, name: string) => {
-    console.log(name);
     try {
       const querySnapshot = await getDocs(
         collection(db, "Equipements", type, "Equipements-subType")
       );
+
       const types = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as EquipementType[];
-      console.log(types);
-      // Find the product type by name
-      const foundType = types.find((type) => type.typeName === name);
+
+      const foundType = types.find((t) => t.typeName === name);
       setEquipementSubType(foundType || null);
     } catch (error) {
-      console.error("Error fetching product type:", error);
+      console.error("Error fetching product subtype:", error);
     }
   };
 
   useEffect(() => {
-    if (CLproduct) {
-      fetchProductSubTypeByName(CLDomain, CLproduct);
+    if (domain && product) {
+      fetchProductSubTypeByName(domain, product);
     }
-  }, [CLDomain, CLproduct]);
-  console.log(CLDomain, EquipementSubType?.id);
+  }, [domain, product]);
+
   const { products, loading, error } = useFirestore({
-    selectedType: CLDomain,
-    selectedSubType: EquipementSubType?.id,
+    selectedType: domain,
+    selectedSubType: equipementSubType?.id || "", // empty string if not ready
   });
 
   if (loading) return <div>Loading...</div>;
-  //@ts-expect-error ggg
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>Error: {error.message || error}</div>;
 
   return (
     <section className="w-full min-h-screen h-max flex justify-center items-center flex-col">
@@ -67,23 +64,19 @@ const Page = ({
         transition={{ duration: 0.75 }}
         className="flex mt-20 justify-center mx-auto lg:text-7xl text-4xl text-[#0e012d] font-semibold"
       >
-        {CLproduct}
+        {product}
       </motion.h1>
       <h2 className="flex justify-center mx-auto text-gray-300 select-none">
-        {CLDomain}&gt;{CLproduct}
+        {domain} &gt; {product}
       </h2>
+
       <div className="w-full h-max grid grid-rows-5 sm:grid-rows-2 sm:grid-cols-3 gap-3 p-5">
-        {products.map((serve, index) => (
+        {products.map((serve) => (
           <Link
-            href={`/No-Equipements/${domain}/${product}/${serve.id}`}
-            className=""
-            key={index}
+            href={`/No-Equipements/${params.domain}/${params.product}/${serve.id}`}
+            key={serve.id}
           >
-            <Iteme
-              key={index}
-              //@ts-expect-error type error
-              produits={serve}
-            />
+            <Iteme produits={serve} />
           </Link>
         ))}
       </div>
