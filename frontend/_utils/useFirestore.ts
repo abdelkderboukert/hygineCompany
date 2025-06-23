@@ -69,7 +69,7 @@ export const useFirestore = ({
 
     fetchProducts();
   }, [selectedType, selectedSubType]);
-
+  console.log(products);
   return { products, loading, error };
 };
 
