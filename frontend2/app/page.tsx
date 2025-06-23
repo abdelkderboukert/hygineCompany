@@ -160,7 +160,7 @@ export default function HomePage() {
             <Card className="group hover:shadow-xl transition-shadow">
               <CardHeader>
                 <Image
-                  src="/placeholder.svg?height=200&width=300"
+                  src="/bidon.png?height=200&width=300"
                   alt="Hand sanitizers"
                   width={300}
                   height={200}
@@ -185,7 +185,7 @@ export default function HomePage() {
             <Card className="group hover:shadow-xl transition-shadow">
               <CardHeader>
                 <Image
-                  src="/placeholder.svg?height=200&width=300"
+                  src="/equp.png?height=200&width=300"
                   alt="Cleaning equipment"
                   width={300}
                   height={200}
