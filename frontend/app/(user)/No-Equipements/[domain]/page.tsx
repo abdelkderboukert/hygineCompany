@@ -117,7 +117,7 @@ const Page = ({
             };
             return (
               <Link
-                href={`/No-Equipements/${EquipementType?.typeName}/${valeu.name}`}
+                href={`/No-Equipements/${EquipementType?.typeName}/${valeu.id}`}
                 className=""
                 key={index}
               >
