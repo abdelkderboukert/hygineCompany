@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -10,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Shield, ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
+import { useParams } from "next/navigation";
 
 // Sample product sectors data with different themes
 const productSectors = [
@@ -67,7 +69,8 @@ const productSectors = [
   {
     id: "Collectivite",
     name: "Collectivité",
-    description: "Un groupe d'individus partageant des caractéristiques, des intérêts, un territoire ou des objectifs communs, et interdépendants au sein d'une structure sociale.",
+    description:
+      "Un groupe d'individus partageant des caractéristiques, des intérêts, un territoire ou des objectifs communs, et interdépendants au sein d'une structure sociale.",
     image: "/placeholder.svg?height=300&width=400",
     activators: ["citoyens", "résidents", "organisations-publiques"],
     theme: {
@@ -79,11 +82,12 @@ const productSectors = [
     },
   },
   {
-    "id": "Additifs",
-    "name": "Additifs",
-    "description": "Substances ajoutées intentionnellement à un produit (alimentaire, cosmétique, industriel, etc.) en faible quantité pour modifier ses caractéristiques (conservation, goût, texture, couleur, stabilité) ou faciliter sa fabrication, sans être consommées seules comme ingrédients principaux.",
-    "image": "/placeholder.svg?height=300&width=400",
-    "activators": ["conservateurs", "colorants", "exhausteurs-de-gout"],
+    id: "Additifs",
+    name: "Additifs",
+    description:
+      "Substances ajoutées intentionnellement à un produit (alimentaire, cosmétique, industriel, etc.) en faible quantité pour modifier ses caractéristiques (conservation, goût, texture, couleur, stabilité) ou faciliter sa fabrication, sans être consommées seules comme ingrédients principaux.",
+    image: "/placeholder.svg?height=300&width=400",
+    activators: ["conservateurs", "colorants", "exhausteurs-de-gout"],
     theme: {
       gradient: "from-orange-500 to-orange-700",
       bgColor: "bg-orange-50",
@@ -95,7 +99,8 @@ const productSectors = [
   {
     id: "Agricole",
     name: "Agricole",
-    description: "Relatif à l'agriculture, l'ensemble des activités humaines qui transforment le milieu naturel pour produire des ressources végétales (cultures) et animales (élevage) utiles aux besoins de l'homme (alimentation, fibres, énergie).",
+    description:
+      "Relatif à l'agriculture, l'ensemble des activités humaines qui transforment le milieu naturel pour produire des ressources végétales (cultures) et animales (élevage) utiles aux besoins de l'homme (alimentation, fibres, énergie).",
     image: "/placeholder.svg?height=300&width=400",
     activators: ["cultures", "elevage", "machinisme-agricole"],
     theme: {
@@ -109,6 +114,20 @@ const productSectors = [
 ];
 
 export default function ProductCatalogPage() {
+  const params = useParams();
+  const productTypeEncoded = params.type as string; // Assert as string if confident it will be present
+
+  // Decode the URL component
+  const productType = decodeURIComponent(productTypeEncoded).replace(/-/g, " ");;
+
+  if (!productType) {
+    // Handle cases where productType might not be available yet or is undefined
+    return <div>Loading product type...</div>;
+  }
+
+  // Now 'productType' will have spaces instead of %20 and other decoded characters
+  console.log("Original encoded product type:", productTypeEncoded);
+  console.log("Decoded product type:", productType);
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -144,7 +163,8 @@ export default function ProductCatalogPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Product Catalog
+              {/* Product Catalog */}
+              {productType ? `${productType}` : ""}
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Browse our comprehensive range of sterilization chemicals and
