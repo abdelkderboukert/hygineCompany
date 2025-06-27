@@ -18,7 +18,7 @@ import { isAuthenticated } from "@/_utils/auth";
 
 const Header = () => {
   const Links = [
-    { name: "Acceuil", url: "/" },
+    { name: "Accueil", url: "/" },
     { name: "A propos de nous", url: "/about" },
     {
       name: "Secteur d'activites",
@@ -93,7 +93,7 @@ const Header = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isAtTop, setIsAtTop] = useState(true);
-  console.log(isMobile)
+  console.log(isMobile);
 
   useEffect(() => {
     const handleResize = () => {
