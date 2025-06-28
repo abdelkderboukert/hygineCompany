@@ -12,8 +12,39 @@ import {
 import { Shield, ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
 import { useParams } from "next/navigation";
+import { getProductType } from "@/lib/firebase-admin"; // Ensure this path is correct
+import { useEffect, useState } from "react"; // Import useEffect and useState
 
-// Sample product sectors data with different themes
+// Define your ProductType interface
+interface ProductType {
+  id?: string;
+  name: string;
+  description: string;
+  image?: string;
+  theme: {
+    gradient: string;
+    bgColor: string;
+    iconColor: string;
+    borderColor: string;
+    hoverColor: string;
+    overlayGradient: string;
+  };
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface ProductSubtype {
+  id?: string;
+  typeId: string;
+  name: string;
+  description: string;
+  image?: string;
+  productCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Sample product sectors data with different themes (can be removed if all data comes from Firestore)
 const productSectors = [
   {
     id: "sterilization-chemicals",
@@ -31,18 +62,12 @@ const productSectors = [
     },
   },
   {
-    id: "Clean-Out-of-Place",
+    id: "clean-out-of-place", // Changed to kebab-case for URL consistency
     name: "Clean-Out-of-Place (COP)",
     description:
       "Nettoyage des équipements et composants qui ne peuvent pas être nettoyés sur place, nécessitant un démontage et un nettoyage dans une zone dédiée.",
     image: "/placeholder.svg?height=300&width=400",
-    activators: [
-      "nettoyants-alcalins",
-      "nettoyants-acides",
-      "eau-purifiee",
-      // "action-mecanique",
-      // "temperature",
-    ],
+    activators: ["nettoyants-alcalins", "nettoyants-acides", "eau-purifiee"],
     theme: {
       gradient: "from-green-500 to-green-700",
       bgColor: "bg-green-50",
@@ -52,7 +77,7 @@ const productSectors = [
     },
   },
   {
-    id: "Hygiene-Corporelle",
+    id: "hygiene-corporelle", // Changed to kebab-case
     name: "Hygiène Corporelle",
     description:
       "Ensemble des pratiques et des soins destinés à maintenir la propreté du corps, prévenir les maladies et favoriser le bien-être physique et mental.",
@@ -67,7 +92,7 @@ const productSectors = [
     },
   },
   {
-    id: "Collectivite",
+    id: "collectivite", // Changed to kebab-case
     name: "Collectivité",
     description:
       "Un groupe d'individus partageant des caractéristiques, des intérêts, un territoire ou des objectifs communs, et interdépendants au sein d'une structure sociale.",
@@ -82,7 +107,7 @@ const productSectors = [
     },
   },
   {
-    id: "Additifs",
+    id: "additifs", // Changed to kebab-case
     name: "Additifs",
     description:
       "Substances ajoutées intentionnellement à un produit (alimentaire, cosmétique, industriel, etc.) en faible quantité pour modifier ses caractéristiques (conservation, goût, texture, couleur, stabilité) ou faciliter sa fabrication, sans être consommées seules comme ingrédients principaux.",
@@ -97,7 +122,7 @@ const productSectors = [
     },
   },
   {
-    id: "Agricole",
+    id: "agricole", // Changed to kebab-case
     name: "Agricole",
     description:
       "Relatif à l'agriculture, l'ensemble des activités humaines qui transforment le milieu naturel pour produire des ressources végétales (cultures) et animales (élevage) utiles aux besoins de l'homme (alimentation, fibres, énergie).",
@@ -115,47 +140,93 @@ const productSectors = [
 
 export default function ProductCatalogPage() {
   const params = useParams();
-  const productTypeEncoded = params.type as string; // Assert as string if confident it will be present
+  const productTypeParam = params.type as string; // Assert as string if confident it will be present
 
-  // Decode the URL component
-  const productType = decodeURIComponent(productTypeEncoded).replace(/-/g, " ");;
+  const [fetchedProductType, setFetchedProductType] =
+    useState<ProductType | null>(null);
+  const [fetchedProductSubType, setFetchedProductSubType] =
+    useState<ProductSubtype | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!productType) {
-    // Handle cases where productType might not be available yet or is undefined
-    return <div>Loading product type...</div>;
+  // Derive the ID to use for Firestore
+  // If your Firestore document IDs are kebab-case (e.g., "sterilization-chemicals"),
+  // then directly use productTypeParam after decoding.
+  // If they contain spaces (e.g., "Sterilization Chemicals"), then convert productTypeParam to that format.
+  // Based on your productSectors array, your IDs are kebab-case, but your decoding logic converts to spaces.
+  // Let's assume Firestore IDs are exactly what's in the URL (kebab-case) for simplicity.
+  const firestoreId = productTypeParam
+    ? decodeURIComponent(productTypeParam)
+    : null;
+
+  useEffect(() => {
+    async function fetchProductTypeData() {
+      if (!firestoreId) {
+        setLoading(false);
+        setError("Product type ID is missing.");
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+      try {
+        // Call the getProductType function with the decoded ID
+        const data = await getProductType(firestoreId);
+        if (data) {
+          setFetchedProductType(data);
+        } else {
+          setFetchedProductType(null); // No product type found
+          setError(`Product type with ID "${firestoreId}" not found.`);
+        }
+      } catch (err) {
+        console.error("Error fetching product type:", err);
+        setError("Failed to load product type data.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProductTypeData();
+  }, [firestoreId]);
+  
+
+  // Display loading, error, or not found states
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <p>Loading product type details...</p>
+      </div>
+    );
   }
 
-  // Now 'productType' will have spaces instead of %20 and other decoded characters
-  console.log("Original encoded product type:", productTypeEncoded);
-  console.log("Decoded product type:", productType);
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <p className="text-red-500">{error}</p>
+      </div>
+    );
+  }
+
+  // If fetchedProductType is null, it means no data was found
+  if (!fetchedProductType) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <p>No product type found for "{firestoreId}".</p>
+      </div>
+    );
+  }
+
+  // If you want to filter your local productSectors based on the fetched ID:
+  const currentSector = productSectors.find(
+    (sector) => sector.id === firestoreId
+  );
+
+  // Now, use fetchedProductType.name and fetchedProductType.description in your rendering
+  // You might also want to fetch `activators` and `theme` from Firestore if they are part of ProductType in DB
+  // For now, if you rely on the local `productSectors` for those details, ensure the `id` matches correctly.
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
-      {/* <header className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-2">
-              <Shield className="h-8 w-8 text-blue-600" />
-              <span className="text-2xl font-bold text-gray-900">HygieneMax</span>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors">
-                Home
-              </Link>
-              <Link href="/products" className="text-blue-600 font-medium">
-                Products
-              </Link>
-              <Link href="/suppliers" className="text-gray-700 hover:text-blue-600 transition-colors">
-                Suppliers
-              </Link>
-              <Link href="/#contact" className="text-gray-700 hover:text-blue-600 transition-colors">
-                Contact
-              </Link>
-            </nav>
-            <Button className="bg-blue-600 hover:bg-blue-700">Get Quote</Button>
-          </div>
-        </div>
-      </header> */}
       <Header />
 
       {/* Hero Section */}
@@ -163,18 +234,19 @@ export default function ProductCatalogPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              {/* Product Catalog */}
-              {productType ? `${productType}` : ""}
+              {/* Display the name fetched from Firestore */}
+              {fetchedProductType.name}
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Browse our comprehensive range of sterilization chemicals and
-              equipment for all industry needs
+              {/* Display the description fetched from Firestore */}
+              {fetchedProductType.description}
             </p>
           </div>
         </div>
       </section>
 
-      {/* Product Sectors Grid */}
+      {/* Product Sectors Grid - You might want to remove this if you only display details for one product type */}
+      {/* Or, if you want to display related product sectors, you could filter them */}
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
