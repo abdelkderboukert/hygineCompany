@@ -22,7 +22,7 @@ import { db, storage } from "./firebase";
 
 // Types
 export interface ProductType {
-  id?: string;
+  id: string;
   name: string;
   description: string;
   image?: string;
@@ -97,6 +97,14 @@ export interface Product {
     certificationDocuments?: string;
     qualityReport?: string;
     complianceDocuments?: string;
+  };
+  theme: {
+    gradient: string;
+    bgColor: string;
+    iconColor: string;
+    borderColor: string;
+    hoverColor: string;
+    overlayGradient: string;
   };
   createdAt: Date;
   updatedAt: Date;
@@ -369,3 +377,41 @@ export const deleteFile = async (url: string) => {
   const fileRef = ref(storage, url);
   await deleteObject(fileRef);
 };
+
+// Image Upload
+// This function uploads an image file to Firebase Storage and returns the download URL
+// It creates a unique filename using the current timestamp and sanitizes the original filename
+
+export const uploadImageToFirebase = async (file: File, path: string): Promise<string> => {
+  try {
+    // Create a unique filename
+    const timestamp = Date.now()
+    const fileName = `${timestamp}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`
+    const fullPath = `${path}/${fileName}`
+
+    // Create storage reference
+    const storageRef = ref(storage, fullPath)
+
+    // Upload file
+    const snapshot = await uploadBytes(storageRef, file)
+
+    // Get download URL
+    const downloadURL = await getDownloadURL(snapshot.ref)
+
+    return downloadURL
+  } catch (error) {
+    console.error("Error uploading image:", error)
+    throw new Error("Failed to upload image")
+  }
+}
+
+export const uploadMultipleImages = async (files: File[], path: string): Promise<string[]> => {
+  try {
+    const uploadPromises = files.map((file) => uploadImageToFirebase(file, path))
+    const urls = await Promise.all(uploadPromises)
+    return urls
+  } catch (error) {
+    console.error("Error uploading multiple images:", error)
+    throw new Error("Failed to upload images")
+  }
+}

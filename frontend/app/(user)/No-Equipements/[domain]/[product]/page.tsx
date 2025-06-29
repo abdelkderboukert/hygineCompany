@@ -13,15 +13,12 @@ interface EquipementType {
   image?: string;
 }
 
-<<<<<<< HEAD
 interface EquipementType {
   id: string;
   typeName: string;
   image?: string;
 }
 
-=======
->>>>>>> 42b2108c6ed6ce97639ac142392897d6fac93d78
 const Page = ({
   params,
 }: {
@@ -30,20 +27,14 @@ const Page = ({
   const { domain, product } = React.use(params);
   const CLDomain = domain.replace(/%20/g, " ");
   const CLproduct = product.replace(/%20/g, " ");
-<<<<<<< HEAD
 
-=======
   console.log(CLDomain, CLproduct);
->>>>>>> 42b2108c6ed6ce97639ac142392897d6fac93d78
   const [EquipementSubType, setEquipementSubType] =
     useState<EquipementType | null>(null);
 
   const fetchProductSubTypeByName = async (type: string, name: string) => {
-<<<<<<< HEAD
     console.log(name);
-=======
     console.log(name,type);
->>>>>>> 42b2108c6ed6ce97639ac142392897d6fac93d78
     try {
       const querySnapshot = await getDocs(
         collection(db, "Equipements", type, "Equipements-subType")
@@ -92,19 +83,11 @@ const Page = ({
       <div className="w-full h-max grid grid-rows-5 sm:grid-rows-2 sm:grid-cols-3 gap-3 p-5">
         {products.map((serve, index) => (
           <Link
-<<<<<<< HEAD
             href={`/No-Equipements/${domain}/${product}/${serve.name}`}
             className=""
             key={index}
           >
-            <Iteme
-=======
-            href={`/secteur-d-activites/${domain}/${product}/${serve.id}`}
-            className=""
-            key={index}
-          >
-            <Iteme1
->>>>>>> 42b2108c6ed6ce97639ac142392897d6fac93d78
+              <Iteme1
               key={index}
               //@ts-expect-error type error
               produits={serve}
