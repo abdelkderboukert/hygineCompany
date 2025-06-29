@@ -9,6 +9,8 @@ import {
   query,
   where,
   orderBy,
+  CollectionReference,
+  DocumentReference,
 } from "firebase/firestore";
 import {
   ref,
@@ -38,19 +40,27 @@ export interface ProductType {
 
 export interface ProductSubtype {
   id?: string;
-  typeId: string;
+  // typeId: string; // This will no longer be a direct field as it's implied by the path
   name: string;
   description: string;
   image?: string;
   productCount: number;
+  theme: {
+    gradient: string;
+    bgColor: string;
+    iconColor: string;
+    borderColor: string;
+    hoverColor: string;
+    overlayGradient: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface Product {
   id?: string;
-  typeId: string;
-  subtypeId: string;
+  // typeId: string;    // Implied by path
+  // subtypeId: string; // Implied by path
   name: string;
   brand: string;
   description: string;
@@ -91,6 +101,33 @@ export interface Product {
   createdAt: Date;
   updatedAt: Date;
 }
+
+// Helper function to get subcollection reference (1 level deep)
+const getSubcollectionRef = (
+  parentCollection: string,
+  parentId: string,
+  subCollectionName: string
+): CollectionReference => {
+  return collection(db, parentCollection, parentId, subCollectionName);
+};
+
+// Helper for deeply nested subcollections (2 levels deep)
+const getDeepSubcollectionRef = (
+  grandparentCollection: string,
+  grandparentId: string,
+  parentSubcollectionName: string, // This is the name of the subcollection within the grandparent
+  parentId: string,
+  subCollectionName: string
+): CollectionReference => {
+  return collection(
+    db,
+    grandparentCollection,
+    grandparentId,
+    parentSubcollectionName,
+    parentId,
+    subCollectionName
+  );
+};
 
 // Product Types CRUD
 export const createProductType = async (
@@ -141,29 +178,29 @@ export const deleteProductType = async (id: string) => {
   await deleteDoc(doc(db, "productTypes", id));
 };
 
-// Product Subtypes CRUD
+// Product Subtypes CRUD (Nested under Product Types)
 export const createProductSubtype = async (
+  typeId: string, // Now requires the parent typeId
   data: Omit<ProductSubtype, "id" | "createdAt" | "updatedAt">
 ) => {
-  const docRef = await addDoc(collection(db, "productSubtypes"), {
-    ...data,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
+  const docRef = await addDoc(
+    getSubcollectionRef("productTypes", typeId, "productSubtypes"),
+    {
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  );
   return docRef.id;
 };
 
 export const getProductSubtypes = async (
-  typeId?: string
+  typeId: string // Now *always* requires typeId to query its subcollection
 ): Promise<ProductSubtype[]> => {
-  let q = query(collection(db, "productSubtypes"), orderBy("name"));
-  if (typeId) {
-    q = query(
-      collection(db, "productSubtypes"),
-      where("typeId", "==", typeId),
-      orderBy("name")
-    );
-  }
+  const q = query(
+    getSubcollectionRef("productTypes", typeId, "productSubtypes"),
+    orderBy("name")
+  );
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map(
     (doc) =>
@@ -175,9 +212,12 @@ export const getProductSubtypes = async (
 };
 
 export const getProductSubtype = async (
-  id: string
+  typeId: string, // Requires parent typeId
+  subtypeId: string
 ): Promise<ProductSubtype | null> => {
-  const docSnap = await getDoc(doc(db, "productSubtypes", id));
+  const docSnap = await getDoc(
+    doc(db, "productTypes", typeId, "productSubtypes", subtypeId)
+  );
   if (docSnap.exists()) {
     return { id: docSnap.id, ...docSnap.data() } as ProductSubtype;
   }
@@ -185,51 +225,65 @@ export const getProductSubtype = async (
 };
 
 export const updateProductSubtype = async (
-  id: string,
+  typeId: string, // Requires parent typeId
+  subtypeId: string,
   data: Partial<ProductSubtype>
 ) => {
-  await updateDoc(doc(db, "productSubtypes", id), {
-    ...data,
-    updatedAt: new Date(),
-  });
+  await updateDoc(
+    doc(db, "productTypes", typeId, "productSubtypes", subtypeId),
+    {
+      ...data,
+      updatedAt: new Date(),
+    }
+  );
 };
 
-export const deleteProductSubtype = async (id: string) => {
-  await deleteDoc(doc(db, "productSubtypes", id));
+export const deleteProductSubtype = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string
+) => {
+  await deleteDoc(
+    doc(db, "productTypes", typeId, "productSubtypes", subtypeId)
+  );
 };
 
-// Products CRUD
+// Products CRUD (Nested under Product Subtypes)
 export const createProduct = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string, // Requires parent subtypeId
   data: Omit<Product, "id" | "createdAt" | "updatedAt">
 ) => {
-  const docRef = await addDoc(collection(db, "products"), {
-    ...data,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  });
+  const docRef = await addDoc(
+    getDeepSubcollectionRef(
+      "productTypes",
+      typeId,
+      "productSubtypes", // The name of the subcollection within the grandparent document
+      subtypeId,
+      "products"
+    ),
+    {
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  );
   return docRef.id;
 };
 
 export const getProducts = async (
-  typeId?: string,
-  subtypeId?: string
+  typeId: string, // Now required
+  subtypeId: string // Now required
 ): Promise<Product[]> => {
-  let q = query(collection(db, "products"), orderBy("name"));
-
-  if (typeId && subtypeId) {
-    q = query(
-      collection(db, "products"),
-      where("typeId", "==", typeId),
-      where("subtypeId", "==", subtypeId),
-      orderBy("name")
-    );
-  } else if (typeId) {
-    q = query(
-      collection(db, "products"),
-      where("typeId", "==", typeId),
-      orderBy("name")
-    );
-  }
+  const q = query(
+    getDeepSubcollectionRef(
+      "productTypes",
+      typeId,
+      "productSubtypes",
+      subtypeId,
+      "products"
+    ),
+    orderBy("name")
+  );
 
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map(
@@ -241,23 +295,67 @@ export const getProducts = async (
   );
 };
 
-export const getProduct = async (id: string): Promise<Product | null> => {
-  const docSnap = await getDoc(doc(db, "products", id));
+export const getProduct = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string, // Requires parent subtypeId
+  productId: string
+): Promise<Product | null> => {
+  const docSnap = await getDoc(
+    doc(
+      db,
+      "productTypes",
+      typeId,
+      "productSubtypes",
+      subtypeId,
+      "products",
+      productId
+    )
+  );
   if (docSnap.exists()) {
     return { id: docSnap.id, ...docSnap.data() } as Product;
   }
   return null;
 };
 
-export const updateProduct = async (id: string, data: Partial<Product>) => {
-  await updateDoc(doc(db, "products", id), {
-    ...data,
-    updatedAt: new Date(),
-  });
+export const updateProduct = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string, // Requires parent subtypeId
+  productId: string,
+  data: Partial<Product>
+) => {
+  await updateDoc(
+    doc(
+      db,
+      "productTypes",
+      typeId,
+      "productSubtypes",
+      subtypeId,
+      "products",
+      productId
+    ),
+    {
+      ...data,
+      updatedAt: new Date(),
+    }
+  );
 };
 
-export const deleteProduct = async (id: string) => {
-  await deleteDoc(doc(db, "products", id));
+export const deleteProduct = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string, // Requires parent subtypeId
+  productId: string
+) => {
+  await deleteDoc(
+    doc(
+      db,
+      "productTypes",
+      typeId,
+      "productSubtypes",
+      subtypeId,
+      "products",
+      productId
+    )
+  );
 };
 
 // File Upload

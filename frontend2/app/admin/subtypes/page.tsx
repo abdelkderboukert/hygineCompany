@@ -1,299 +1,175 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { onAuthStateChanged, signOut, type User } from "firebase/auth"
-import { auth, db } from "@/lib/firebase"
-import { collection, getDocs, query, limit } from "firebase/firestore"
-import { Loader2, AlertCircle, Package, Layers, Grid3X3, BarChart, LogOut, Shield } from "lucide-react"
 import Link from "next/link"
-import { Header } from "@/components/Header"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge"
+import { Input } from "@/components/ui/input"
+import { Shield, Plus, Search, Edit, Trash2, ArrowLeft } from "lucide-react"
+import { getProductSubtypes, deleteProductType } from "@/lib/firebase-admin"
+import type { ProductSubtype } from "@/lib/firebase-admin"
+import { toast } from "sonner"
 
-export default function AdminDashboard() {
-  const [user, setUser] = useState<User | null>(null)
+export default function ProductTypesPage() {
+  const [types, setTypes] = useState<ProductSubtype[]>([])
+  const [filteredSubTypes, setFilteredSubTypes] = useState<ProductSubtype[]>([])
+  const [searchTerm, setSearchTerm] = useState("")
   const [loading, setLoading] = useState(true)
-  const router = useRouter()
-  const [stats, setStats] = useState({
-    types: 0,
-    subtypes: 0,
-    products: 0,
-  })
-  const [recentItems, setRecentItems] = useState([])
-  const [firebaseError, setFirebaseError] = useState<string | null>(null)
-  const [isLoadingData, setIsLoadingData] = useState(true)
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user)
-      setLoading(false)
-
-      if (!user) {
-        router.push("/admin/login")
-      }
-    })
-
-    return unsubscribe
-  }, [router])
+    fetchTypes()
+  }, [])
 
   useEffect(() => {
-    async function fetchStats() {
-      if (!user) return
+    const filtered = types.filter(
+      (type) =>
+        type.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        type.description.toLowerCase().includes(searchTerm.toLowerCase()),
+    )
+    setFilteredSubTypes(filtered)
+  }, [types, searchTerm])
 
-      setIsLoadingData(true)
-      try {
-        // Check if Firebase is properly initialized
-        if (!db) {
-          throw new Error("Firebase database is not initialized")
-        }
-
-        // Fetch product types count
-        const typesSnapshot = await getDocs(collection(db, "productTypes"))
-        const typesCount = typesSnapshot.size
-
-        // Fetch subtypes count
-        const subtypesSnapshot = await getDocs(collection(db, "subtypes"))
-        const subtypesCount = subtypesSnapshot.size
-
-        // Fetch products count
-        const productsSnapshot = await getDocs(collection(db, "products"))
-        const productsCount = productsSnapshot.size
-
-        // Fetch recent items
-        const recentItemsQuery = query(collection(db, "productTypes"), limit(5))
-        const recentItemsSnapshot = await getDocs(recentItemsQuery)
-        const recentItemsData = recentItemsSnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-          type: "Product Type",
-        }))
-
-        setStats({
-          types: typesCount,
-          subtypes: subtypesCount,
-          products: productsCount,
-        })
-        //@ts-ignore
-        setRecentItems(recentItemsData)
-        setFirebaseError(null)
-      } catch (error) {
-        console.error("Error fetching stats:", error)
-        setFirebaseError(error instanceof Error ? error.message : "Unknown error occurred")
-      } finally {
-        setIsLoadingData(false)
-      }
-    }
-
-    fetchStats()
-  }, [user])
-
-  const handleSignOut = async () => {
+  const fetchTypes = async () => {
     try {
-      await signOut(auth)
-      router.push("/admin/login")
+      const data = await getProductSubtypes()
+      setTypes(data)
     } catch (error) {
-      console.error("Error signing out:", error)
+      console.error("Error fetching types:", error)
+      toast.error("Failed to fetch product types")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleDelete = async (id: string, name: string) => {
+    if (window.confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) {
+      try {
+        await deleteProductType(id)
+        setTypes(types.filter((type) => type.id !== id))
+        toast.success("Product type deleted successfully")
+      } catch (error) {
+        console.error("Error deleting type:", error)
+        toast.error("Failed to delete product type")
+      }
     }
   }
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin text-blue-600 mx-auto" />
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     )
-  }
-
-  if (!user) {
-    return null // Router will redirect to login
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      {/* <header className="bg-white shadow-sm border-b">
+      <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <Shield className="h-8 w-8 text-blue-600" />
+              <Link href="/admin">
+                <Button variant="ghost" size="sm">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Dashboard
+                </Button>
+              </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">HygienDust Admin</h1>
-                <p className="text-sm text-gray-500">Product Management System</p>
+                <h1 className="text-2xl font-bold text-gray-900">Product Types</h1>
+                <p className="text-sm text-gray-500">Manage product categories</p>
               </div>
             </div>
-            <div className="flex items-center space-x-4">
-              <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">{user?.email}</p>
-                <p className="text-xs text-gray-500">Administrator</p>
-              </div>
-              <Button variant="outline" onClick={handleSignOut}>
-                <LogOut className="h-4 w-4 mr-2" />
-                Sign Out
+            <Link href="/admin/types/new">
+              <Button className="bg-blue-600 hover:bg-blue-700">
+                <Plus className="h-4 w-4 mr-2" />
+                New Type
               </Button>
-            </div>
+            </Link>
           </div>
         </div>
-      </header> */}
-      <Header/>
+      </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {firebaseError && (
-          <div className="mb-6 rounded-lg bg-red-50 p-4 text-red-800">
-            <div className="flex items-center">
-              <AlertCircle className="mr-2 h-5 w-5" />
-              <h3 className="font-semibold">Firebase Error</h3>
+        {/* Search */}
+        <Card className="mb-6">
+          <CardContent className="pt-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search product types..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
             </div>
-            <p className="mt-2">{firebaseError}</p>
-            <p className="mt-2 text-sm">
-              Please check your Firebase configuration and environment variables. Make sure you have set up the
-              following environment variables:
-            </p>
-            <ul className="mt-1 list-inside list-disc text-sm">
-              <li>NEXT_PUBLIC_FIREBASE_API_KEY</li>
-              <li>NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN</li>
-              <li>NEXT_PUBLIC_FIREBASE_PROJECT_ID</li>
-              <li>NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET</li>
-              <li>NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID</li>
-              <li>NEXT_PUBLIC_FIREBASE_APP_ID</li>
-            </ul>
-          </div>
-        )}
+          </CardContent>
+        </Card>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Product Types</CardTitle>
-              <Layers className="h-4 w-4 text-blue-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {isLoadingData ? <Loader2 className="h-6 w-6 animate-spin" /> : stats.types}
-              </div>
-              <p className="text-xs text-muted-foreground">Main product categories</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Subtypes</CardTitle>
-              <Package className="h-4 w-4 text-green-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {isLoadingData ? <Loader2 className="h-6 w-6 animate-spin" /> : stats.subtypes}
-              </div>
-              <p className="text-xs text-muted-foreground">Product subcategories</p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Products</CardTitle>
-              <Grid3X3 className="h-4 w-4 text-purple-600" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">
-                {isLoadingData ? <Loader2 className="h-6 w-6 animate-spin" /> : stats.products}
-              </div>
-              <p className="text-xs text-muted-foreground">Individual products</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Common administrative tasks</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Link href="/admin/types/new">
-                <Button className="w-full justify-start bg-blue-600 hover:bg-blue-700">
-                  <Package className="h-4 w-4 mr-2" />
-                  Create New Product Type
-                </Button>
-              </Link>
-              <Link href="/admin/subtypes/new">
-                <Button className="w-full justify-start bg-green-600 hover:bg-green-700">
-                  <Layers className="h-4 w-4 mr-2" />
-                  Create New Subtype
-                </Button>
-              </Link>
-              <Link href="/admin/products/new">
-                <Button className="w-full justify-start bg-purple-600 hover:bg-purple-700">
-                  <Grid3X3 className="h-4 w-4 mr-2" />
-                  Create New Product
-                </Button>
-              </Link>
-              <Link href="/admin/data">
-                <Button className="w-full justify-start bg-orange-600 hover:bg-orange-700">
-                  <BarChart className="h-4 w-4 mr-2" />
-                  View All Data
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Management</CardTitle>
-              <CardDescription>Manage existing content</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <Link href="/admin/types">
-                <Button variant="outline" className="w-full justify-start">
-                  <Layers className="h-4 w-4 mr-2" />
-                  Manage Product Types
-                </Button>
-              </Link>
-              <Link href="/admin/subtypes">
-                <Button variant="outline" className="w-full justify-start">
-                  <Package className="h-4 w-4 mr-2" />
-                  Manage Subtypes
-                </Button>
-              </Link>
-              <Link href="/admin/products">
-                <Button variant="outline" className="w-full justify-start">
-                  <Grid3X3 className="h-4 w-4 mr-2" />
-                  Manage Products
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Recent Items */}
-        {recentItems.length > 0 && (
-          <Card className="mt-8">
-            <CardHeader>
-              <CardTitle>Recent Product Types</CardTitle>
-              <CardDescription>Recently created product categories</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {recentItems.map((item: any) => (
-                  <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex items-center space-x-4">
-                      <div className="w-10 h-10 rounded-full bg-blue-100 border-2 border-blue-200 flex items-center justify-center">
-                        <Shield className="h-5 w-5 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium">{item.name}</h3>
-                        <p className="text-sm text-gray-500">{item.description}</p>
-                      </div>
+        {/* Types Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredSubTypes.map((type) => (
+            <Card key={type.id} className={`border-2 ${type.theme.borderColor}`}>
+              <CardHeader className={type.theme.bgColor}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-3">
+                    <div
+                      className={`w-10 h-10 rounded-full ${type.theme.bgColor} border-2 ${type.theme.borderColor} flex items-center justify-center`}
+                    >
+                      <Shield className={`h-5 w-5 ${type.theme.iconColor}`} />
                     </div>
-                    <Link href={`/admin/types/${item.id}/edit`}>
-                      <Button variant="outline" size="sm">
-                        Edit
+                    <CardTitle className="text-lg">{type.name}</CardTitle>
+                  </div>
+                  <div className="flex space-x-2">
+                    <Link href={`/admin/types/${type.id}/edit`}>
+                      <Button variant="ghost" size="sm">
+                        <Edit className="h-4 w-4" />
                       </Button>
                     </Link>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => handleDelete(type.id!, type.name)}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-                ))}
-              </div>
+                </div>
+              </CardHeader>
+              <CardContent className="pt-4">
+                <CardDescription className="mb-4">{type.description}</CardDescription>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className={`${type.theme.iconColor} border-current`}>
+                    {type.theme.gradient
+                      .replace("from-", "")
+                      .replace("-500", "")
+                      .replace(" to-", " → ")
+                      .replace("-700", "")}
+                  </Badge>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {filteredSubTypes.length === 0 && (
+          <Card>
+            <CardContent className="text-center py-12">
+              <Shield className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No product types found</h3>
+              <p className="text-gray-500 mb-4">
+                {searchTerm ? "Try adjusting your search terms." : "Get started by creating your first product type."}
+              </p>
+              {!searchTerm && (
+                <Link href="/admin/types/new">
+                  <Button className="bg-blue-600 hover:bg-blue-700">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Product Type
+                  </Button>
+                </Link>
+              )}
             </CardContent>
           </Card>
         )}
