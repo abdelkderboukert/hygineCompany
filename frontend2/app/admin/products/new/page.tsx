@@ -28,7 +28,7 @@ import MultipleImageUpload from "@/components/multiple-image-upload";
 import {
   getProductTypes,
   getProductSubtypes,
-  getProducts,
+  createProduct,
 } from "@/lib/firebase-admin";
 import type {
   Product,
@@ -36,39 +36,30 @@ import type {
   ProductType,
 } from "@/lib/firebase-admin";
 
-// Sample product types for the dropdown
-const productTypes = [
-  { id: "cleaning", name: "Cleaning Products" },
-  { id: "chemicals", name: "Industrial Chemicals" },
-  { id: "safety", name: "Safety Equipment" },
-  { id: "maintenance", name: "Maintenance Supplies" },
-  { id: "packaging", name: "Packaging Materials" },
-];
-
 const themeOptions = [
   {
-      gradient: "from-blue-500 to-blue-700",
-      bgColor: "bg-blue-50",
-      iconColor: "text-blue-600",
-      borderColor: "border-blue-200",
-      hoverColor: "hover:bg-blue-600",
-      overlayGradient: "from-blue-900/70",
+    gradient: "from-blue-500 to-blue-700",
+    bgColor: "bg-blue-50",
+    iconColor: "text-blue-600",
+    borderColor: "border-blue-200",
+    hoverColor: "hover:bg-blue-600",
+    overlayGradient: "from-blue-900/70",
   },
   {
-      gradient: "from-green-500 to-green-700",
-      bgColor: "bg-green-50",
-      iconColor: "text-green-600",
-      borderColor: "border-green-200",
-      hoverColor: "hover:bg-green-600",
-      overlayGradient: "from-green-900/70",
+    gradient: "from-green-500 to-green-700",
+    bgColor: "bg-green-50",
+    iconColor: "text-green-600",
+    borderColor: "border-green-200",
+    hoverColor: "hover:bg-green-600",
+    overlayGradient: "from-green-900/70",
   },
   {
-      gradient: "from-purple-500 to-purple-700",
-      bgColor: "bg-purple-50",
-      iconColor: "text-purple-600",
-      borderColor: "border-purple-200",
-      hoverColor: "hover:bg-purple-600",
-      overlayGradient: "from-purple-900/70",
+    gradient: "from-purple-500 to-purple-700",
+    bgColor: "bg-purple-50",
+    iconColor: "text-purple-600",
+    borderColor: "border-purple-200",
+    hoverColor: "hover:bg-purple-600",
+    overlayGradient: "from-purple-900/70",
   },
   {
     gradient: "from-orange-500 to-orange-700",
@@ -96,6 +87,9 @@ const themeOptions = [
   },
 ];
 
+// Re-defining interfaces to match your ProductFormData structure and simplify
+// You already have the main Product interface imported from '@/lib/firebase-admin'
+
 interface Size {
   size: string;
   sku: string;
@@ -105,7 +99,14 @@ interface Size {
   barcode: string;
 }
 
-interface theme {
+interface UsageInput {
+  application: string;
+  frequency: string;
+  precautions: string; // Stored as a single string for textarea input
+  suitableFor: string; // Stored as a single string for textarea input
+}
+
+interface Theme {
   gradient: string;
   bgColor: string;
   iconColor: string;
@@ -131,18 +132,15 @@ interface ProductFormData {
   brand: string;
   shortDescription: string;
   description: string;
-  image: string;
+  image?: string; // Made optional as per your Product interface
   additionalImages: string[];
-  productType: string;
-  productSubtype: string;
-  features: string;
+  productType: string; // For selected product type ID
+  productSubtype: string; // For selected product subtype ID
+  features: string; // Stored as a single string for textarea input
   sizes: Size[];
   certifications: Certification[];
   specifications: Specification[];
-  application: string;
-  frequency: string;
-  precautions: string;
-  suitableFor: string;
+  usage: UsageInput; // Use the UsageInput interface for form data
   documents: {
     productDatasheet: boolean;
     technicalData: boolean;
@@ -152,7 +150,7 @@ interface ProductFormData {
     qualityReport: boolean;
     complianceDocuments: boolean;
   };
-  theme: theme;
+  theme: Theme;
 }
 
 const initialFormData: ProductFormData = {
@@ -164,7 +162,7 @@ const initialFormData: ProductFormData = {
   additionalImages: [],
   productType: "",
   productSubtype: "",
-  features: "",
+  features: "", // Initial value for textarea
   sizes: [
     {
       size: "",
@@ -177,10 +175,12 @@ const initialFormData: ProductFormData = {
   ],
   certifications: [],
   specifications: [],
-  application: "",
-  frequency: "",
-  precautions: "",
-  suitableFor: "",
+  usage: {
+    application: "",
+    frequency: "",
+    precautions: "",
+    suitableFor: "",
+  },
   documents: {
     productDatasheet: false,
     technicalData: false,
@@ -202,17 +202,35 @@ const initialFormData: ProductFormData = {
 
 export default function CreateNewProductPage() {
   const [formData, setFormData] = useState<ProductFormData>(initialFormData);
-  const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [fetchedProductTypes, setFetchedProductTypes] = useState<
+    ProductType[]
+  >([]);
+  const [fetchedProductSubtypes, setFetchedProductSubtypes] = useState<
+    ProductSubtype[]
+  >([]);
+  const [loadingProductTypes, setLoadingProductTypes] = useState(true);
+  const [loadingProductSubtypes, setLoadingProductSubtypes] = useState(false); // Initially false
+  const [error, setError] = useState<string | null>(null);
+
+  // --- Utility Functions ---
   const updateFormData = (field: keyof ProductFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const updateUsage = (field: keyof UsageInput, value: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      usage: { ...prev.usage, [field]: value },
+    }));
+  };
+
   const getCurrentTheme = () => {
     return (
-      themeOptions.find((theme) => theme.bgColor === formData.theme.bgColor) ||
-      themeOptions[0]
+      themeOptions.find(
+        (theme) => theme.bgColor === formData.theme.bgColor
+      ) || themeOptions[0]
     );
   };
 
@@ -328,86 +346,142 @@ export default function CreateNewProductPage() {
     }));
   };
 
+  // --- Data Fetching Effects ---
+
+  // Effect to fetch product types
+  useEffect(() => {
+    async function fetchTypes() {
+      setLoadingProductTypes(true);
+      setError(null);
+      try {
+        const data = await getProductTypes();
+        if (data) {
+          setFetchedProductTypes(data);
+        } else {
+          setFetchedProductTypes([]);
+          setError("No product types found.");
+        }
+      } catch (err) {
+        console.error("Error fetching product types:", err);
+        setError("Failed to load product types.");
+      } finally {
+        setLoadingProductTypes(false);
+      }
+    }
+    fetchTypes();
+  }, []); // Empty dependency array means this runs once on mount
+
+  // Effect to fetch product subtypes when productType changes
+  useEffect(() => {
+    if (formData.productType) {
+      setLoadingProductSubtypes(true);
+      setError(null);
+      setFetchedProductSubtypes([]); // Clear previous subtypes
+      setFormData((prev) => ({ ...prev, productSubtype: "" })); // Reset selected subtype
+
+      async function fetchSubtypes() {
+        try {
+          const data = await getProductSubtypes(formData.productType);
+          if (data) {
+            setFetchedProductSubtypes(data);
+          } else {
+            setFetchedProductSubtypes([]);
+            setError(`No subtypes found for type "${formData.productType}".`);
+          }
+        } catch (err) {
+          console.error("Error fetching product subtypes:", err);
+          setError("Failed to load product subtypes.");
+        } finally {
+          setLoadingProductSubtypes(false);
+        }
+      }
+      fetchSubtypes();
+    } else {
+      setFetchedProductSubtypes([]); // Clear subtypes if no product type is selected
+      setLoadingProductSubtypes(false);
+    }
+  }, [formData.productType]); // Re-run when productType changes
+
+  // --- Form Submission and Cancel ---
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      // Prepare the data to match the Product interface for createProduct
+      const productToCreate: Product = {
+        name: formData.name,
+        brand: formData.brand,
+        description: formData.description,
+        shortDescription: formData.shortDescription,
+        image: formData.image,
+        additionalImages: formData.additionalImages,
+        // Convert comma/newline separated strings to arrays
+        features: formData.features
+          .split(/[\n,]+/)
+          .map((s) => s.trim())
+          .filter(Boolean),
+        sizes: formData.sizes,
+        certifications: formData.certifications,
+        specifications: formData.specifications.reduce((acc, spec) => {
+          acc[spec.key] = spec.value;
+          return acc;
+        }, {} as Record<string, string>),
+        usage: {
+          application: formData.usage.application,
+          frequency: formData.usage.frequency,
+          precautions: formData.usage.precautions
+            .split(/[\n,]+/)
+            .map((s) => s.trim())
+            .filter(Boolean),
+          suitableFor: formData.usage.suitableFor
+            .split(/[\n,]+/)
+            .map((s) => s.trim())
+            .filter(Boolean),
+        },
+        // Assuming documents are just boolean flags for availability for now.
+        // If they are meant to be URLs, you'd need input fields for them.
+        documents: Object.keys(formData.documents).reduce((acc, key) => {
+            if (formData.documents[key as keyof ProductFormData["documents"]]) {
+                // If the checkbox is checked, you might put a placeholder URL or handle actual file uploads here.
+                // For now, setting a dummy string or leaving it undefined if no URL is provided.
+                acc[key as keyof Product['documents']] = `path/to/${key}.pdf`; // Placeholder
+            }
+            return acc;
+        }, {} as Partial<Product['documents']>) as Product['documents'], // Cast to ensure type compatibility
+        theme: formData.theme,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      };
 
-    console.log("Product created:", formData);
-    setIsSubmitting(false);
-    alert("Product created successfully!");
+      // Call createProduct with typeId and subtypeId, and the prepared product data
+      await createProduct(
+        formData.productType,
+        formData.productSubtype,
+        productToCreate
+      );
+
+      console.log("Product created:", productToCreate);
+      alert("Product created successfully!");
+      setFormData(initialFormData); // Clear form after successful submission
+      window.history.back(); // Navigate back
+    } catch (submitError) {
+      console.error("Error creating product:", submitError);
+      setError("Failed to create product. Please try again.");
+      alert("Failed to create product.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleCancel = () => {
     if (confirm("Are you sure you want to discard all changes?")) {
       setFormData(initialFormData);
-      // Navigate back to products list
       window.history.back();
     }
   };
 
-  const [fetchedProductType, setFetchedProductType] = useState<
-    ProductType[] | null
-  >(null);
-  const [fetchedProductSubType, setFetchedProductSubType] =
-    useState<ProductSubtype | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    async function fetchProductTypeData() {
-      setLoading(true);
-      setError(null);
-      try {
-        // Call the getProductType function with the decoded ID
-        const data = await getProductTypes();
-        // const SubTypeData: ProductSubtype[] | null = await getProductSubtypes(
-        //   formData.productType
-        // );
-        if (data) {
-          setFetchedProductType(data);
-          //   setFetchedProductSubType(SubTypeData);
-        } else {
-          setFetchedProductType(null); // No product type found
-          setError(`Product type with ID "${formData.productType}" not found.`);
-        }
-      } catch (err) {
-        console.error("Error fetching product type:", err);
-        setError("Failed to load product type data.");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchProductTypeData();
-  }, [formData.productType]);
-  //   useEffect(() => {
-  //     async function fetchProductTypeData() {
-  //       setLoading(true);
-  //       setError(null);
-  //       try {
-  //         const SubTypeData: ProductSubtype[] | null = await getProductSubtypes(
-  //           formData.productType
-  //         );
-  //         if (SubTypeData) {
-  //           setFetchedProductSubType(SubTypeData);
-  //         } else {
-  //           setFetchedProductSubType(null); // No product subtype found
-  //           setError(`Product subtype with ID "${formData.productSubtype}" not found.`);
-  //         }
-  //       } catch (err) {
-  //         console.error("Error fetching product type:", err);
-  //         setError("Failed to load product type data.");
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     }
-
-  //     fetchProductTypeData();
-  //   }, [formData.productType]);
-
+  // --- Rendered Component ---
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
@@ -442,7 +516,6 @@ export default function CreateNewProductPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* rfjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjg */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">
@@ -506,7 +579,7 @@ export default function CreateNewProductPage() {
               <div className="space-y-6">
                 <ImageUpload
                   label="Main Product Image"
-                  value={formData.image}
+                  value={formData.image || ""}
                   onChange={(url) => updateFormData("image", url)}
                   required
                 />
@@ -518,7 +591,7 @@ export default function CreateNewProductPage() {
                   maxImages={5}
                 />
               </div>
-              {/* yhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhffffffffffffffffffffffffffffffffffffffffffffffffffffjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj */}
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="productType">
@@ -529,18 +602,30 @@ export default function CreateNewProductPage() {
                     onValueChange={(value) =>
                       updateFormData("productType", value)
                     }
+                    disabled={loadingProductTypes}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select a product type" />
                     </SelectTrigger>
                     <SelectContent>
-                      {fetchedProductType?.map((type) => (
-                        <SelectItem key={type.id} value={type.id}>
-                          {type.name}
+                      {loadingProductTypes ? (
+                        <SelectItem value="loading" disabled>
+                          Loading types...
                         </SelectItem>
-                      ))}
+                      ) : fetchedProductTypes.length > 0 ? (
+                        fetchedProductTypes.map((type) => (
+                          <SelectItem key={type.id} value={type.id}>
+                            {type.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-types" disabled>
+                          No product types available
+                        </SelectItem>
+                      )}
                     </SelectContent>
                   </Select>
+                  {error && <p className="text-red-500 text-sm">{error}</p>}
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="productSubtype">
@@ -551,16 +636,29 @@ export default function CreateNewProductPage() {
                     onValueChange={(value) =>
                       updateFormData("productSubtype", value)
                     }
+                    disabled={!formData.productType || loadingProductSubtypes} // Disable if no type selected or loading
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a product type" />
+                      <SelectValue placeholder="Select a product subtype" />
                     </SelectTrigger>
                     <SelectContent>
-                      {fetchedProductType?.map((type) => (
-                        <SelectItem key={type.id} value={type.id}>
-                          {type.name}
+                      {loadingProductSubtypes ? (
+                        <SelectItem value="loading" disabled>
+                          Loading subtypes...
                         </SelectItem>
-                      ))}
+                      ) : fetchedProductSubtypes?.length > 0 ? (
+                        fetchedProductSubtypes.map((subtype) => (
+                          <SelectItem key={subtype.id} value={subtype.id  || ""}>
+                            {subtype.name}
+                          </SelectItem>
+                        ))
+                      ) : (
+                        <SelectItem value="no-subtypes" disabled>
+                          {formData.productType
+                            ? "No subtypes available for selected type"
+                            : "Select a product type first"}
+                        </SelectItem>
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
@@ -573,7 +671,8 @@ export default function CreateNewProductPage() {
             <CardHeader>
               <CardTitle>Key Features</CardTitle>
               <CardDescription>
-                List the main features and benefits of the product
+                List the main features and benefits of the product (one per
+                line)
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -877,10 +976,8 @@ export default function CreateNewProductPage() {
                   id="application"
                   placeholder="Describe where and how this product should be used..."
                   rows={3}
-                  value={formData.application}
-                  onChange={(e) =>
-                    updateFormData("application", e.target.value)
-                  }
+                  value={formData.usage.application}
+                  onChange={(e) => updateUsage("application", e.target.value)}
                 />
               </div>
 
@@ -890,8 +987,8 @@ export default function CreateNewProductPage() {
                   id="frequency"
                   placeholder="Describe usage frequency and dilution instructions..."
                   rows={3}
-                  value={formData.frequency}
-                  onChange={(e) => updateFormData("frequency", e.target.value)}
+                  value={formData.usage.frequency}
+                  onChange={(e) => updateUsage("frequency", e.target.value)}
                 />
               </div>
 
@@ -901,10 +998,8 @@ export default function CreateNewProductPage() {
                   id="precautions"
                   placeholder="List safety precautions, one per line"
                   rows={4}
-                  value={formData.precautions}
-                  onChange={(e) =>
-                    updateFormData("precautions", e.target.value)
-                  }
+                  value={formData.usage.precautions}
+                  onChange={(e) => updateUsage("precautions", e.target.value)}
                 />
               </div>
 
@@ -914,10 +1009,8 @@ export default function CreateNewProductPage() {
                   id="suitableFor"
                   placeholder="List suitable applications, one per line"
                   rows={4}
-                  value={formData.suitableFor}
-                  onChange={(e) =>
-                    updateFormData("suitableFor", e.target.value)
-                  }
+                  value={formData.usage.suitableFor}
+                  onChange={(e) => updateUsage("suitableFor", e.target.value)}
                 />
               </div>
             </CardContent>
@@ -972,7 +1065,7 @@ export default function CreateNewProductPage() {
                     type="button"
                     onClick={() => updateFormData("theme", theme)}
                     className={`p-4 rounded-lg border-2 transition-all ${
-                      formData.theme === theme
+                      formData.theme.bgColor === theme.bgColor // Corrected comparison here
                         ? `${theme.borderColor} ${theme.bgColor} ring-2 ring-offset-2 ring-blue-500`
                         : "border-gray-200 hover:border-gray-300 bg-white"
                     }`}
@@ -997,9 +1090,7 @@ export default function CreateNewProductPage() {
                       </div>
 
                       {/* Theme Elements Preview */}
-                      <div
-                        className={`p-2 rounded ${theme.bgColor} space-y-1`}
-                      >
+                      <div className={`p-2 rounded ${theme.bgColor} space-y-1`}>
                         <div
                           className={`w-full h-2 rounded ${theme.iconColor.replace(
                             "text-",
@@ -1025,11 +1116,12 @@ export default function CreateNewProductPage() {
                 } ${getCurrentTheme().bgColor}`}
               >
                 <h4
-                  className={`font-medium mb-2 ${
-                    getCurrentTheme().iconColor
-                  }`}
+                  className={`font-medium mb-2 ${getCurrentTheme().iconColor}`}
                 >
-                  Selected Theme: {getCurrentTheme().bgColor.replace("bg-", "").replace("-50", "")}
+                  Selected Theme:{" "}
+                  {getCurrentTheme()
+                    .bgColor.replace("bg-", "")
+                    .replace("-50", "")}
                 </h4>
                 <div className="grid grid-cols-2 gap-2 text-sm">
                   <div>

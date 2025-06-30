@@ -190,7 +190,7 @@ export default function ProductCatalogPage() {
                     </p>
                   </div>
                   <Link
-                    href={`/products/${fetchedProductType.id}/${sector.id}`}
+                    href={`/products/${fetchedProductType.id}/${fetchedProductSubType?.id}/${sector.id}`}
                   >
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
