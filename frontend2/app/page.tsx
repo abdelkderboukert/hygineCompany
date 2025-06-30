@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -21,6 +24,53 @@ import {
 import { Header } from "@/components/Header";
 
 export default function HomePage() {
+  interface FormData {
+    name: string;
+    company: string;
+    message: string;
+    email: string;
+    phoneNumber: number | undefined;
+    ref: number | undefined;
+  }
+
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    company: "",
+    message: "",
+    email: "",
+    phoneNumber: undefined,
+    ref: 0,
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  // Update handleSubmit
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const response = await fetch("/api/sendEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert("Email sent successfully!");
+    } else {
+      alert("Error sending email: " + data.error);
+    }
+  };
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -720,14 +770,14 @@ export default function HomePage() {
               opportunities
             </p>
           </div>
-
+          {/*  frrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr */}
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">
                 Send us a Message
               </h3>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label
@@ -738,8 +788,10 @@ export default function HomePage() {
                     </label>
                     <input
                       type="text"
-                      id="firstName"
-                      name="firstName"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="John"
@@ -774,6 +826,8 @@ export default function HomePage() {
                     type="email"
                     id="email"
                     name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="john@company.com"
@@ -791,6 +845,8 @@ export default function HomePage() {
                     type="text"
                     id="company"
                     name="company"
+                    value={formData.company}
+                    onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Your Company"
                   />
@@ -805,8 +861,10 @@ export default function HomePage() {
                   </label>
                   <input
                     type="tel"
-                    id="phone"
-                    name="phone"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    value={formData.phoneNumber}
+                    onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="+1 (555) 123-4567"
                   />
@@ -847,6 +905,8 @@ export default function HomePage() {
                   <textarea
                     id="message"
                     name="message"
+                    value={formData.message}
+                    onChange={handleChange}
                     rows={5}
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
