@@ -276,6 +276,7 @@ export const createProduct = async (
       updatedAt: new Date(),
     }
   );
+  await updateDoc(docRef, { id: docRef.id });
   return docRef.id;
 };
 
@@ -327,7 +328,9 @@ export const getProduct = async (
 };
 
 // New function to get a product by its ID using a collection group query
-export const getProductById = async (productId: string): Promise<Product | null> => {
+export const getProductById = async (
+  productId: string
+): Promise<Product | null> => {
   // Create a query against the collection group named "products"
   const productsRef = collectionGroup(db, "products");
 
@@ -355,7 +358,6 @@ export const getProductById = async (productId: string): Promise<Product | null>
 
   return null;
 };
-
 
 export const updateProduct = async (
   typeId: string, // Requires parent typeId

@@ -453,59 +453,10 @@ export default function EditProductPage() {
               complianceDocuments: !!product.documents?.complianceDocuments,
             },
             theme: product.theme || initialFormData.theme,
-            // Note: getProductById doesn't return typeId/subtypeId directly from the product document.
-            // If these are crucial for updateProduct, you'll need to store them during creation
-            // or fetch the full path (which getProductById doesn't provide directly).
-            // For now, we'll assume the updateProduct function will derive these or they are passed separately.
-            // In a real-world scenario, you might store typeId and subtypeId within the product document itself,
-            // or perform a more complex query to find the parent path.
-            // For this example, we'll need to pass the typeId and subtypeId to updateProduct.
-            // A common workaround is to store these IDs *within* the product document upon creation.
-            // Since they are not in the `Product` interface for `getProductById`,
-            // we'll need to find a way to get them for `updateProduct`.
-            // For now, let's assume they are part of the `Product` interface if fetched by ID, or we need to derive them.
-            // Given the `getProductById` signature, it only returns `Product`.
-            // If `typeId` and `subtypeId` are required for `updateProduct`, they need to be known.
-            // Let's add placeholders and acknowledge this limitation.
             productType: "", // This will need to be dynamically set based on how you fetch/store this
             productSubtype: "", // Same here
           });
 
-          // After setting general product data, attempt to find productType and productSubtype
-          // This is a placeholder and might require a more robust solution based on your Firebase structure.
-          // The `getProductById` function doesn't return the parent `typeId` and `subtypeId`.
-          // You'd typically embed `typeId` and `subtypeId` directly into the `Product` document itself
-          // when it's created, or use a Firebase function to get the full path.
-          // For demonstration, let's assume you'd have these fields available in the fetched `product` object.
-          // Example: if your Product interface included `typeId` and `subtypeId`.
-          // product.typeId and product.subtypeId
-          // If not, you'd need to adjust your data model or fetching logic.
-          // For now, setting them to empty strings. If update requires them, this will break.
-          // Let's modify Product interface to include typeId and subtypeId for this purpose.
-          // (This change is outside the scope of *this* file but is a necessary consideration for `updateProduct`)
-          // Assuming product object *does* contain typeId and subtypeId from getProductById (e.g. if you added them to Product interface):
-          // setFormData(prev => ({ ...prev, productType: product.typeId, productSubtype: product.subtypeId }));
-
-          // If productType and productSubtype are NOT part of the Product document,
-          // then getProductById alone cannot provide them, and `updateProduct` would fail.
-          // A common practice is to store parent IDs within the child document for easier lookups.
-          // For the sake of completing the task, I will *assume* the `product` object returned by `getProductById`
-          // *can* somehow provide the `typeId` and `subtypeId`, or that your `updateProduct` function
-          // *doesn't strictly rely on them if the ID is provided*.
-          // Given `updateProduct` explicitly requires `typeId` and `subtypeId`, this is a crucial point.
-          // The most reliable way for this UI is if Product objects store their parent `typeId` and `subtypeId`.
-          // Let's adapt by adding them to the Product interface definition in `firebase-admin.ts`
-          // and assume they are returned by `getProductById`.
-
-          // *** IMPORTANT ASSUMPTION FOR DEMONSTRATION ***
-          // I will assume `product` fetched by `getProductById` will now have `typeId` and `subtypeId`
-          // fields present, meaning your `Product` interface in `firebase-admin.ts` should be updated:
-          // export interface Product {
-          //   id?: string;
-          //   typeId: string;    // ADD THIS
-          //   subtypeId: string; // ADD THIS
-          //   ... rest of fields
-          // }
           // With this assumption:
           setFormData((prev) => ({
             ...prev,
