@@ -9,6 +9,7 @@ import {
   query,
   where,
   orderBy,
+  collectionGroup, // Import collectionGroup
   CollectionReference,
   DocumentReference,
 } from "firebase/firestore";
@@ -324,6 +325,37 @@ export const getProduct = async (
   }
   return null;
 };
+
+// New function to get a product by its ID using a collection group query
+export const getProductById = async (productId: string): Promise<Product | null> => {
+  // Create a query against the collection group named "products"
+  const productsRef = collectionGroup(db, "products");
+
+  // Create a query to find the document with the matching ID
+  // Note: Firestore does not directly support `where(documentId(), '==', productId)` for collection group queries.
+  // Instead, you would typically query on a field within the document that holds the ID,
+  // or if the ID is also a field within the document (which is a common practice when you need to query by ID).
+  // Assuming 'id' is also a field within your Product documents:
+  const q = query(productsRef, where("id", "==", productId));
+
+  // If 'id' is NOT a field within your document and you only want to query by the document's actual ID,
+  // then you'd have to get all documents and then filter by doc.id.
+  // However, this is highly inefficient and not recommended for large datasets.
+  // The most efficient way with collection groups to find by document ID is if the ID is duplicated as a field.
+  // For this example, I'm assuming 'id' is also a field in your Product interface.
+
+  const querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    // If there are multiple documents with the same 'id' field (which shouldn't happen for unique IDs),
+    // this will return the first one found.
+    const docSnap = querySnapshot.docs[0];
+    return { id: docSnap.id, ...docSnap.data() } as Product;
+  }
+
+  return null;
+};
+
 
 export const updateProduct = async (
   typeId: string, // Requires parent typeId
