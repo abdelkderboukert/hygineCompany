@@ -30,14 +30,15 @@ import {
   getProductSubtypes,
   createProduct, // We'll replace this with updateProduct
   getProductById, // New import to fetch existing product
-  updateProduct, // New import for updating
+  updateProduct,
+  getProduct, // New import for updating
 } from "@/lib/firebase-admin";
 import type {
   Product,
   ProductSubtype,
   ProductType,
 } from "@/lib/firebase-admin";
-import { useParams } from "next/navigation"; // To get the product ID from the URL
+import { useParams, useSearchParams } from "next/navigation";
 
 const themeOptions = [
   {
@@ -202,7 +203,12 @@ const initialFormData: ProductFormData = {
 
 export default function EditProductPage() {
   const params = useParams();
-  const productId = params.edit as string; // Get product ID from URL
+  const productId = params.edit as string; // Assuming [edit] is your productId segment
+
+  // Get query parameters (e.g., ?typeid=abc&subtypeid=xyz)
+  const searchParams = useSearchParams();
+  const typeId = searchParams.get("typeid"); // This will be 'abc' or null if not present
+  const subTypeId = searchParams.get("subtypeid"); // This will be 'xyz' or null if not present
 
   const [formData, setFormData] = useState<ProductFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -411,11 +417,13 @@ export default function EditProductPage() {
   useEffect(() => {
     async function fetchProductData() {
       if (!productId) return;
+      if (!typeId) return;
+      if (!subTypeId) return;
 
       setIsLoadingProduct(true);
       setError(null);
       try {
-        const product = await getProductById(productId);
+        const product = await getProduct(typeId, subTypeId, productId);
         if (product) {
           // Map fetched product data to form data structure
           setFormData({
@@ -453,17 +461,17 @@ export default function EditProductPage() {
               complianceDocuments: !!product.documents?.complianceDocuments,
             },
             theme: product.theme || initialFormData.theme,
-            productType: "", // This will need to be dynamically set based on how you fetch/store this
-            productSubtype: "", // Same here
+            productType: typeId, // This will need to be dynamically set based on how you fetch/store this
+            productSubtype: subTypeId, // Same here
           });
 
-          // With this assumption:
-          setFormData((prev) => ({
-            ...prev,
-            productType: (product as Product & { typeId: string }).typeId, // Cast assuming typeId is present
-            productSubtype: (product as Product & { subtypeId: string })
-              .subtypeId, // Cast assuming subtypeId is present
-          }));
+          // // With this assumption:
+          // setFormData((prev) => ({
+          //   ...prev,
+          //   productType: (product as Product & { typeId: string }).typeId, // Cast assuming typeId is present
+          //   productSubtype: (product as Product & { subtypeId: string })
+          //     .subtypeId, // Cast assuming subtypeId is present
+          // }));
         } else {
           setError("Product not found.");
         }
@@ -475,7 +483,7 @@ export default function EditProductPage() {
       }
     }
     fetchProductData();
-  }, [productId]); // Re-run when productId changes
+  }, [productId, subTypeId, typeId]); // Re-run when productId changes
 
   // --- Form Submission and Cancel ---
   const handleSubmit = async (e: React.FormEvent) => {

@@ -344,7 +344,7 @@ export default function ProductTypesPage() {
                     <CardTitle className="text-lg">{p.name}</CardTitle>
                   </div>
                   <div className="flex space-x-2">
-                    <Link href={`/admin/products/${p.id}`}>
+                    <Link href={`/admin/products/${p.id}?typeid=${type}&subtypeid=${subtype}`}>
                       <Button variant="ghost" size="sm">
                         <Edit className="h-4 w-4" />
                       </Button>
