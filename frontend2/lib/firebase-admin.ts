@@ -9,6 +9,7 @@ import {
   query,
   where,
   orderBy,
+  collectionGroup, // Import collectionGroup
   CollectionReference,
   DocumentReference,
 } from "firebase/firestore";
@@ -22,7 +23,7 @@ import { db, storage } from "./firebase";
 
 // Types
 export interface ProductType {
-  id?: string;
+  id: string;
   name: string;
   description: string;
   image?: string;
@@ -67,7 +68,7 @@ export interface Product {
   shortDescription: string;
   image?: string;
   additionalImages: string[];
-  features: string[];
+  features: string[]; // Changed from Record<string, string> to string[]
   sizes: Array<{
     size: string;
     sku: string;
@@ -97,6 +98,14 @@ export interface Product {
     certificationDocuments?: string;
     qualityReport?: string;
     complianceDocuments?: string;
+  };
+  theme: {
+    gradient: string;
+    bgColor: string;
+    iconColor: string;
+    borderColor: string;
+    hoverColor: string;
+    overlayGradient: string;
   };
   createdAt: Date;
   updatedAt: Date;
@@ -267,6 +276,7 @@ export const createProduct = async (
       updatedAt: new Date(),
     }
   );
+  await updateDoc(docRef, { id: docRef.id });
   return docRef.id;
 };
 
@@ -314,6 +324,38 @@ export const getProduct = async (
   if (docSnap.exists()) {
     return { id: docSnap.id, ...docSnap.data() } as Product;
   }
+  return null;
+};
+
+// New function to get a product by its ID using a collection group query
+export const getProductById = async (
+  productId: string
+): Promise<Product | null> => {
+  // Create a query against the collection group named "products"
+  const productsRef = collectionGroup(db, "products");
+
+  // Create a query to find the document with the matching ID
+  // Note: Firestore does not directly support `where(documentId(), '==', productId)` for collection group queries.
+  // Instead, you would typically query on a field within the document that holds the ID,
+  // or if the ID is also a field within the document (which is a common practice when you need to query by ID).
+  // Assuming 'id' is also a field within your Product documents:
+  const q = query(productsRef, where("id", "==", productId));
+
+  // If 'id' is NOT a field within your document and you only want to query by the document's actual ID,
+  // then you'd have to get all documents and then filter by doc.id.
+  // However, this is highly inefficient and not recommended for large datasets.
+  // The most efficient way with collection groups to find by document ID is if the ID is duplicated as a field.
+  // For this example, I'm assuming 'id' is also a field in your Product interface.
+
+  const querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    // If there are multiple documents with the same 'id' field (which shouldn't happen for unique IDs),
+    // this will return the first one found.
+    const docSnap = querySnapshot.docs[0];
+    return { id: docSnap.id, ...docSnap.data() } as Product;
+  }
+
   return null;
 };
 
@@ -368,4 +410,317 @@ export const uploadFile = async (file: File, path: string): Promise<string> => {
 export const deleteFile = async (url: string) => {
   const fileRef = ref(storage, url);
   await deleteObject(fileRef);
+};
+
+// Image Upload
+// This function uploads an image file to Firebase Storage and returns the download URL
+// It creates a unique filename using the current timestamp and sanitizes the original filename
+
+export const uploadImageToFirebase = async (
+  file: File,
+  path: string
+): Promise<string> => {
+  try {
+    // Create a unique filename
+    const timestamp = Date.now();
+    const fileName = `${timestamp}-${file.name.replace(
+      /[^a-zA-Z0-9.-]/g,
+      "_"
+    )}`;
+    const fullPath = `${path}/${fileName}`;
+
+    // Create storage reference
+    const storageRef = ref(storage, fullPath);
+
+    // Upload file
+    const snapshot = await uploadBytes(storageRef, file);
+
+    // Get download URL
+    const downloadURL = await getDownloadURL(snapshot.ref);
+
+    return downloadURL;
+  } catch (error) {
+    console.error("Error uploading image:", error);
+    throw new Error("Failed to upload image");
+  }
+};
+
+export const uploadMultipleImages = async (
+  files: File[],
+  path: string
+): Promise<string[]> => {
+  try {
+    const uploadPromises = files.map((file) =>
+      uploadImageToFirebase(file, path)
+    );
+    const urls = await Promise.all(uploadPromises);
+    return urls;
+  } catch (error) {
+    console.error("Error uploading multiple images:", error);
+    throw new Error("Failed to upload images");
+  }
+};
+
+
+// Equipment SECTION
+// Equipment Types CRUD
+export const createEquipmentType = async (
+  data: Omit<ProductType, "id" | "createdAt" | "updatedAt">
+) => {
+  const docRef = await addDoc(collection(db, "EquipmentTypes"), {
+    ...data,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+  return docRef.id;
+};
+
+export const getEquipmentTypes = async (): Promise<ProductType[]> => {
+  const querySnapshot = await getDocs(
+    query(collection(db, "EquipmentTypes"), orderBy("name"))
+  );
+  return querySnapshot.docs.map(
+    (doc) =>
+      ({
+        id: doc.id,
+        ...doc.data(),
+      } as ProductType)
+  );
+};
+
+export const getEquipmentType = async (
+  id: string
+): Promise<ProductType | null> => {
+  const docSnap = await getDoc(doc(db, "EquipmentTypes", id));
+  if (docSnap.exists()) {
+    return { id: docSnap.id, ...docSnap.data() } as ProductType;
+  }
+  return null;
+};
+
+export const updateEquipmentType = async (
+  id: string,
+  data: Partial<ProductType>
+) => {
+  await updateDoc(doc(db, "EquipmentTypes", id), {
+    ...data,
+    updatedAt: new Date(),
+  });
+};
+
+export const deleteEquipmentType = async (id: string) => {
+  await deleteDoc(doc(db, "EquipmentTypes", id));
+};
+
+// Equipment Subtypes CRUD (Nested under Equipment Types)
+export const createEquipmentSubtype = async (
+  typeId: string, // Now requires the parent typeId
+  data: Omit<ProductSubtype, "id" | "createdAt" | "updatedAt">
+) => {
+  const docRef = await addDoc(
+    getSubcollectionRef("EquipmentTypes", typeId, "EquipmentSubtypes"),
+    {
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  );
+  return docRef.id;
+};
+
+export const getEquipmentSubtypes = async (
+  typeId: string // Now *always* requires typeId to query its subcollection
+): Promise<ProductSubtype[]> => {
+  const q = query(
+    getSubcollectionRef("EquipmentTypes", typeId, "EquipmentSubtypes"),
+    orderBy("name")
+  );
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(
+    (doc) =>
+      ({
+        id: doc.id,
+        ...doc.data(),
+      } as ProductSubtype)
+  );
+};
+
+export const getEquipmentSubtype = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string
+): Promise<ProductSubtype | null> => {
+  const docSnap = await getDoc(
+    doc(db, "EquipmentTypes", typeId, "EquipmentSubtypes", subtypeId)
+  );
+  if (docSnap.exists()) {
+    return { id: docSnap.id, ...docSnap.data() } as ProductSubtype;
+  }
+  return null;
+};
+
+export const updateEquipmentSubtype = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string,
+  data: Partial<ProductSubtype>
+) => {
+  await updateDoc(
+    doc(db, "EquipmentTypes", typeId, "EquipmentSubtypes", subtypeId),
+    {
+      ...data,
+      updatedAt: new Date(),
+    }
+  );
+};
+
+export const deleteEquipmentSubtype = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string
+) => {
+  await deleteDoc(
+    doc(db, "EquipmentTypes", typeId, "EquipmentSubtypes", subtypeId)
+  );
+};
+
+// Equipments CRUD (Nested under Equipment Subtypes)
+export const createEquipment = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string, // Requires parent subtypeId
+  data: Omit<Product, "id" | "createdAt" | "updatedAt">
+) => {
+  const docRef = await addDoc(
+    getDeepSubcollectionRef(
+      "EquipmentTypes",
+      typeId,
+      "EquipmentSubtypes", // The name of the subcollection within the grandparent document
+      subtypeId,
+      "Equipments"
+    ),
+    {
+      ...data,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+  );
+  await updateDoc(docRef, { id: docRef.id });
+  return docRef.id;
+};
+
+export const getEquipments = async (
+  typeId: string, // Now required
+  subtypeId: string // Now required
+): Promise<Product[]> => {
+  const q = query(
+    getDeepSubcollectionRef(
+      "EquipmentTypes",
+      typeId,
+      "EquipmentSubtypes",
+      subtypeId,
+      "Equipments"
+    ),
+    orderBy("name")
+  );
+
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map(
+    (doc) =>
+      ({
+        id: doc.id,
+        ...doc.data(),
+      } as Product)
+  );
+};
+
+export const getEquipment = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string, // Requires parent subtypeId
+  EquipmentId: string
+): Promise<Product | null> => {
+  const docSnap = await getDoc(
+    doc(
+      db,
+      "EquipmentTypes",
+      typeId,
+      "EquipmentSubtypes",
+      subtypeId,
+      "Equipments",
+      EquipmentId
+    )
+  );
+  if (docSnap.exists()) {
+    return { id: docSnap.id, ...docSnap.data() } as Product;
+  }
+  return null;
+};
+
+// New function to get a Equipment by its ID using a collection group query
+export const getEquipmentById = async (
+  EquipmentId: string
+): Promise<Product | null> => {
+  // Create a query against the collection group named "Equipments"
+  const EquipmentsRef = collectionGroup(db, "Equipments");
+
+  // Create a query to find the document with the matching ID
+  // Note: Firestore does not directly support `where(documentId(), '==', EquipmentId)` for collection group queries.
+  // Instead, you would typically query on a field within the document that holds the ID,
+  // or if the ID is also a field within the document (which is a common practice when you need to query by ID).
+  // Assuming 'id' is also a field within your Equipment documents:
+  const q = query(EquipmentsRef, where("id", "==", EquipmentId));
+
+  // If 'id' is NOT a field within your document and you only want to query by the document's actual ID,
+  // then you'd have to get all documents and then filter by doc.id.
+  // However, this is highly inefficient and not recommended for large datasets.
+  // The most efficient way with collection groups to find by document ID is if the ID is duplicated as a field.
+  // For this example, I'm assuming 'id' is also a field in your Equipment interface.
+
+  const querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    // If there are multiple documents with the same 'id' field (which shouldn't happen for unique IDs),
+    // this will return the first one found.
+    const docSnap = querySnapshot.docs[0];
+    return { id: docSnap.id, ...docSnap.data() } as Product;
+  }
+
+  return null;
+};
+
+export const updateEquipment = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string, // Requires parent subtypeId
+  EquipmentId: string,
+  data: Partial<Product>
+) => {
+  await updateDoc(
+    doc(
+      db,
+      "EquipmentTypes",
+      typeId,
+      "EquipmentSubtypes",
+      subtypeId,
+      "Equipments",
+      EquipmentId
+    ),
+    {
+      ...data,
+      updatedAt: new Date(),
+    }
+  );
+};
+
+export const deleteEquipment = async (
+  typeId: string, // Requires parent typeId
+  subtypeId: string, // Requires parent subtypeId
+  EquipmentId: string
+) => {
+  await deleteDoc(
+    doc(
+      db,
+      "EquipmentTypes",
+      typeId,
+      "EquipmentSubtypes",
+      subtypeId,
+      "Equipments",
+      EquipmentId
+    )
+  );
 };

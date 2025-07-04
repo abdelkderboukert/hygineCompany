@@ -14,7 +14,7 @@ import { Header } from "@/components/Header";
 // Sample product sectors data with different themes
 const productSectors = [
   {
-    id: "sterilization-chemicals",
+    id: "pSVKtoCNmJocgpPTYmYa",
     name: "Clean-in-Place / Sterilize-in-Place",
     description:
       "Professional chemical solutions for sterilization across various industries",
@@ -29,7 +29,7 @@ const productSectors = [
     },
   },
   {
-    id: "Clean-Out-of-Place",
+    id: "G2bxJGI8T8AibUtZtwkD",
     name: "Clean-Out-of-Place (COP)",
     description:
       "Nettoyage des équipements et composants qui ne peuvent pas être nettoyés sur place, nécessitant un démontage et un nettoyage dans une zone dédiée.",
@@ -50,7 +50,7 @@ const productSectors = [
     },
   },
   {
-    id: "Hygiene-Corporelle",
+    id: "djHzgM7n8JA7I8AEmNeC",
     name: "Hygiène Corporelle",
     description:
       "Ensemble des pratiques et des soins destinés à maintenir la propreté du corps, prévenir les maladies et favoriser le bien-être physique et mental.",
@@ -65,9 +65,10 @@ const productSectors = [
     },
   },
   {
-    id: "Collectivite",
+    id: "mL4fIyquLQWct4oprf4M",
     name: "Collectivité",
-    description: "Un groupe d'individus partageant des caractéristiques, des intérêts, un territoire ou des objectifs communs, et interdépendants au sein d'une structure sociale.",
+    description:
+      "Un groupe d'individus partageant des caractéristiques, des intérêts, un territoire ou des objectifs communs, et interdépendants au sein d'une structure sociale.",
     image: "/placeholder.svg?height=300&width=400",
     activators: ["citoyens", "résidents", "organisations-publiques"],
     theme: {
@@ -79,11 +80,12 @@ const productSectors = [
     },
   },
   {
-    "id": "Additifs",
-    "name": "Additifs",
-    "description": "Substances ajoutées intentionnellement à un produit (alimentaire, cosmétique, industriel, etc.) en faible quantité pour modifier ses caractéristiques (conservation, goût, texture, couleur, stabilité) ou faciliter sa fabrication, sans être consommées seules comme ingrédients principaux.",
-    "image": "/placeholder.svg?height=300&width=400",
-    "activators": ["conservateurs", "colorants", "exhausteurs-de-gout"],
+    id: "AKf0XnxFSybJEiGKbANm",
+    name: "Additifs",
+    description:
+      "Substances ajoutées intentionnellement à un produit (alimentaire, cosmétique, industriel, etc.) en faible quantité pour modifier ses caractéristiques (conservation, goût, texture, couleur, stabilité) ou faciliter sa fabrication, sans être consommées seules comme ingrédients principaux.",
+    image: "/placeholder.svg?height=300&width=400",
+    activators: ["conservateurs", "colorants", "exhausteurs-de-gout"],
     theme: {
       gradient: "from-orange-500 to-orange-700",
       bgColor: "bg-orange-50",
@@ -93,9 +95,10 @@ const productSectors = [
     },
   },
   {
-    id: "Agricole",
+    id: "Mb0qxk60dAdiPwu7eKL3",
     name: "Agricole",
-    description: "Relatif à l'agriculture, l'ensemble des activités humaines qui transforment le milieu naturel pour produire des ressources végétales (cultures) et animales (élevage) utiles aux besoins de l'homme (alimentation, fibres, énergie).",
+    description:
+      "Relatif à l'agriculture, l'ensemble des activités humaines qui transforment le milieu naturel pour produire des ressources végétales (cultures) et animales (élevage) utiles aux besoins de l'homme (alimentation, fibres, énergie).",
     image: "/placeholder.svg?height=300&width=400",
     activators: ["cultures", "elevage", "machinisme-agricole"],
     theme: {

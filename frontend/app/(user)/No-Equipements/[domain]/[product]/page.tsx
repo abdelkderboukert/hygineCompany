@@ -29,13 +29,11 @@ const Page = ({
   const CLproduct = product.replace(/%20/g, " ");
 
   console.log(CLDomain, CLproduct);
-
   const [EquipementSubType, setEquipementSubType] =
     useState<EquipementType | null>(null);
 
   const fetchProductSubTypeByName = async (type: string, name: string) => {
     console.log(name);
-
     console.log(name,type);
     try {
       const querySnapshot = await getDocs(
@@ -89,7 +87,7 @@ const Page = ({
             className=""
             key={index}
           >
-            <Iteme1
+              <Iteme1
               key={index}
               //@ts-expect-error type error
               produits={serve}

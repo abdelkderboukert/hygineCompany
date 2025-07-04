@@ -1,4 +1,3 @@
-"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -11,44 +10,11 @@ import {
 } from "@/components/ui/card";
 import { Shield, ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
-import { useParams } from "next/navigation";
-import { getProductSubtypes, getProductType } from "@/lib/firebase-admin"; // Ensure this path is correct
-import { useEffect, useState } from "react"; // Import useEffect and useState
-import type { ProductType, ProductSubtype } from "@/lib/firebase-admin"; // Adjust the import path as needed
 
-// Define your ProductType interface
-// interface ProductType {
-//   id?: string;
-//   name: string;
-//   description: string;
-//   image?: string;
-//   theme: {
-//     gradient: string;
-//     bgColor: string;
-//     iconColor: string;
-//     borderColor: string;
-//     hoverColor: string;
-//     overlayGradient: string;
-//   };
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// interface ProductSubtype {
-//   id?: string;
-//   typeId: string;
-//   name: string;
-//   description: string;
-//   image?: string;
-//   productCount: number;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// Sample product sectors data with different themes (can be removed if all data comes from Firestore)
-const productSectors = [
+// Sample Equipment sectors data with different themes
+const EquipmentSectors = [
   {
-    id: "sterilization-chemicals",
+    id: "pSVKtoCNmJocgpPTYmYa",
     name: "Clean-in-Place / Sterilize-in-Place",
     description:
       "Professional chemical solutions for sterilization across various industries",
@@ -63,12 +29,18 @@ const productSectors = [
     },
   },
   {
-    id: "clean-out-of-place", // Changed to kebab-case for URL consistency
+    id: "G2bxJGI8T8AibUtZtwkD",
     name: "Clean-Out-of-Place (COP)",
     description:
       "Nettoyage des équipements et composants qui ne peuvent pas être nettoyés sur place, nécessitant un démontage et un nettoyage dans une zone dédiée.",
     image: "/placeholder.svg?height=300&width=400",
-    activators: ["nettoyants-alcalins", "nettoyants-acides", "eau-purifiee"],
+    activators: [
+      "nettoyants-alcalins",
+      "nettoyants-acides",
+      "eau-purifiee",
+      // "action-mecanique",
+      // "temperature",
+    ],
     theme: {
       gradient: "from-green-500 to-green-700",
       bgColor: "bg-green-50",
@@ -78,7 +50,7 @@ const productSectors = [
     },
   },
   {
-    id: "hygiene-corporelle", // Changed to kebab-case
+    id: "djHzgM7n8JA7I8AEmNeC",
     name: "Hygiène Corporelle",
     description:
       "Ensemble des pratiques et des soins destinés à maintenir la propreté du corps, prévenir les maladies et favoriser le bien-être physique et mental.",
@@ -93,7 +65,7 @@ const productSectors = [
     },
   },
   {
-    id: "collectivite", // Changed to kebab-case
+    id: "mL4fIyquLQWct4oprf4M",
     name: "Collectivité",
     description:
       "Un groupe d'individus partageant des caractéristiques, des intérêts, un territoire ou des objectifs communs, et interdépendants au sein d'une structure sociale.",
@@ -108,7 +80,7 @@ const productSectors = [
     },
   },
   {
-    id: "additifs", // Changed to kebab-case
+    id: "AKf0XnxFSybJEiGKbANm",
     name: "Additifs",
     description:
       "Substances ajoutées intentionnellement à un produit (alimentaire, cosmétique, industriel, etc.) en faible quantité pour modifier ses caractéristiques (conservation, goût, texture, couleur, stabilité) ou faciliter sa fabrication, sans être consommées seules comme ingrédients principaux.",
@@ -123,7 +95,7 @@ const productSectors = [
     },
   },
   {
-    id: "agricole", // Changed to kebab-case
+    id: "Mb0qxk60dAdiPwu7eKL3",
     name: "Agricole",
     description:
       "Relatif à l'agriculture, l'ensemble des activités humaines qui transforment le milieu naturel pour produire des ressources végétales (cultures) et animales (élevage) utiles aux besoins de l'homme (alimentation, fibres, énergie).",
@@ -139,97 +111,35 @@ const productSectors = [
   },
 ];
 
-export default function ProductCatalogPage() {
-  const params = useParams();
-  const productTypeParam = params.type as string; // Assert as string if confident it will be present
-
-  const [fetchedProductType, setFetchedProductType] =
-    useState<ProductType | null>(null);
-  const [fetchedProductSubType, setFetchedProductSubType] =
-    useState<ProductSubtype[] | null>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Derive the ID to use for Firestore
-  // If your Firestore document IDs are kebab-case (e.g., "sterilization-chemicals"),
-  // then directly use productTypeParam after decoding.
-  // If they contain spaces (e.g., "Sterilization Chemicals"), then convert productTypeParam to that format.
-  // Based on your productSectors array, your IDs are kebab-case, but your decoding logic converts to spaces.
-  // Let's assume Firestore IDs are exactly what's in the URL (kebab-case) for simplicity.
-  const firestoreId = productTypeParam
-    ? decodeURIComponent(productTypeParam)
-    : null;
-
-  useEffect(() => {
-    async function fetchProductTypeData() {
-      if (!firestoreId) {
-        setLoading(false);
-        setError("Product type ID is missing.");
-        return;
-      }
-
-      setLoading(true);
-      setError(null);
-      try {
-        // Call the getProductType function with the decoded ID
-        const data = await getProductType(firestoreId);
-        const SubTypeData : ProductSubtype[] = await getProductSubtypes(firestoreId);
-        if (data || SubTypeData) {
-          setFetchedProductType(data);
-          setFetchedProductSubType(SubTypeData);
-        } else {
-          setFetchedProductType(null); // No product type found
-          setError(`Product type with ID "${firestoreId}" not found.`);
-        }
-      } catch (err) {
-        console.error("Error fetching product type:", err);
-        setError("Failed to load product type data.");
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchProductTypeData();
-  }, [firestoreId]);
-  
-
-  // Display loading, error, or not found states
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <p>Loading product type details...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <p className="text-red-500">{error}</p>
-      </div>
-    );
-  }
-
-  // If fetchedProductType is null, it means no data was found
-  if (!fetchedProductType) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-white">
-        <p>No product type found for "{firestoreId}".</p>
-      </div>
-    );
-  }
-
-  // If you want to filter your local productSectors based on the fetched ID:
-  const currentSector = productSectors.find(
-    (sector) => sector.id === firestoreId
-  );
-
-  // Now, use fetchedProductType.name and fetchedProductType.description in your rendering
-  // You might also want to fetch `activators` and `theme` from Firestore if they are part of ProductType in DB
-  // For now, if you rely on the local `productSectors` for those details, ensure the `id` matches correctly.
-
+export default function EquipmentCatalogPage() {
   return (
     <div className="min-h-screen bg-white">
+      {/* Header */}
+      {/* <header className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center py-4">
+            <div className="flex items-center space-x-2">
+              <Shield className="h-8 w-8 text-blue-600" />
+              <span className="text-2xl font-bold text-gray-900">HygieneMax</span>
+            </div>
+            <nav className="hidden md:flex space-x-8">
+              <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors">
+                Home
+              </Link>
+              <Link href="/Equipments" className="text-blue-600 font-medium">
+                Equipments
+              </Link>
+              <Link href="/suppliers" className="text-gray-700 hover:text-blue-600 transition-colors">
+                Suppliers
+              </Link>
+              <Link href="/#contact" className="text-gray-700 hover:text-blue-600 transition-colors">
+                Contact
+              </Link>
+            </nav>
+            <Button className="bg-blue-600 hover:bg-blue-700">Get Quote</Button>
+          </div>
+        </div>
+      </header> */}
       <Header />
 
       {/* Hero Section */}
@@ -237,23 +147,21 @@ export default function ProductCatalogPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              {/* Display the name fetched from Firestore */}
-              {fetchedProductType.name}
+              Equipment Catalog
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              {/* Display the description fetched from Firestore */}
-              {fetchedProductType.description}
+              Browse our comprehensive range of sterilization chemicals and
+              equipment for all industry needs
             </p>
           </div>
         </div>
       </section>
 
-      {/* Product Sectors Grid - You might want to remove this if you only display details for one product type */}
-      {/* Or, if you want to display related product sectors, you could filter them */}
+      {/* Equipment Sectors Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {fetchedProductSubType?.map((sector) => (
+            {EquipmentSectors.map((sector) => (
               <Card
                 key={sector.id}
                 className={`overflow-hidden group hover:shadow-xl transition-all duration-300 ${sector.theme.borderColor} border-2`}
@@ -287,9 +195,9 @@ export default function ProductCatalogPage() {
                   </CardDescription>
                   <div className="space-y-3">
                     <p className="text-sm font-medium text-gray-800">
-                      {/* Activator Categories: */}
+                      Activator Categories:
                     </p>
-                    {/* <div className="grid grid-cols-1 gap-2">
+                    <div className="grid grid-cols-1 gap-2">
                       {sector.activators.map((activator) => (
                         <div
                           key={activator}
@@ -312,13 +220,13 @@ export default function ProductCatalogPage() {
                           </span>
                         </div>
                       ))}
-                    </div> */}
+                    </div>
                   </div>
-                  <Link href={`/products/${fetchedProductType.id}/${sector.id}`}>
+                  <Link href={`/Equipments/${sector.id}`}>
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
                     >
-                      Browse Products
+                      Browse Equipments
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -329,16 +237,16 @@ export default function ProductCatalogPage() {
         </div>
       </section>
 
-      {/* Product Finder */}
+      {/* Equipment Finder */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Need Help Finding the Right Product?
+                Need Help Finding the Right Equipment?
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Our product specialists can help you find the perfect
+                Our Equipment specialists can help you find the perfect
                 sterilization solution for your specific needs
               </p>
             </div>
@@ -369,11 +277,11 @@ export default function ProductCatalogPage() {
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Products</h3>
+              <h3 className="font-semibold mb-4">Equipments</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link
-                    href="/products/sterilization-chemicals"
+                    href="/Equipments/sterilization-chemicals"
                     className="hover:text-white transition-colors"
                   >
                     Sterilization Chemicals
@@ -381,7 +289,7 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/products/cleaning-chemicals"
+                    href="/Equipments/cleaning-chemicals"
                     className="hover:text-white transition-colors"
                   >
                     Cleaning Chemicals
@@ -389,7 +297,7 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/products/sterilization-equipment"
+                    href="/Equipments/sterilization-equipment"
                     className="hover:text-white transition-colors"
                   >
                     Sterilization Equipment
@@ -397,10 +305,10 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/products"
+                    href="/Equipments"
                     className="hover:text-white transition-colors"
                   >
-                    View All Products
+                    View All Equipments
                   </Link>
                 </li>
               </ul>
@@ -449,7 +357,7 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Product Guides
+                    Equipment Guides
                   </Link>
                 </li>
                 <li>

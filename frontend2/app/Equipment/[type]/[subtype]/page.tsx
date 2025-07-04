@@ -12,192 +12,96 @@ import {
 import { Shield, ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
 import { useParams } from "next/navigation";
-import { getProductSubtypes, getProductType } from "@/lib/firebase-admin"; // Ensure this path is correct
+import {
+  getEquipmentSubtype,
+  getEquipmentType,
+  getEquipments,
+} from "@/lib/firebase-admin"; // Ensure this path is correct
 import { useEffect, useState } from "react"; // Import useEffect and useState
-import type { ProductType, ProductSubtype } from "@/lib/firebase-admin"; // Adjust the import path as needed
+import type {
+  ProductType,
+  ProductSubtype,
+  Product,
+} from "@/lib/firebase-admin"; // Adjust the import path as needed
+import { set } from "date-fns";
 
-// Define your ProductType interface
-// interface ProductType {
-//   id?: string;
-//   name: string;
-//   description: string;
-//   image?: string;
-//   theme: {
-//     gradient: string;
-//     bgColor: string;
-//     iconColor: string;
-//     borderColor: string;
-//     hoverColor: string;
-//     overlayGradient: string;
-//   };
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// interface ProductSubtype {
-//   id?: string;
-//   typeId: string;
-//   name: string;
-//   description: string;
-//   image?: string;
-//   productCount: number;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// Sample product sectors data with different themes (can be removed if all data comes from Firestore)
-const productSectors = [
-  {
-    id: "sterilization-chemicals",
-    name: "Clean-in-Place / Sterilize-in-Place",
-    description:
-      "Professional chemical solutions for sterilization across various industries",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["disinfectants", "sanitizers", "sterilants"],
-    theme: {
-      gradient: "from-blue-500 to-blue-700",
-      bgColor: "bg-blue-50",
-      iconColor: "text-blue-600",
-      borderColor: "border-blue-200",
-      hoverColor: "hover:bg-blue-600",
-    },
-  },
-  {
-    id: "clean-out-of-place", // Changed to kebab-case for URL consistency
-    name: "Clean-Out-of-Place (COP)",
-    description:
-      "Nettoyage des équipements et composants qui ne peuvent pas être nettoyés sur place, nécessitant un démontage et un nettoyage dans une zone dédiée.",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["nettoyants-alcalins", "nettoyants-acides", "eau-purifiee"],
-    theme: {
-      gradient: "from-green-500 to-green-700",
-      bgColor: "bg-green-50",
-      iconColor: "text-green-600",
-      borderColor: "border-green-200",
-      hoverColor: "hover:bg-green-600",
-    },
-  },
-  {
-    id: "hygiene-corporelle", // Changed to kebab-case
-    name: "Hygiène Corporelle",
-    description:
-      "Ensemble des pratiques et des soins destinés à maintenir la propreté du corps, prévenir les maladies et favoriser le bien-être physique et mental.",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["savon", "shampoing", "dentifrice"],
-    theme: {
-      gradient: "from-cyan-500 to-cyan-700",
-      bgColor: "bg-cyan-50",
-      iconColor: "text-cyan-600",
-      borderColor: "border-cyan-200",
-      hoverColor: "hover:bg-cyan-600",
-    },
-  },
-  {
-    id: "collectivite", // Changed to kebab-case
-    name: "Collectivité",
-    description:
-      "Un groupe d'individus partageant des caractéristiques, des intérêts, un territoire ou des objectifs communs, et interdépendants au sein d'une structure sociale.",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["citoyens", "résidents", "organisations-publiques"],
-    theme: {
-      gradient: "from-purple-500 to-purple-700",
-      bgColor: "bg-purple-50",
-      iconColor: "text-purple-600",
-      borderColor: "border-purple-200",
-      hoverColor: "hover:bg-purple-600",
-    },
-  },
-  {
-    id: "additifs", // Changed to kebab-case
-    name: "Additifs",
-    description:
-      "Substances ajoutées intentionnellement à un produit (alimentaire, cosmétique, industriel, etc.) en faible quantité pour modifier ses caractéristiques (conservation, goût, texture, couleur, stabilité) ou faciliter sa fabrication, sans être consommées seules comme ingrédients principaux.",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["conservateurs", "colorants", "exhausteurs-de-gout"],
-    theme: {
-      gradient: "from-orange-500 to-orange-700",
-      bgColor: "bg-orange-50",
-      iconColor: "text-orange-600",
-      borderColor: "border-orange-200",
-      hoverColor: "hover:bg-orange-600",
-    },
-  },
-  {
-    id: "agricole", // Changed to kebab-case
-    name: "Agricole",
-    description:
-      "Relatif à l'agriculture, l'ensemble des activités humaines qui transforment le milieu naturel pour produire des ressources végétales (cultures) et animales (élevage) utiles aux besoins de l'homme (alimentation, fibres, énergie).",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["cultures", "elevage", "machinisme-agricole"],
-    theme: {
-      gradient: "from-red-500 to-red-700",
-      bgColor: "bg-red-50",
-      iconColor: "text-red-600",
-      borderColor: "border-red-200",
-      hoverColor: "hover:bg-red-600",
-    },
-  },
-];
-
-export default function ProductCatalogPage() {
+export default function EquipmentCatalogPage() {
   const params = useParams();
-  const productTypeParam = params.type as string; // Assert as string if confident it will be present
+  const EquipmentTypeParam = params.type as string;
+  const EquipmentSubtypeParam = params.subtype as string;
 
-  const [fetchedProductType, setFetchedProductType] =
+  const [fetchedEquipmentType, setFetchedEquipmentType] =
     useState<ProductType | null>(null);
-  const [fetchedProductSubType, setFetchedProductSubType] =
-    useState<ProductSubtype[] | null>([]);
+  const [fetchedEquipmentSubType, setFetchedEquipmentSubType] =
+    useState<ProductSubtype | null>(null);
+  const [fetchedEquipments, setFetchedEquipments] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // Derive the ID to use for Firestore
   // If your Firestore document IDs are kebab-case (e.g., "sterilization-chemicals"),
-  // then directly use productTypeParam after decoding.
-  // If they contain spaces (e.g., "Sterilization Chemicals"), then convert productTypeParam to that format.
-  // Based on your productSectors array, your IDs are kebab-case, but your decoding logic converts to spaces.
+  // then directly use EquipmentTypeParam after decoding.
+  // If they contain spaces (e.g., "Sterilization Chemicals"), then convert EquipmentTypeParam to that format.
+  // Based on your EquipmentSectors array, your IDs are kebab-case, but your decoding logic converts to spaces.
   // Let's assume Firestore IDs are exactly what's in the URL (kebab-case) for simplicity.
-  const firestoreId = productTypeParam
-    ? decodeURIComponent(productTypeParam)
+  const firestoreId = EquipmentTypeParam
+    ? decodeURIComponent(EquipmentTypeParam)
+    : null;
+
+  const firestoreSubTypeId = EquipmentSubtypeParam
+    ? decodeURIComponent(EquipmentSubtypeParam)
     : null;
 
   useEffect(() => {
-    async function fetchProductTypeData() {
+    async function fetchEquipmentTypeData() {
       if (!firestoreId) {
         setLoading(false);
-        setError("Product type ID is missing.");
+        setError("Equipment type ID is missing.");
+        return;
+      }
+      if (!firestoreSubTypeId) {
+        setLoading(false);
+        setError("Equipment subtype ID is missing.");
         return;
       }
 
       setLoading(true);
       setError(null);
       try {
-        // Call the getProductType function with the decoded ID
-        const data = await getProductType(firestoreId);
-        const SubTypeData : ProductSubtype[] = await getProductSubtypes(firestoreId);
-        if (data || SubTypeData) {
-          setFetchedProductType(data);
-          setFetchedProductSubType(SubTypeData);
+        // Call the getEquipmentType function with the decoded ID
+        const data = await getEquipmentType(firestoreId);
+        const SubTypeData: ProductSubtype | null = await getEquipmentSubtype(
+          firestoreId,
+          firestoreSubTypeId
+        );
+        const Equipments: Product[] = await getEquipments(
+          firestoreId,
+          firestoreSubTypeId
+        );
+        if (data || SubTypeData || Equipments) {
+          setFetchedEquipmentType(data);
+          setFetchedEquipmentSubType(SubTypeData);
+          setFetchedEquipments(Equipments);
         } else {
-          setFetchedProductType(null); // No product type found
-          setError(`Product type with ID "${firestoreId}" not found.`);
+          setFetchedEquipmentType(null); // No Equipment type found
+          setError(`Equipment type with ID "${firestoreId}" not found.`);
         }
       } catch (err) {
-        console.error("Error fetching product type:", err);
-        setError("Failed to load product type data.");
+        console.error("Error fetching Equipment type:", err);
+        setError("Failed to load Equipment type data.");
       } finally {
         setLoading(false);
       }
     }
 
-    fetchProductTypeData();
-  }, [firestoreId]);
-  
+    fetchEquipmentTypeData();
+  }, [firestoreId, firestoreSubTypeId]);
 
   // Display loading, error, or not found states
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <p>Loading product type details...</p>
+        <p>Loading Equipment type details...</p>
       </div>
     );
   }
@@ -210,23 +114,14 @@ export default function ProductCatalogPage() {
     );
   }
 
-  // If fetchedProductType is null, it means no data was found
-  if (!fetchedProductType) {
+  // If fetchedEquipmentType is null, it means no data was found
+  if (!fetchedEquipmentType) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <p>No product type found for "{firestoreId}".</p>
+        <p>No Equipment type found for "{firestoreId}".</p>
       </div>
     );
   }
-
-  // If you want to filter your local productSectors based on the fetched ID:
-  const currentSector = productSectors.find(
-    (sector) => sector.id === firestoreId
-  );
-
-  // Now, use fetchedProductType.name and fetchedProductType.description in your rendering
-  // You might also want to fetch `activators` and `theme` from Firestore if they are part of ProductType in DB
-  // For now, if you rely on the local `productSectors` for those details, ensure the `id` matches correctly.
 
   return (
     <div className="min-h-screen bg-white">
@@ -236,24 +131,28 @@ export default function ProductCatalogPage() {
       <section className="bg-gradient-to-br from-blue-50 to-green-50 py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-1">
               {/* Display the name fetched from Firestore */}
-              {fetchedProductType.name}
+              {fetchedEquipmentSubType?.name}
             </h1>
+            <p className="text-lg text-gray-400 mb-8">
+              {/* Display the Equipment type name */}
+              {fetchedEquipmentType?.name}
+            </p>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               {/* Display the description fetched from Firestore */}
-              {fetchedProductType.description}
+              {fetchedEquipmentSubType?.description}
             </p>
           </div>
         </div>
       </section>
 
-      {/* Product Sectors Grid - You might want to remove this if you only display details for one product type */}
-      {/* Or, if you want to display related product sectors, you could filter them */}
+      {/* Equipment Sectors Grid - You might want to remove this if you only display details for one Equipment type */}
+      {/* Or, if you want to display related Equipment sectors, you could filter them */}
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {fetchedProductSubType?.map((sector) => (
+            {fetchedEquipments?.map((sector) => (
               <Card
                 key={sector.id}
                 className={`overflow-hidden group hover:shadow-xl transition-all duration-300 ${sector.theme.borderColor} border-2`}
@@ -289,36 +188,14 @@ export default function ProductCatalogPage() {
                     <p className="text-sm font-medium text-gray-800">
                       {/* Activator Categories: */}
                     </p>
-                    {/* <div className="grid grid-cols-1 gap-2">
-                      {sector.activators.map((activator) => (
-                        <div
-                          key={activator}
-                          className={`flex items-center p-2 rounded-lg ${sector.theme.bgColor} border ${sector.theme.borderColor}`}
-                        >
-                          <span
-                            className={`w-2 h-2 ${sector.theme.iconColor.replace(
-                              "text-",
-                              "bg-"
-                            )} rounded-full mr-3`}
-                          ></span>
-                          <span className="text-sm font-medium text-gray-700">
-                            {activator
-                              .split("-")
-                              .map(
-                                (word) =>
-                                  word.charAt(0).toUpperCase() + word.slice(1)
-                              )
-                              .join(" ")}
-                          </span>
-                        </div>
-                      ))}
-                    </div> */}
                   </div>
-                  <Link href={`/products/${fetchedProductType.id}/${sector.id}`}>
+                  <Link
+                    href={`/Equipments/${fetchedEquipmentType.id}/${fetchedEquipmentSubType?.id}/${sector.id}`}
+                  >
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
                     >
-                      Browse Products
+                      Browse Equipments
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -329,16 +206,16 @@ export default function ProductCatalogPage() {
         </div>
       </section>
 
-      {/* Product Finder */}
+      {/* Equipment Finder */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Need Help Finding the Right Product?
+                Need Help Finding the Right Equipment?
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Our product specialists can help you find the perfect
+                Our Equipment specialists can help you find the perfect
                 sterilization solution for your specific needs
               </p>
             </div>
@@ -369,11 +246,11 @@ export default function ProductCatalogPage() {
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Products</h3>
+              <h3 className="font-semibold mb-4">Equipments</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link
-                    href="/products/sterilization-chemicals"
+                    href="/Equipments/sterilization-chemicals"
                     className="hover:text-white transition-colors"
                   >
                     Sterilization Chemicals
@@ -381,7 +258,7 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/products/cleaning-chemicals"
+                    href="/Equipments/cleaning-chemicals"
                     className="hover:text-white transition-colors"
                   >
                     Cleaning Chemicals
@@ -389,7 +266,7 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/products/sterilization-equipment"
+                    href="/Equipments/sterilization-equipment"
                     className="hover:text-white transition-colors"
                   >
                     Sterilization Equipment
@@ -397,10 +274,10 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/products"
+                    href="/Equipments"
                     className="hover:text-white transition-colors"
                   >
-                    View All Products
+                    View All Equipments
                   </Link>
                 </li>
               </ul>
@@ -449,7 +326,7 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Product Guides
+                    Equipment Guides
                   </Link>
                 </li>
                 <li>

@@ -12,141 +12,29 @@ import {
 import { Shield, ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
 import { useParams } from "next/navigation";
-import { getProductSubtypes, getProductType } from "@/lib/firebase-admin"; // Ensure this path is correct
+import {
+  getProductSubtype,
+  getProductType,
+  getProducts,
+} from "@/lib/firebase-admin"; // Ensure this path is correct
 import { useEffect, useState } from "react"; // Import useEffect and useState
-import type { ProductType, ProductSubtype } from "@/lib/firebase-admin"; // Adjust the import path as needed
-
-// Define your ProductType interface
-// interface ProductType {
-//   id?: string;
-//   name: string;
-//   description: string;
-//   image?: string;
-//   theme: {
-//     gradient: string;
-//     bgColor: string;
-//     iconColor: string;
-//     borderColor: string;
-//     hoverColor: string;
-//     overlayGradient: string;
-//   };
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// interface ProductSubtype {
-//   id?: string;
-//   typeId: string;
-//   name: string;
-//   description: string;
-//   image?: string;
-//   productCount: number;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-
-// Sample product sectors data with different themes (can be removed if all data comes from Firestore)
-const productSectors = [
-  {
-    id: "sterilization-chemicals",
-    name: "Clean-in-Place / Sterilize-in-Place",
-    description:
-      "Professional chemical solutions for sterilization across various industries",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["disinfectants", "sanitizers", "sterilants"],
-    theme: {
-      gradient: "from-blue-500 to-blue-700",
-      bgColor: "bg-blue-50",
-      iconColor: "text-blue-600",
-      borderColor: "border-blue-200",
-      hoverColor: "hover:bg-blue-600",
-    },
-  },
-  {
-    id: "clean-out-of-place", // Changed to kebab-case for URL consistency
-    name: "Clean-Out-of-Place (COP)",
-    description:
-      "Nettoyage des équipements et composants qui ne peuvent pas être nettoyés sur place, nécessitant un démontage et un nettoyage dans une zone dédiée.",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["nettoyants-alcalins", "nettoyants-acides", "eau-purifiee"],
-    theme: {
-      gradient: "from-green-500 to-green-700",
-      bgColor: "bg-green-50",
-      iconColor: "text-green-600",
-      borderColor: "border-green-200",
-      hoverColor: "hover:bg-green-600",
-    },
-  },
-  {
-    id: "hygiene-corporelle", // Changed to kebab-case
-    name: "Hygiène Corporelle",
-    description:
-      "Ensemble des pratiques et des soins destinés à maintenir la propreté du corps, prévenir les maladies et favoriser le bien-être physique et mental.",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["savon", "shampoing", "dentifrice"],
-    theme: {
-      gradient: "from-cyan-500 to-cyan-700",
-      bgColor: "bg-cyan-50",
-      iconColor: "text-cyan-600",
-      borderColor: "border-cyan-200",
-      hoverColor: "hover:bg-cyan-600",
-    },
-  },
-  {
-    id: "collectivite", // Changed to kebab-case
-    name: "Collectivité",
-    description:
-      "Un groupe d'individus partageant des caractéristiques, des intérêts, un territoire ou des objectifs communs, et interdépendants au sein d'une structure sociale.",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["citoyens", "résidents", "organisations-publiques"],
-    theme: {
-      gradient: "from-purple-500 to-purple-700",
-      bgColor: "bg-purple-50",
-      iconColor: "text-purple-600",
-      borderColor: "border-purple-200",
-      hoverColor: "hover:bg-purple-600",
-    },
-  },
-  {
-    id: "additifs", // Changed to kebab-case
-    name: "Additifs",
-    description:
-      "Substances ajoutées intentionnellement à un produit (alimentaire, cosmétique, industriel, etc.) en faible quantité pour modifier ses caractéristiques (conservation, goût, texture, couleur, stabilité) ou faciliter sa fabrication, sans être consommées seules comme ingrédients principaux.",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["conservateurs", "colorants", "exhausteurs-de-gout"],
-    theme: {
-      gradient: "from-orange-500 to-orange-700",
-      bgColor: "bg-orange-50",
-      iconColor: "text-orange-600",
-      borderColor: "border-orange-200",
-      hoverColor: "hover:bg-orange-600",
-    },
-  },
-  {
-    id: "agricole", // Changed to kebab-case
-    name: "Agricole",
-    description:
-      "Relatif à l'agriculture, l'ensemble des activités humaines qui transforment le milieu naturel pour produire des ressources végétales (cultures) et animales (élevage) utiles aux besoins de l'homme (alimentation, fibres, énergie).",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["cultures", "elevage", "machinisme-agricole"],
-    theme: {
-      gradient: "from-red-500 to-red-700",
-      bgColor: "bg-red-50",
-      iconColor: "text-red-600",
-      borderColor: "border-red-200",
-      hoverColor: "hover:bg-red-600",
-    },
-  },
-];
+import type {
+  ProductType,
+  ProductSubtype,
+  Product,
+} from "@/lib/firebase-admin"; // Adjust the import path as needed
+import { set } from "date-fns";
 
 export default function ProductCatalogPage() {
   const params = useParams();
-  const productTypeParam = params.type as string; // Assert as string if confident it will be present
+  const productTypeParam = params.type as string;
+  const productSubtypeParam = params.subtype as string;
 
   const [fetchedProductType, setFetchedProductType] =
     useState<ProductType | null>(null);
   const [fetchedProductSubType, setFetchedProductSubType] =
-    useState<ProductSubtype[] | null>([]);
+    useState<ProductSubtype | null>(null);
+  const [fetchedProducts, setFetchedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -160,11 +48,20 @@ export default function ProductCatalogPage() {
     ? decodeURIComponent(productTypeParam)
     : null;
 
+  const firestoreSubTypeId = productSubtypeParam
+    ? decodeURIComponent(productSubtypeParam)
+    : null;
+
   useEffect(() => {
     async function fetchProductTypeData() {
       if (!firestoreId) {
         setLoading(false);
         setError("Product type ID is missing.");
+        return;
+      }
+      if (!firestoreSubTypeId) {
+        setLoading(false);
+        setError("Product subtype ID is missing.");
         return;
       }
 
@@ -173,10 +70,18 @@ export default function ProductCatalogPage() {
       try {
         // Call the getProductType function with the decoded ID
         const data = await getProductType(firestoreId);
-        const SubTypeData : ProductSubtype[] = await getProductSubtypes(firestoreId);
-        if (data || SubTypeData) {
+        const SubTypeData: ProductSubtype | null = await getProductSubtype(
+          firestoreId,
+          firestoreSubTypeId
+        );
+        const Products: Product[] = await getProducts(
+          firestoreId,
+          firestoreSubTypeId
+        );
+        if (data || SubTypeData || Products) {
           setFetchedProductType(data);
           setFetchedProductSubType(SubTypeData);
+          setFetchedProducts(Products);
         } else {
           setFetchedProductType(null); // No product type found
           setError(`Product type with ID "${firestoreId}" not found.`);
@@ -190,8 +95,7 @@ export default function ProductCatalogPage() {
     }
 
     fetchProductTypeData();
-  }, [firestoreId]);
-  
+  }, [firestoreId, firestoreSubTypeId]);
 
   // Display loading, error, or not found states
   if (loading) {
@@ -219,15 +123,6 @@ export default function ProductCatalogPage() {
     );
   }
 
-  // If you want to filter your local productSectors based on the fetched ID:
-  const currentSector = productSectors.find(
-    (sector) => sector.id === firestoreId
-  );
-
-  // Now, use fetchedProductType.name and fetchedProductType.description in your rendering
-  // You might also want to fetch `activators` and `theme` from Firestore if they are part of ProductType in DB
-  // For now, if you rely on the local `productSectors` for those details, ensure the `id` matches correctly.
-
   return (
     <div className="min-h-screen bg-white">
       <Header />
@@ -236,13 +131,17 @@ export default function ProductCatalogPage() {
       <section className="bg-gradient-to-br from-blue-50 to-green-50 py-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-1">
               {/* Display the name fetched from Firestore */}
-              {fetchedProductType.name}
+              {fetchedProductSubType?.name}
             </h1>
+            <p className="text-lg text-gray-400 mb-8">
+              {/* Display the product type name */}
+              {fetchedProductType?.name}
+            </p>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               {/* Display the description fetched from Firestore */}
-              {fetchedProductType.description}
+              {fetchedProductSubType?.description}
             </p>
           </div>
         </div>
@@ -253,7 +152,7 @@ export default function ProductCatalogPage() {
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {fetchedProductSubType?.map((sector) => (
+            {fetchedProducts?.map((sector) => (
               <Card
                 key={sector.id}
                 className={`overflow-hidden group hover:shadow-xl transition-all duration-300 ${sector.theme.borderColor} border-2`}
@@ -289,32 +188,10 @@ export default function ProductCatalogPage() {
                     <p className="text-sm font-medium text-gray-800">
                       {/* Activator Categories: */}
                     </p>
-                    {/* <div className="grid grid-cols-1 gap-2">
-                      {sector.activators.map((activator) => (
-                        <div
-                          key={activator}
-                          className={`flex items-center p-2 rounded-lg ${sector.theme.bgColor} border ${sector.theme.borderColor}`}
-                        >
-                          <span
-                            className={`w-2 h-2 ${sector.theme.iconColor.replace(
-                              "text-",
-                              "bg-"
-                            )} rounded-full mr-3`}
-                          ></span>
-                          <span className="text-sm font-medium text-gray-700">
-                            {activator
-                              .split("-")
-                              .map(
-                                (word) =>
-                                  word.charAt(0).toUpperCase() + word.slice(1)
-                              )
-                              .join(" ")}
-                          </span>
-                        </div>
-                      ))}
-                    </div> */}
                   </div>
-                  <Link href={`/products/${fetchedProductType.id}/${sector.id}`}>
+                  <Link
+                    href={`/products/${fetchedProductType.id}/${fetchedProductSubType?.id}/${sector.id}`}
+                  >
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
                     >
