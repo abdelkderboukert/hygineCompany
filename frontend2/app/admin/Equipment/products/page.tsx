@@ -22,12 +22,12 @@ import {
 } from "@/components/ui/select";
 import { Shield, Plus, Search, Edit, Trash2, ArrowLeft } from "lucide-react";
 import {
-  getProductTypes,
-  deleteProductType, // Not used in this snippet, but kept for context
-  deleteProduct,
+  getEquipmentTypes,
+  deleteEquipmentType, // Not used in this snippet, but kept for context
+  deleteEquipment,
   deleteFile, // This is the key function you need
-  getProductSubtypes,
-  getProducts,
+  getEquipmentSubtypes,
+  getEquipments,
 } from "@/lib/firebase-admin";
 import type {
   ProductType,
@@ -36,114 +36,115 @@ import type {
 } from "@/lib/firebase-admin";
 import { toast } from "sonner";
 
-export default function ProductTypesPage() {
-  const [types, setTypes] = useState<ProductType[]>([]); // This state seems unused now that products are filtered.
+export default function EquipmentTypesPage() {
+  const [types, setTypes] = useState<ProductType[]>([]); // This state seems unused now that Equipments are filtered.
   const [filteredTypes, setFilteredTypes] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
   const [type, setType] = useState<string>("");
-  const [products, setProducts] = useState<Product[]>([]);
+  const [Equipments, setEquipments] = useState<Product[]>([]);
   const [subtype, setSubtype] = useState<string>("");
-  const [fetchedProductTypes, setFetchedProductTypes] = useState<ProductType[]>(
-    []
-  );
-  const [fetchedProductSubtypes, setFetchedProductSubtypes] = useState<
+  const [fetchedEquipmentTypes, setFetchedEquipmentTypes] = useState<
+    ProductType[]
+  >([]);
+  const [fetchedEquipmentSubtypes, setFetchedEquipmentSubtypes] = useState<
     ProductSubtype[]
   >([]);
-  const [loadingProductTypes, setLoadingProductTypes] = useState(true);
-  const [loadingProductSubtypes, setLoadingProductSubtypes] = useState(false);
+  const [loadingEquipmentTypes, setLoadingEquipmentTypes] = useState(true);
+  const [loadingEquipmentSubtypes, setLoadingEquipmentSubtypes] =
+    useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Initial fetch of products based on selected type and subtype
+  // Initial fetch of Equipments based on selected type and subtype
   useEffect(() => {
-    fetchProduct(type, subtype);
+    fetchEquipment(type, subtype);
   }, [type, subtype]);
 
-  // Filter products based on search term
+  // Filter Equipments based on search term
   useEffect(() => {
-    const filtered = products.filter(
-      (product) =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+    const filtered = Equipments.filter(
+      (Equipment) =>
+        Equipment.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        Equipment.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredTypes(filtered);
-  }, [products, searchTerm]);
+  }, [Equipments, searchTerm]);
 
   // --- Data Fetching Effects ---
 
-  // Effect to fetch product types
+  // Effect to fetch Equipment types
   useEffect(() => {
     async function fetchTypes() {
-      setLoadingProductTypes(true);
+      setLoadingEquipmentTypes(true);
       setError(null);
       try {
-        const data = await getProductTypes();
+        const data = await getEquipmentTypes();
         if (data) {
-          setFetchedProductTypes(data);
+          setFetchedEquipmentTypes(data);
         } else {
-          setFetchedProductTypes([]);
-          setError("No product types found.");
+          setFetchedEquipmentTypes([]);
+          setError("No Equipment types found.");
         }
       } catch (err) {
-        console.error("Error fetching product types:", err);
-        setError("Failed to load product types.");
+        console.error("Error fetching Equipment types:", err);
+        setError("Failed to load Equipment types.");
       } finally {
-        setLoadingProductTypes(false);
+        setLoadingEquipmentTypes(false);
       }
     }
     fetchTypes();
   }, []);
 
-  // Effect to fetch product subtypes when productType changes
+  // Effect to fetch Equipment subtypes when EquipmentType changes
   useEffect(() => {
     if (type) {
-      setLoadingProductSubtypes(true);
+      setLoadingEquipmentSubtypes(true);
       setError(null);
-      setFetchedProductSubtypes([]); // Clear previous subtypes
+      setFetchedEquipmentSubtypes([]); // Clear previous subtypes
       setSubtype(""); // Reset selected subtype
 
       async function fetchSubtypes() {
         try {
-          const data = await getProductSubtypes(type);
+          const data = await getEquipmentSubtypes(type);
           if (data) {
-            setFetchedProductSubtypes(data);
+            setFetchedEquipmentSubtypes(data);
           } else {
-            setFetchedProductSubtypes([]);
+            setFetchedEquipmentSubtypes([]);
             setError(`No subtypes found for type "${type}".`);
           }
         } catch (err) {
-          console.error("Error fetching product subtypes:", err);
-          setError("Failed to load product subtypes.");
+          console.error("Error fetching Equipment subtypes:", err);
+          setError("Failed to load Equipment subtypes.");
         } finally {
-          setLoadingProductSubtypes(false);
+          setLoadingEquipmentSubtypes(false);
         }
       }
       fetchSubtypes();
     } else {
-      setFetchedProductSubtypes([]); // Clear subtypes if no product type is selected
-      setLoadingProductSubtypes(false);
+      setFetchedEquipmentSubtypes([]); // Clear subtypes if no Equipment type is selected
+      setLoadingEquipmentSubtypes(false);
     }
   }, [type]);
 
-  const fetchProduct = async (type: string, subtype: string) => {
+  const fetchEquipment = async (type: string, subtype: string) => {
     setLoading(true);
     try {
-      const data = await getProducts(type, subtype);
-      setProducts(data);
+      const data = await getEquipments(type, subtype);
+      setEquipments(data);
     } catch (error) {
-      console.error("Error fetching products:", error);
-      toast.error("Failed to fetch products");
+      console.error("Error fetching Equipments:", error);
+      toast.error("Failed to fetch Equipments");
     } finally {
       setLoading(false);
     }
   };
 
   // --- Modified handleDelete function ---
-  const handleDelete = async (productToDelete: Product) => {
-    const { id, name, image, additionalImages, documents } = productToDelete;
+  const handleDelete = async (EquipmentToDelete: Product) => {
+    const { id, name, image, additionalImages, documents } = EquipmentToDelete;
 
     if (!id || !type || !subtype) {
-      toast.error("Product ID, Type, or Subtype is missing.");
+      toast.error("Equipment ID, Type, or Subtype is missing.");
       return;
     }
 
@@ -156,7 +157,7 @@ export default function ProductTypesPage() {
     }
 
     try {
-      // 1. Delete main product image if it exists
+      // 1. Delete main Equipment image if it exists
       if (image) {
         await deleteFile(image);
         console.log(`Deleted main image: ${image}`);
@@ -196,13 +197,13 @@ export default function ProductTypesPage() {
         );
       }
 
-      // 4. Delete the product document from Firestore
-      await deleteProduct(type, subtype, id);
-      setProducts(products.filter((product) => product.id !== id));
-      toast.success("Product and associated files deleted successfully");
+      // 4. Delete the Equipment document from Firestore
+      await deleteEquipment(type, subtype, id);
+      setEquipments(Equipments.filter((Equipment) => Equipment.id !== id));
+      toast.success("Equipment and associated files deleted successfully");
     } catch (error) {
-      console.error("Error deleting product or files:", error);
-      toast.error("Failed to delete product or some associated files.");
+      console.error("Error deleting Equipment or files:", error);
+      toast.error("Failed to delete Equipment or some associated files.");
     }
   };
 
@@ -229,10 +230,10 @@ export default function ProductTypesPage() {
               </Link>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Product Types
+                  Equipment Types
                 </h1>
                 <p className="text-sm text-gray-500">
-                  Manage product categories
+                  Manage Equipment categories
                 </p>
               </div>
             </div>
@@ -249,31 +250,31 @@ export default function ProductTypesPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid md:grid-cols-2 gap-6 mb-4">
           <div className="space-y-2">
-            <Label htmlFor="productType">
-              Product Type <span className="text-red-500">*</span>
+            <Label htmlFor="EquipmentType">
+              Equipment Type <span className="text-red-500">*</span>
             </Label>
             <Select
               value={type}
               onValueChange={(value) => setType(value)}
-              disabled={loadingProductTypes}
+              disabled={loadingEquipmentTypes}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select a product type" />
+                <SelectValue placeholder="Select a Equipment type" />
               </SelectTrigger>
               <SelectContent>
-                {loadingProductTypes ? (
+                {loadingEquipmentTypes ? (
                   <SelectItem value="loading" disabled>
                     Loading types...
                   </SelectItem>
-                ) : fetchedProductTypes.length > 0 ? (
-                  fetchedProductTypes.map((type) => (
+                ) : fetchedEquipmentTypes.length > 0 ? (
+                  fetchedEquipmentTypes.map((type) => (
                     <SelectItem key={type.id} value={type.id}>
                       {type.name}
                     </SelectItem>
                   ))
                 ) : (
                   <SelectItem value="no-types" disabled>
-                    No product types available
+                    No Equipment types available
                   </SelectItem>
                 )}
               </SelectContent>
@@ -281,24 +282,24 @@ export default function ProductTypesPage() {
             {error && <p className="text-red-500 text-sm">{error}</p>}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="productSubtype">
-              Product SubType <span className="text-red-500">*</span>
+            <Label htmlFor="EquipmentSubtype">
+              Equipment SubType <span className="text-red-500">*</span>
             </Label>
             <Select
               value={subtype}
               onValueChange={(value) => setSubtype(value)}
-              disabled={!type || loadingProductSubtypes}
+              disabled={!type || loadingEquipmentSubtypes}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select a product subtype" />
+                <SelectValue placeholder="Select a Equipment subtype" />
               </SelectTrigger>
               <SelectContent>
-                {loadingProductSubtypes ? (
+                {loadingEquipmentSubtypes ? (
                   <SelectItem value="loading" disabled>
                     Loading subtypes...
                   </SelectItem>
-                ) : fetchedProductSubtypes?.length > 0 ? (
-                  fetchedProductSubtypes.map((subtype) => (
+                ) : fetchedEquipmentSubtypes?.length > 0 ? (
+                  fetchedEquipmentSubtypes.map((subtype) => (
                     <SelectItem key={subtype.id} value={subtype.id || ""}>
                       {subtype.name}
                     </SelectItem>
@@ -307,7 +308,7 @@ export default function ProductTypesPage() {
                   <SelectItem value="no-subtypes" disabled>
                     {subtype
                       ? "No subtypes available for selected type"
-                      : "Select a product type first"}
+                      : "Select a Equipment type first"}
                   </SelectItem>
                 )}
               </SelectContent>
@@ -320,7 +321,7 @@ export default function ProductTypesPage() {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
-                placeholder="Search product types..."
+                placeholder="Search Equipment types..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -344,7 +345,9 @@ export default function ProductTypesPage() {
                     <CardTitle className="text-lg">{p.name}</CardTitle>
                   </div>
                   <div className="flex space-x-2">
-                    <Link href={`/admin/products/${p.id}?typeid=${type}&subtypeid=${subtype}`}>
+                    <Link
+                      href={`/admin/Equipments/${p.id}?typeid=${type}&subtypeid=${subtype}`}
+                    >
                       <Button variant="ghost" size="sm">
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -353,7 +356,7 @@ export default function ProductTypesPage() {
                       variant="ghost"
                       size="sm"
                       onClick={() =>
-                        // Pass the entire product object
+                        // Pass the entire Equipment object
                         handleDelete(p)
                       }
                       className="text-red-600 hover:text-red-700"
@@ -389,18 +392,18 @@ export default function ProductTypesPage() {
             <CardContent className="text-center py-12">
               <Shield className="h-12 w-12 text-gray-400 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-2">
-                No products found
+                No Equipments found
               </h3>
               <p className="text-gray-500 mb-4">
                 {searchTerm
                   ? "Try adjusting your search terms."
-                  : "Get started by creating your first product."}
+                  : "Get started by creating your first Equipment."}
               </p>
               {!searchTerm && (
-                <Link href="/admin/products/new">
+                <Link href="/admin/Equipments/new">
                   <Button className="bg-blue-600 hover:bg-blue-700">
                     <Plus className="h-4 w-4 mr-2" />
-                    Create Product
+                    Create Equipment
                   </Button>
                 </Link>
               )}

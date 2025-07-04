@@ -26,14 +26,14 @@ import { Checkbox } from "@/components/ui/checkbox";
 import ImageUpload from "@/components/image-upload";
 import MultipleImageUpload from "@/components/multiple-image-upload";
 import {
-  getProductTypes,
-  getProductSubtypes,
-  createProduct,
+  getEquipmentTypes,
+  getEquipmentSubtypes,
+  createEquipment,
 } from "@/lib/firebase-admin";
 import type {
-  Product,
-  ProductSubtype,
-  ProductType,
+  Product as Equipment,
+  ProductSubtype as EquipmentSubType,
+  ProductType as EquipmentType,
 } from "@/lib/firebase-admin";
 
 const themeOptions = [
@@ -87,8 +87,8 @@ const themeOptions = [
   },
 ];
 
-// Re-defining interfaces to match your ProductFormData structure and simplify
-// You already have the main Product interface imported from '@/lib/firebase-admin'
+// Re-defining interfaces to match your EquipmentFormData structure and simplify
+// You already have the main Equipment interface imported from '@/lib/firebase-admin'
 
 interface Size {
   size: string;
@@ -127,22 +127,22 @@ interface Specification {
   value: string;
 }
 
-interface ProductFormData {
+interface EquipmentFormData {
   name: string;
   brand: string;
   shortDescription: string;
   description: string;
-  image?: string; // Made optional as per your Product interface
+  image?: string; // Made optional as per your Equipment interface
   additionalImages: string[];
-  productType: string; // For selected product type ID
-  productSubtype: string; // For selected product subtype ID
+  EquipmentType: string; // For selected Equipment type ID
+  EquipmentSubtype: string; // For selected Equipment subtype ID
   features: string; // Stored as a single string for textarea input
   sizes: Size[];
   certifications: Certification[];
   specifications: Specification[];
   usage: UsageInput; // Use the UsageInput interface for form data
   documents: {
-    productDatasheet: boolean;
+    EquipmentDatasheet: boolean;
     technicalData: boolean;
     safetyDataSheet: boolean;
     usageInstructions: boolean;
@@ -153,15 +153,15 @@ interface ProductFormData {
   theme: Theme;
 }
 
-const initialFormData: ProductFormData = {
+const initialFormData: EquipmentFormData = {
   name: "",
   brand: "",
   shortDescription: "",
   description: "",
   image: "",
   additionalImages: [],
-  productType: "",
-  productSubtype: "",
+  EquipmentType: "",
+  EquipmentSubtype: "",
   features: "", // Initial value for textarea
   sizes: [
     {
@@ -182,7 +182,7 @@ const initialFormData: ProductFormData = {
     suitableFor: "",
   },
   documents: {
-    productDatasheet: false,
+    EquipmentDatasheet: false,
     technicalData: false,
     safetyDataSheet: false,
     usageInstructions: false,
@@ -200,22 +200,22 @@ const initialFormData: ProductFormData = {
   },
 };
 
-export default function CreateNewProductPage() {
-  const [formData, setFormData] = useState<ProductFormData>(initialFormData);
+export default function CreateNewEquipmentPage() {
+  const [formData, setFormData] = useState<EquipmentFormData>(initialFormData);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [fetchedProductTypes, setFetchedProductTypes] = useState<
-    ProductType[]
+  const [fetchedEquipmentTypes, setFetchedEquipmentTypes] = useState<
+    EquipmentType[]
   >([]);
-  const [fetchedProductSubtypes, setFetchedProductSubtypes] = useState<
-    ProductSubtype[]
+  const [fetchedEquipmentSubtypes, setFetchedEquipmentSubtypes] = useState<
+    EquipmentSubType[]
   >([]);
-  const [loadingProductTypes, setLoadingProductTypes] = useState(true);
-  const [loadingProductSubtypes, setLoadingProductSubtypes] = useState(false); // Initially false
+  const [loadingEquipmentTypes, setLoadingEquipmentTypes] = useState(true);
+  const [loadingEquipmentSubtypes, setLoadingEquipmentSubtypes] = useState(false); // Initially false
   const [error, setError] = useState<string | null>(null);
 
   // --- Utility Functions ---
-  const updateFormData = (field: keyof ProductFormData, value: any) => {
+  const updateFormData = (field: keyof EquipmentFormData, value: any) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -235,7 +235,7 @@ export default function CreateNewProductPage() {
   };
 
   const updateDocument = (
-    field: keyof ProductFormData["documents"],
+    field: keyof EquipmentFormData["documents"],
     value: boolean
   ) => {
     setFormData((prev) => ({
@@ -348,59 +348,59 @@ export default function CreateNewProductPage() {
 
   // --- Data Fetching Effects ---
 
-  // Effect to fetch product types
+  // Effect to fetch Equipment types
   useEffect(() => {
     async function fetchTypes() {
-      setLoadingProductTypes(true);
+      setLoadingEquipmentTypes(true);
       setError(null);
       try {
-        const data = await getProductTypes();
+        const data = await getEquipmentTypes();
         if (data) {
-          setFetchedProductTypes(data);
+          setFetchedEquipmentTypes(data);
         } else {
-          setFetchedProductTypes([]);
-          setError("No product types found.");
+          setFetchedEquipmentTypes([]);
+          setError("No Equipment types found.");
         }
       } catch (err) {
-        console.error("Error fetching product types:", err);
-        setError("Failed to load product types.");
+        console.error("Error fetching Equipment types:", err);
+        setError("Failed to load Equipment types.");
       } finally {
-        setLoadingProductTypes(false);
+        setLoadingEquipmentTypes(false);
       }
     }
     fetchTypes();
   }, []); // Empty dependency array means this runs once on mount
 
-  // Effect to fetch product subtypes when productType changes
+  // Effect to fetch Equipment subtypes when EquipmentType changes
   useEffect(() => {
-    if (formData.productType) {
-      setLoadingProductSubtypes(true);
+    if (formData.EquipmentType) {
+      setLoadingEquipmentSubtypes(true);
       setError(null);
-      setFetchedProductSubtypes([]); // Clear previous subtypes
-      setFormData((prev) => ({ ...prev, productSubtype: "" })); // Reset selected subtype
+      setFetchedEquipmentSubtypes([]); // Clear previous subtypes
+      setFormData((prev) => ({ ...prev, EquipmentSubtype: "" })); // Reset selected subtype
 
       async function fetchSubtypes() {
         try {
-          const data = await getProductSubtypes(formData.productType);
+          const data = await getEquipmentSubtypes(formData.EquipmentType);
           if (data) {
-            setFetchedProductSubtypes(data);
+            setFetchedEquipmentSubtypes(data);
           } else {
-            setFetchedProductSubtypes([]);
-            setError(`No subtypes found for type "${formData.productType}".`);
+            setFetchedEquipmentSubtypes([]);
+            setError(`No subtypes found for type "${formData.EquipmentType}".`);
           }
         } catch (err) {
-          console.error("Error fetching product subtypes:", err);
-          setError("Failed to load product subtypes.");
+          console.error("Error fetching Equipment subtypes:", err);
+          setError("Failed to load Equipment subtypes.");
         } finally {
-          setLoadingProductSubtypes(false);
+          setLoadingEquipmentSubtypes(false);
         }
       }
       fetchSubtypes();
     } else {
-      setFetchedProductSubtypes([]); // Clear subtypes if no product type is selected
-      setLoadingProductSubtypes(false);
+      setFetchedEquipmentSubtypes([]); // Clear subtypes if no Equipment type is selected
+      setLoadingEquipmentSubtypes(false);
     }
-  }, [formData.productType]); // Re-run when productType changes
+  }, [formData.EquipmentType]); // Re-run when EquipmentType changes
 
   // --- Form Submission and Cancel ---
   const handleSubmit = async (e: React.FormEvent) => {
@@ -408,8 +408,8 @@ export default function CreateNewProductPage() {
     setIsSubmitting(true);
 
     try {
-      // Prepare the data to match the Product interface for createProduct
-      const productToCreate: Product = {
+      // Prepare the data to match the Equipment interface for createEquipment
+      const EquipmentToCreate: Equipment = {
         name: formData.name,
         brand: formData.brand,
         description: formData.description,
@@ -442,33 +442,33 @@ export default function CreateNewProductPage() {
         // Assuming documents are just boolean flags for availability for now.
         // If they are meant to be URLs, you'd need input fields for them.
         documents: Object.keys(formData.documents).reduce((acc, key) => {
-            if (formData.documents[key as keyof ProductFormData["documents"]]) {
+            if (formData.documents[key as keyof EquipmentFormData["documents"]]) {
                 // If the checkbox is checked, you might put a placeholder URL or handle actual file uploads here.
                 // For now, setting a dummy string or leaving it undefined if no URL is provided.
-                acc[key as keyof Product['documents']] = `path/to/${key}.pdf`; // Placeholder
+                acc[key as keyof Equipment['documents']] = `path/to/${key}.pdf`; // Placeholder
             }
             return acc;
-        }, {} as Partial<Product['documents']>) as Product['documents'], // Cast to ensure type compatibility
+        }, {} as Partial<Equipment['documents']>) as Equipment['documents'], // Cast to ensure type compatibility
         theme: formData.theme,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
 
-      // Call createProduct with typeId and subtypeId, and the prepared product data
-      await createProduct(
-        formData.productType,
-        formData.productSubtype,
-        productToCreate
+      // Call createEquipment with typeId and subtypeId, and the prepared Equipment data
+      await createEquipment(
+        formData.EquipmentType,
+        formData.EquipmentSubtype,
+        EquipmentToCreate
       );
 
-      console.log("Product created:", productToCreate);
-      alert("Product created successfully!");
+      console.log("Equipment created:", EquipmentToCreate);
+      alert("Equipment created successfully!");
       setFormData(initialFormData); // Clear form after successful submission
       window.history.back(); // Navigate back
     } catch (submitError) {
-      console.error("Error creating product:", submitError);
-      setError("Failed to create product. Please try again.");
-      alert("Failed to create product.");
+      console.error("Error creating Equipment:", submitError);
+      setError("Failed to create Equipment. Please try again.");
+      alert("Failed to create Equipment.");
     } finally {
       setIsSubmitting(false);
     }
@@ -493,11 +493,11 @@ export default function CreateNewProductPage() {
             onClick={() => window.history.back()}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Products
+            Back to Equipments
           </Button>
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Create New Product
+              Create New Equipment
             </h1>
             <p className="text-gray-600 text-lg">
               Add a new item to your inventory with detailed specifications.
@@ -512,14 +512,14 @@ export default function CreateNewProductPage() {
             <CardHeader>
               <CardTitle>Basic Information</CardTitle>
               <CardDescription>
-                Enter the fundamental details about the product
+                Enter the fundamental details about the Equipment
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="name">
-                    Product Name <span className="text-red-500">*</span>
+                    Equipment Name <span className="text-red-500">*</span>
                   </Label>
                   <Input
                     id="name"
@@ -550,7 +550,7 @@ export default function CreateNewProductPage() {
                 </Label>
                 <Textarea
                   id="shortDescription"
-                  placeholder="A brief, compelling overview of the product..."
+                  placeholder="A brief, compelling overview of the Equipment..."
                   rows={2}
                   value={formData.shortDescription}
                   onChange={(e) =>
@@ -566,7 +566,7 @@ export default function CreateNewProductPage() {
                 </Label>
                 <Textarea
                   id="description"
-                  placeholder="Detailed product description including features, benefits, and specifications..."
+                  placeholder="Detailed Equipment description including features, benefits, and specifications..."
                   rows={4}
                   value={formData.description}
                   onChange={(e) =>
@@ -578,14 +578,14 @@ export default function CreateNewProductPage() {
 
               <div className="space-y-6">
                 <ImageUpload
-                  label="Main Product Image"
+                  label="Main Equipment Image"
                   value={formData.image || ""}
                   onChange={(url) => updateFormData("image", url)}
                   required
                 />
 
                 <MultipleImageUpload
-                  label="Additional Product Images"
+                  label="Additional Equipment Images"
                   value={formData.additionalImages}
                   onChange={(urls) => updateFormData("additionalImages", urls)}
                   maxImages={5}
@@ -594,33 +594,33 @@ export default function CreateNewProductPage() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="productType">
-                    Product Type <span className="text-red-500">*</span>
+                  <Label htmlFor="EquipmentType">
+                    Equipment Type <span className="text-red-500">*</span>
                   </Label>
                   <Select
-                    value={formData.productType}
+                    value={formData.EquipmentType}
                     onValueChange={(value) =>
-                      updateFormData("productType", value)
+                      updateFormData("EquipmentType", value)
                     }
-                    disabled={loadingProductTypes}
+                    disabled={loadingEquipmentTypes}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a product type" />
+                      <SelectValue placeholder="Select a Equipment type" />
                     </SelectTrigger>
                     <SelectContent>
-                      {loadingProductTypes ? (
+                      {loadingEquipmentTypes ? (
                         <SelectItem value="loading" disabled>
                           Loading types...
                         </SelectItem>
-                      ) : fetchedProductTypes.length > 0 ? (
-                        fetchedProductTypes.map((type) => (
+                      ) : fetchedEquipmentTypes.length > 0 ? (
+                        fetchedEquipmentTypes.map((type) => (
                           <SelectItem key={type.id} value={type.id}>
                             {type.name}
                           </SelectItem>
                         ))
                       ) : (
                         <SelectItem value="no-types" disabled>
-                          No product types available
+                          No Equipment types available
                         </SelectItem>
                       )}
                     </SelectContent>
@@ -628,35 +628,35 @@ export default function CreateNewProductPage() {
                   {error && <p className="text-red-500 text-sm">{error}</p>}
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="productSubtype">
-                    Product SubType <span className="text-red-500">*</span>
+                  <Label htmlFor="EquipmentSubtype">
+                    Equipment SubType <span className="text-red-500">*</span>
                   </Label>
                   <Select
-                    value={formData.productSubtype}
+                    value={formData.EquipmentSubtype}
                     onValueChange={(value) =>
-                      updateFormData("productSubtype", value)
+                      updateFormData("EquipmentSubtype", value)
                     }
-                    disabled={!formData.productType || loadingProductSubtypes} // Disable if no type selected or loading
+                    disabled={!formData.EquipmentType || loadingEquipmentSubtypes} // Disable if no type selected or loading
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a product subtype" />
+                      <SelectValue placeholder="Select a Equipment subtype" />
                     </SelectTrigger>
                     <SelectContent>
-                      {loadingProductSubtypes ? (
+                      {loadingEquipmentSubtypes ? (
                         <SelectItem value="loading" disabled>
                           Loading subtypes...
                         </SelectItem>
-                      ) : fetchedProductSubtypes?.length > 0 ? (
-                        fetchedProductSubtypes.map((subtype) => (
+                      ) : fetchedEquipmentSubtypes?.length > 0 ? (
+                        fetchedEquipmentSubtypes.map((subtype) => (
                           <SelectItem key={subtype.id} value={subtype.id  || ""}>
                             {subtype.name}
                           </SelectItem>
                         ))
                       ) : (
                         <SelectItem value="no-subtypes" disabled>
-                          {formData.productType
+                          {formData.EquipmentType
                             ? "No subtypes available for selected type"
-                            : "Select a product type first"}
+                            : "Select a Equipment type first"}
                         </SelectItem>
                       )}
                     </SelectContent>
@@ -671,7 +671,7 @@ export default function CreateNewProductPage() {
             <CardHeader>
               <CardTitle>Key Features</CardTitle>
               <CardDescription>
-                List the main features and benefits of the product (one per
+                List the main features and benefits of the Equipment (one per
                 line)
               </CardDescription>
             </CardHeader>
@@ -974,7 +974,7 @@ export default function CreateNewProductPage() {
                 <Label htmlFor="application">Application</Label>
                 <Textarea
                   id="application"
-                  placeholder="Describe where and how this product should be used..."
+                  placeholder="Describe where and how this Equipment should be used..."
                   rows={3}
                   value={formData.usage.application}
                   onChange={(e) => updateUsage("application", e.target.value)}
@@ -1021,7 +1021,7 @@ export default function CreateNewProductPage() {
             <CardHeader>
               <CardTitle>Available Documents</CardTitle>
               <CardDescription>
-                Select which documents are available for this product
+                Select which documents are available for this Equipment
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -1033,7 +1033,7 @@ export default function CreateNewProductPage() {
                       checked={value}
                       onCheckedChange={(checked) =>
                         updateDocument(
-                          key as keyof ProductFormData["documents"],
+                          key as keyof EquipmentFormData["documents"],
                           !!checked
                         )
                       }
@@ -1054,7 +1054,7 @@ export default function CreateNewProductPage() {
             <CardHeader>
               <CardTitle>Theme Selection</CardTitle>
               <CardDescription>
-                Choose a visual theme for this product
+                Choose a visual theme for this Equipment
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -1167,12 +1167,12 @@ export default function CreateNewProductPage() {
                   {isSubmitting ? (
                     <>
                       <div className="w-4 h-4 mr-2 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                      Creating Product...
+                      Creating Equipment...
                     </>
                   ) : (
                     <>
                       <Save className="w-4 h-4 mr-2" />
-                      Create Product
+                      Create Equipment
                     </>
                   )}
                 </Button>

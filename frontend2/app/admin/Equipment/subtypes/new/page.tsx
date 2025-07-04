@@ -279,7 +279,10 @@ export default function NewProductTypePage() {
                     <Label htmlFor="theme">Theme Color</Label>
                     <Select
                       onValueChange={handleThemeChange}
-                      value={themeOptions.find(opt => opt.value === formData.theme)?.name || themeOptions[0].name}
+                      value={
+                        themeOptions.find((opt) => opt.value === formData.theme)
+                          ?.name || themeOptions[0].name
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select a theme color" />

@@ -463,8 +463,7 @@ export const uploadMultipleImages = async (
 
 
 // Equipment SECTION
-
-// Product Types CRUD
+// Equipment Types CRUD
 export const createEquipmentType = async (
   data: Omit<ProductType, "id" | "createdAt" | "updatedAt">
 ) => {
