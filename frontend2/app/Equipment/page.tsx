@@ -11,8 +11,8 @@ import {
 import { Shield, ArrowRight } from "lucide-react";
 import { Header } from "@/components/Header";
 
-// Sample product sectors data with different themes
-const productSectors = [
+// Sample Equipment sectors data with different themes
+const EquipmentSectors = [
   {
     id: "pSVKtoCNmJocgpPTYmYa",
     name: "Clean-in-Place / Sterilize-in-Place",
@@ -111,7 +111,7 @@ const productSectors = [
   },
 ];
 
-export default function ProductCatalogPage() {
+export default function EquipmentCatalogPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -126,8 +126,8 @@ export default function ProductCatalogPage() {
               <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors">
                 Home
               </Link>
-              <Link href="/products" className="text-blue-600 font-medium">
-                Products
+              <Link href="/Equipments" className="text-blue-600 font-medium">
+                Equipments
               </Link>
               <Link href="/suppliers" className="text-gray-700 hover:text-blue-600 transition-colors">
                 Suppliers
@@ -147,7 +147,7 @@ export default function ProductCatalogPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Product Catalog
+              Equipment Catalog
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
               Browse our comprehensive range of sterilization chemicals and
@@ -157,11 +157,11 @@ export default function ProductCatalogPage() {
         </div>
       </section>
 
-      {/* Product Sectors Grid */}
+      {/* Equipment Sectors Grid */}
       <section className="py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {productSectors.map((sector) => (
+            {EquipmentSectors.map((sector) => (
               <Card
                 key={sector.id}
                 className={`overflow-hidden group hover:shadow-xl transition-all duration-300 ${sector.theme.borderColor} border-2`}
@@ -222,11 +222,11 @@ export default function ProductCatalogPage() {
                       ))}
                     </div>
                   </div>
-                  <Link href={`/products/${sector.id}`}>
+                  <Link href={`/Equipments/${sector.id}`}>
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
                     >
-                      Browse Products
+                      Browse Equipments
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -237,16 +237,16 @@ export default function ProductCatalogPage() {
         </div>
       </section>
 
-      {/* Product Finder */}
+      {/* Equipment Finder */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Need Help Finding the Right Product?
+                Need Help Finding the Right Equipment?
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Our product specialists can help you find the perfect
+                Our Equipment specialists can help you find the perfect
                 sterilization solution for your specific needs
               </p>
             </div>
@@ -277,11 +277,11 @@ export default function ProductCatalogPage() {
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Products</h3>
+              <h3 className="font-semibold mb-4">Equipments</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link
-                    href="/products/sterilization-chemicals"
+                    href="/Equipments/sterilization-chemicals"
                     className="hover:text-white transition-colors"
                   >
                     Sterilization Chemicals
@@ -289,7 +289,7 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/products/cleaning-chemicals"
+                    href="/Equipments/cleaning-chemicals"
                     className="hover:text-white transition-colors"
                   >
                     Cleaning Chemicals
@@ -297,7 +297,7 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/products/sterilization-equipment"
+                    href="/Equipments/sterilization-equipment"
                     className="hover:text-white transition-colors"
                   >
                     Sterilization Equipment
@@ -305,10 +305,10 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/products"
+                    href="/Equipments"
                     className="hover:text-white transition-colors"
                   >
-                    View All Products
+                    View All Equipments
                   </Link>
                 </li>
               </ul>
@@ -357,7 +357,7 @@ export default function ProductCatalogPage() {
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Product Guides
+                    Equipment Guides
                   </Link>
                 </li>
                 <li>

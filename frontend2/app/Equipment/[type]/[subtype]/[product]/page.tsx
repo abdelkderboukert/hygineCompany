@@ -21,9 +21,9 @@ import {
   BarChart3,
 } from "lucide-react";
 import {
-  getProductSubtype,
-  getProductType,
-  getProduct,
+  getEquipmentSubtype,
+  getEquipmentType,
+  getEquipment,
 } from "@/lib/firebase-admin"; // Ensure this path is correct
 import { useEffect, useState } from "react"; // Import useEffect and useState
 import type {
@@ -32,214 +32,95 @@ import type {
   Product,
 } from "@/lib/firebase-admin";
 
-interface ProductDetailPageProps {
-  product: Product;
+interface EquipmentDetailPageProps {
+  Product: Product;
 }
 
-const sampleProduct: Product = {
-  id: "prod-001",
-  name: "Professional Grade Industrial Cleaner",
-  brand: "CleanTech Pro",
-  description:
-    "Our Professional Grade Industrial Cleaner is a powerful, multi-surface cleaning solution designed for heavy-duty industrial applications. Formulated with advanced biodegradable compounds, it effectively removes grease, oil, dirt, and grime while being environmentally responsible. This concentrated formula provides exceptional cleaning power while maintaining safety standards for professional use.",
-  shortDescription:
-    "Heavy-duty industrial cleaner with biodegradable formula for professional applications",
-  image: "/placeholder.svg?height=600&width=600",
-  additionalImages: [
-    "/placeholder.svg?height=400&width=400",
-    "/placeholder.svg?height=400&width=400",
-    "/placeholder.svg?height=400&width=400",
-    "/placeholder.svg?height=400&width=400",
-  ],
-  features: [
-    "Biodegradable formula",
-    "Heavy-duty cleaning power",
-    "Multi-surface compatibility",
-    "Concentrated solution",
-    "Professional grade",
-    "Environmentally safe",
-    "Quick-acting formula",
-    "Non-toxic when used as directed",
-  ],
-  sizes: [
-    {
-      size: "500ml",
-      sku: "CTP-500",
-      caseQty: 12,
-      dimensions: "8.5 x 8.5 x 25 cm",
-      weight: "0.6 kg",
-      barcode: "1234567890123",
-    },
-    {
-      size: "1L",
-      sku: "CTP-1000",
-      caseQty: 6,
-      dimensions: "10 x 10 x 30 cm",
-      weight: "1.1 kg",
-      barcode: "1234567890124",
-    },
-    {
-      size: "5L",
-      sku: "CTP-5000",
-      caseQty: 2,
-      dimensions: "20 x 15 x 35 cm",
-      weight: "5.2 kg",
-      barcode: "1234567890125",
-    },
-  ],
-  certifications: [
-    {
-      name: "ISO 14001",
-      description: "Environmental Management System Certification",
-      issueDate: "2023-01-15",
-      expiryDate: "2026-01-15",
-    },
-    {
-      name: "EPA Safer Choice",
-      description: "EPA recognition for safer chemical ingredients",
-      issueDate: "2023-03-20",
-      expiryDate: "2025-03-20",
-    },
-  ],
-  specifications: {
-    "pH Level": "7.5 - 8.5",
-    Density: "1.02 g/cm³",
-    Viscosity: "Low",
-    Color: "Clear Blue",
-    Odor: "Mild Fresh Scent",
-    Solubility: "Completely water soluble",
-    "Storage Temperature": "5°C to 40°C",
-    "Shelf Life": "24 months",
-  },
-  usage: {
-    application:
-      "Suitable for industrial equipment, machinery, floors, walls, and general surface cleaning in manufacturing facilities, warehouses, and commercial spaces.",
-    frequency:
-      "Use as needed for regular maintenance cleaning or intensive deep cleaning sessions. For routine cleaning, dilute 1:10 with water. For heavy-duty cleaning, use 1:5 dilution.",
-    precautions: [
-      "Wear protective gloves when handling concentrated solution",
-      "Ensure adequate ventilation during use",
-      "Do not mix with other cleaning products",
-      "Keep out of reach of children",
-      "Avoid contact with eyes and skin",
-      "Store in original container only",
-    ],
-    suitableFor: [
-      "Manufacturing facilities",
-      "Warehouses",
-      "Commercial kitchens",
-      "Automotive workshops",
-      "Industrial equipment",
-      "Concrete floors",
-      "Metal surfaces",
-      "Painted surfaces",
-    ],
-  },
-  documents: {
-    productDatasheet: "available",
-    technicalData: "available",
-    safetyDataSheet: "available",
-    usageInstructions: "available",
-    certificationDocuments: "available",
-    qualityReport: "available",
-    complianceDocuments: undefined,
-  },
-  theme: {
-    gradient: "from-blue-600 to-cyan-600",
-    bgColor: "bg-blue-50",
-    iconColor: "text-blue-600",
-    borderColor: "border-blue-200",
-    hoverColor: "hover:bg-blue-100",
-    overlayGradient: "from-blue-900/20 to-cyan-900/20",
-  },
-  createdAt: new Date("2023-01-01"),
-  updatedAt: new Date("2023-12-01"),
-};
 
-export default function ProductDetailPage() {
+export default function EquipmentDetailPage() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
   const params = useParams();
-  const productTypeParam = params.type as string;
-  const productSubtypeParam = params.subtype as string;
-  const productParam = params.product as string;
+  const EquipmentTypeParam = params.type as string;
+  const EquipmentSubtypeParam = params.subtype as string;
+  const EquipmentParam = params.Equipment as string;
 
-  const [fetchedProductType, setFetchedProductType] =
+  const [fetchedEquipmentType, setFetchedEquipmentType] =
     useState<ProductType | null>(null);
-  const [fetchedProductSubType, setFetchedProductSubType] =
+  const [fetchedEquipmentSubType, setFetchedEquipmentSubType] =
     useState<ProductSubtype | null>(null);
-  const [product, setFetchedProducts] = useState<Product | null>(null);
+  const [Equipment, setFetchedEquipments] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   // Decode the parameters to handle special characters
-  const firestoreId = productTypeParam
-    ? decodeURIComponent(productTypeParam)
+  const firestoreId = EquipmentTypeParam
+    ? decodeURIComponent(EquipmentTypeParam)
     : null;
 
-  const firestoreSubTypeId = productSubtypeParam
-    ? decodeURIComponent(productSubtypeParam)
+  const firestoreSubTypeId = EquipmentSubtypeParam
+    ? decodeURIComponent(EquipmentSubtypeParam)
     : null;
 
-  const firestoreProductId = productParam
-    ? decodeURIComponent(productParam)
+  const firestoreEquipmentId = EquipmentParam
+    ? decodeURIComponent(EquipmentParam)
     : null;
 
   useEffect(() => {
-    async function fetchProductTypeData() {
+    async function fetchEquipmentTypeData() {
       if (!firestoreId) {
         setLoading(false);
-        setError("Product type ID is missing.");
+        setError("Equipment type ID is missing.");
         return;
       }
       if (!firestoreSubTypeId) {
         setLoading(false);
-        setError("Product subtype ID is missing.");
+        setError("Equipment subtype ID is missing.");
         return;
       }
-      if (!firestoreProductId) {
+      if (!firestoreEquipmentId) {
         setLoading(false);
-        setError("Product ID is missing.");
+        setError("Equipment ID is missing.");
         return;
       }
 
       setLoading(true);
       setError(null);
       try {
-        // Call the getProductType function with the decoded ID
-        const data = await getProductType(firestoreId);
-        const SubTypeData: ProductSubtype | null = await getProductSubtype(
+        // Call the getEquipmentType function with the decoded ID
+        const data = await getEquipmentType(firestoreId);
+        const SubTypeData: ProductSubtype | null = await getEquipmentSubtype(
           firestoreId,
           firestoreSubTypeId
         );
-        const Products: Product | null = await getProduct(
+        const Equipments: Product | null = await getEquipment(
           firestoreId,
           firestoreSubTypeId,
-          firestoreProductId
+          firestoreEquipmentId
         );
-        if (data || SubTypeData || Products) {
-          setFetchedProductType(data);
-          setFetchedProductSubType(SubTypeData);
-          setFetchedProducts(Products);
+        if (data || SubTypeData || Equipments) {
+          setFetchedEquipmentType(data);
+          setFetchedEquipmentSubType(SubTypeData);
+          setFetchedEquipments(Equipments);
         } else {
-          setFetchedProductType(null); // No product type found
-          setError(`Product type with ID "${firestoreId}" not found.`);
+          setFetchedEquipmentType(null); // No Equipment type found
+          setError(`Equipment type with ID "${firestoreId}" not found.`);
         }
       } catch (err) {
-        console.error("Error fetching product type:", err);
-        setError("Failed to load product type data.");
+        console.error("Error fetching Equipment type:", err);
+        setError("Failed to load Equipment type data.");
       } finally {
         setLoading(false);
       }
     }
 
-    fetchProductTypeData();
+    fetchEquipmentTypeData();
   }, [firestoreId, firestoreSubTypeId]);
 
   // Display loading, error, or not found states
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <p>Loading product type details...</p>
+        <p>Loading Equipment type details...</p>
       </div>
     );
   }
@@ -252,138 +133,18 @@ export default function ProductDetailPage() {
     );
   }
 
-  // If fetchedProductType is null, it means no data was found
-  if (!fetchedProductType) {
+  // If fetchedEquipmentType is null, it means no data was found
+  if (!fetchedEquipmentType) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
-        <p>No product type found for "{firestoreId}".</p>
+        <p>No Equipment type found for "{firestoreId}".</p>
       </div>
     );
   }
 
-  // const product: Product = {
-  //   id: "prod-001",
-  //   name: "Professional Grade Industrial Cleaner",
-  //   brand: "CleanTech Pro",
-  //   description:
-  //     "Our Professional Grade Industrial Cleaner is a powerful, multi-surface cleaning solution designed for heavy-duty industrial applications. Formulated with advanced biodegradable compounds, it effectively removes grease, oil, dirt, and grime while being environmentally responsible. This concentrated formula provides exceptional cleaning power while maintaining safety standards for professional use.",
-  //   shortDescription:
-  //     "Heavy-duty industrial cleaner with biodegradable formula for professional applications",
-  //   image: "/placeholder.svg?height=600&width=600",
-  //   additionalImages: [
-  //     "/placeholder.svg?height=400&width=400",
-  //     "/placeholder.svg?height=400&width=400",
-  //     "/placeholder.svg?height=400&width=400",
-  //     "/placeholder.svg?height=400&width=400",
-  //   ],
-  //   features: [
-  //     "Biodegradable formula",
-  //     "Heavy-duty cleaning power",
-  //     "Multi-surface compatibility",
-  //     "Concentrated solution",
-  //     "Professional grade",
-  //     "Environmentally safe",
-  //     "Quick-acting formula",
-  //     "Non-toxic when used as directed",
-  //   ],
-  //   sizes: [
-  //     {
-  //       size: "500ml",
-  //       sku: "CTP-500",
-  //       caseQty: 12,
-  //       dimensions: "8.5 x 8.5 x 25 cm",
-  //       weight: "0.6 kg",
-  //       barcode: "1234567890123",
-  //     },
-  //     {
-  //       size: "1L",
-  //       sku: "CTP-1000",
-  //       caseQty: 6,
-  //       dimensions: "10 x 10 x 30 cm",
-  //       weight: "1.1 kg",
-  //       barcode: "1234567890124",
-  //     },
-  //     {
-  //       size: "5L",
-  //       sku: "CTP-5000",
-  //       caseQty: 2,
-  //       dimensions: "20 x 15 x 35 cm",
-  //       weight: "5.2 kg",
-  //       barcode: "1234567890125",
-  //     },
-  //   ],
-  //   certifications: [
-  //     {
-  //       name: "ISO 14001",
-  //       description: "Environmental Management System Certification",
-  //       issueDate: "2023-01-15",
-  //       expiryDate: "2026-01-15",
-  //     },
-  //     {
-  //       name: "EPA Safer Choice",
-  //       description: "EPA recognition for safer chemical ingredients",
-  //       issueDate: "2023-03-20",
-  //       expiryDate: "2025-03-20",
-  //     },
-  //   ],
-  //   specifications: {
-  //     "pH Level": "7.5 - 8.5",
-  //     Density: "1.02 g/cm³",
-  //     Viscosity: "Low",
-  //     Color: "Clear Blue",
-  //     Odor: "Mild Fresh Scent",
-  //     Solubility: "Completely water soluble",
-  //     "Storage Temperature": "5°C to 40°C",
-  //     "Shelf Life": "24 months",
-  //   },
-  //   usage: {
-  //     application:
-  //       "Suitable for industrial equipment, machinery, floors, walls, and general surface cleaning in manufacturing facilities, warehouses, and commercial spaces.",
-  //     frequency:
-  //       "Use as needed for regular maintenance cleaning or intensive deep cleaning sessions. For routine cleaning, dilute 1:10 with water. For heavy-duty cleaning, use 1:5 dilution.",
-  //     precautions: [
-  //       "Wear protective gloves when handling concentrated solution",
-  //       "Ensure adequate ventilation during use",
-  //       "Do not mix with other cleaning products",
-  //       "Keep out of reach of children",
-  //       "Avoid contact with eyes and skin",
-  //       "Store in original container only",
-  //     ],
-  //     suitableFor: [
-  //       "Manufacturing facilities",
-  //       "Warehouses",
-  //       "Commercial kitchens",
-  //       "Automotive workshops",
-  //       "Industrial equipment",
-  //       "Concrete floors",
-  //       "Metal surfaces",
-  //       "Painted surfaces",
-  //     ],
-  //   },
-  //   documents: {
-  //     productDatasheet: "available",
-  //     technicalData: "available",
-  //     safetyDataSheet: "available",
-  //     usageInstructions: "available",
-  //     certificationDocuments: "available",
-  //     qualityReport: "available",
-  //     complianceDocuments: undefined,
-  //   },
-  //   theme: {
-  //     gradient: "from-blue-600 to-cyan-600",
-  //     bgColor: "bg-blue-50",
-  //     iconColor: "text-blue-600",
-  //     borderColor: "border-blue-200",
-  //     hoverColor: "hover:bg-blue-100",
-  //     overlayGradient: "from-blue-900/20 to-cyan-900/20",
-  //   },
-  //   createdAt: new Date("2023-01-01"),
-  //   updatedAt: new Date("2023-12-01"),
-  // };
-
   const allImages = [
-    product?.image,
-    ...(product?.additionalImages || []),
+    Equipment?.image,
+    ...(Equipment?.additionalImages || []),
   ].filter(Boolean) as string[];
 
   return (
@@ -393,8 +154,8 @@ export default function ProductDetailPage() {
       <div className="container mx-auto px-4 py-4">
         <nav className="text-sm text-gray-600">
           <span>Home</span> <span className="mx-2">/</span>
-          <span>Products</span> <span className="mx-2">/</span>
-          <span className="text-gray-900">{product?.name}</span>
+          <span>Equipments</span> <span className="mx-2">/</span>
+          <span className="text-gray-900">{Equipment?.name}</span>
         </nav>
       </div>
 
@@ -402,15 +163,15 @@ export default function ProductDetailPage() {
         {/* Header Section */}
         <div className="mb-8">
           <div
-            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${product?.theme.bgColor} ${product?.theme.iconColor} mb-4`}
+            className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${Equipment?.theme.bgColor} ${Equipment?.theme.iconColor} mb-4`}
           >
-            {product?.brand}
+            {Equipment?.brand}
           </div>
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            {product?.name}
+            {Equipment?.name}
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl">
-            {product?.shortDescription}
+            {Equipment?.shortDescription}
           </p>
         </div>
 
@@ -424,7 +185,7 @@ export default function ProductDetailPage() {
                   allImages[selectedImage] ||
                   "/placeholder.svg?height=600&width=600"
                 }
-                alt={product?.name || "Product Image"}
+                alt={Equipment?.name || "Equipment Image"}
                 width={600}
                 height={600}
                 className="w-full h-full object-cover"
@@ -439,13 +200,13 @@ export default function ProductDetailPage() {
                     onClick={() => setSelectedImage(index)}
                     className={`aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                       selectedImage === index
-                        ? `${product?.theme.borderColor} ring-2 ring-offset-2 ring-blue-500`
+                        ? `${Equipment?.theme.borderColor} ring-2 ring-offset-2 ring-blue-500`
                         : "border-gray-200 hover:border-gray-300"
                     }`}
                   >
                     <Image
                       src={image || "/placeholder.svg"}
-                      alt={`${product?.name} view ${index + 1}`}
+                      alt={`${Equipment?.name} view ${index + 1}`}
                       width={150}
                       height={150}
                       className="w-full h-full object-cover"
@@ -456,24 +217,24 @@ export default function ProductDetailPage() {
             )}
           </div>
 
-          {/* Product Info */}
+          {/* Equipment Info */}
           <div className="space-y-8">
             {/* Features */}
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CheckCircle
-                    className={`w-5 h-5 ${product?.theme.iconColor}`}
+                    className={`w-5 h-5 ${Equipment?.theme.iconColor}`}
                   />
                   Key Features
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 gap-3">
-                  {product?.features.map((feature, index) => (
+                  {Equipment?.features.map((feature, index) => (
                     <div key={index} className="flex items-center gap-2">
                       <div
-                        className={`w-2 h-2 rounded-full bg-gradient-to-r ${product?.theme.gradient}`}
+                        className={`w-2 h-2 rounded-full bg-gradient-to-r ${Equipment?.theme.gradient}`}
                       />
                       <span className="text-sm">{feature}</span>
                     </div>
@@ -486,20 +247,20 @@ export default function ProductDetailPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Package className={`w-5 h-5 ${product?.theme.iconColor}`} />
+                  <Package className={`w-5 h-5 ${Equipment?.theme.iconColor}`} />
                   Available Sizes
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-3">
-                  {product?.sizes.map((size, index) => (
+                  {Equipment?.sizes.map((size, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedSize(index)}
                       className={`p-4 rounded-lg border-2 text-left transition-all ${
                         selectedSize === index
-                          ? `${product.theme.borderColor} ${product.theme.bgColor}`
-                          : `border-gray-200 ${product.theme.hoverColor}`
+                          ? `${Equipment.theme.borderColor} ${Equipment.theme.bgColor}`
+                          : `border-gray-200 ${Equipment.theme.hoverColor}`
                       }`}
                     >
                       <div className="flex justify-between items-start mb-2">
@@ -536,7 +297,7 @@ export default function ProductDetailPage() {
             <div className="flex flex-col sm:flex-row gap-4">
               <Button
                 size="lg"
-                className={`flex-1 bg-gradient-to-r ${product?.theme.gradient} hover:opacity-90 transition-opacity`}
+                className={`flex-1 bg-gradient-to-r ${Equipment?.theme.gradient} hover:opacity-90 transition-opacity`}
               >
                 <ShoppingCart className="w-5 h-5 mr-2" />
                 Add to Cart
@@ -567,7 +328,7 @@ export default function ProductDetailPage() {
             <Card>
               <CardContent className="pt-6">
                 <p className="text-gray-700 leading-relaxed text-lg">
-                  {product?.description}
+                  {Equipment?.description}
                 </p>
               </CardContent>
             </Card>
@@ -577,8 +338,8 @@ export default function ProductDetailPage() {
             <Card>
               <CardContent className="pt-6">
                 <div className="grid gap-4">
-                  {product &&
-                    Object.entries(product.specifications).map(
+                  {Equipment &&
+                    Object.entries(Equipment.specifications).map(
                       ([key, value]) => (
                         <div
                           key={key}
@@ -603,7 +364,7 @@ export default function ProductDetailPage() {
                   <CardTitle>Application</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700">{product?.usage.application}</p>
+                  <p className="text-gray-700">{Equipment?.usage.application}</p>
                 </CardContent>
               </Card>
 
@@ -612,7 +373,7 @@ export default function ProductDetailPage() {
                   <CardTitle>Frequency & Dilution</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700">{product?.usage.frequency}</p>
+                  <p className="text-gray-700">{Equipment?.usage.frequency}</p>
                 </CardContent>
               </Card>
 
@@ -626,7 +387,7 @@ export default function ProductDetailPage() {
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2">
-                      {product?.usage.precautions.map((precaution, index) => (
+                      {Equipment?.usage.precautions.map((precaution, index) => (
                         <li key={index} className="flex items-start gap-2">
                           <div className="w-2 h-2 rounded-full bg-amber-500 mt-2 flex-shrink-0" />
                           <span className="text-sm text-gray-700">
@@ -647,8 +408,8 @@ export default function ProductDetailPage() {
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2">
-                      {product &&
-                        product.usage.suitableFor.map((item, index) => (
+                      {Equipment &&
+                        Equipment.usage.suitableFor.map((item, index) => (
                           <li key={index} className="flex items-start gap-2">
                             <div className="w-2 h-2 rounded-full bg-green-500 mt-2 flex-shrink-0" />
                             <span className="text-sm text-gray-700">
@@ -665,12 +426,12 @@ export default function ProductDetailPage() {
 
           <TabsContent value="certifications" className="mt-8">
             <div className="grid gap-6">
-              {product?.certifications.map((cert, index) => (
+              {Equipment?.certifications.map((cert, index) => (
                 <Card key={index}>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Shield
-                        className={`w-5 h-5 ${product.theme.iconColor}`}
+                        className={`w-5 h-5 ${Equipment.theme.iconColor}`}
                       />
                       {cert.name}
                     </CardTitle>
@@ -698,26 +459,26 @@ export default function ProductDetailPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className={`w-5 h-5 ${product?.theme.iconColor}`} />
+                  <FileText className={`w-5 h-5 ${Equipment?.theme.iconColor}`} />
                   Available Documents
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {product &&
-                    Object.entries(product.documents).map(([key, value]) => (
+                  {Equipment &&
+                    Object.entries(Equipment.documents).map(([key, value]) => (
                       <Button
                         key={key}
                         variant={value ? "outline" : "ghost"}
                         disabled={!value}
                         className={`justify-start h-auto p-4 ${
-                          value ? product?.theme.hoverColor : ""
+                          value ? Equipment?.theme.hoverColor : ""
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <Download
                             className={`w-5 h-5 ${
-                              value ? product?.theme.iconColor : "text-gray-400"
+                              value ? Equipment?.theme.iconColor : "text-gray-400"
                             }`}
                           />
                           <div className="text-left">
@@ -744,21 +505,21 @@ export default function ProductDetailPage() {
                 <div className="grid gap-4">
                   <div className="flex justify-between items-center py-3 border-b border-gray-100">
                     <span className="font-medium text-gray-900">
-                      Product ID
+                      Equipment ID
                     </span>
-                    <span className="text-gray-600">{product?.id}</span>
+                    <span className="text-gray-600">{Equipment?.id}</span>
                   </div>
                   <div className="flex justify-between items-center py-3 border-b border-gray-100">
                     <span className="font-medium text-gray-900">Created</span>
                     {/* <span className="text-gray-600">
-                      {product && product.createdAt.toLocaleDateString()}
+                      {Equipment && Equipment.createdAt.toLocaleDateString()}
                     </span> */}
-                    {product && (
+                    {Equipment && (
                       <span className="text-gray-600">
-                        {product.createdAt instanceof Date // Check if it's already a Date object
-                          ? product.createdAt.toLocaleDateString()
+                        {Equipment.createdAt instanceof Date // Check if it's already a Date object
+                          ? Equipment.createdAt.toLocaleDateString()
                           : new Date(
-                              product.createdAt
+                              Equipment.createdAt
                             ).toLocaleDateString()}{" "}
                         {/* Convert if not */}
                       </span>
@@ -769,14 +530,14 @@ export default function ProductDetailPage() {
                       Last Updated
                     </span>
                     {/* <span className="text-gray-600">
-                      {product?.updatedAt.toLocaleDateString()}
+                      {Equipment?.updatedAt.toLocaleDateString()}
                     </span> */}
-                    {product && (
+                    {Equipment && (
                       <span className="text-gray-600">
-                        {product.updatedAt instanceof Date // Check if it's already a Date object
-                          ? product.updatedAt.toLocaleDateString()
+                        {Equipment.updatedAt instanceof Date // Check if it's already a Date object
+                          ? Equipment.updatedAt.toLocaleDateString()
                           : new Date(
-                              product.createdAt
+                              Equipment.createdAt
                             ).toLocaleDateString()}{" "}
                         {/* Convert if not */}
                       </span>
@@ -793,7 +554,7 @@ export default function ProductDetailPage() {
       <div className="fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 lg:hidden">
         <Button
           size="lg"
-          className={`w-full bg-gradient-to-r ${product?.theme.gradient} hover:opacity-90 transition-opacity`}
+          className={`w-full bg-gradient-to-r ${Equipment?.theme.gradient} hover:opacity-90 transition-opacity`}
         >
           <ShoppingCart className="w-5 h-5 mr-2" />
           Add to Cart
