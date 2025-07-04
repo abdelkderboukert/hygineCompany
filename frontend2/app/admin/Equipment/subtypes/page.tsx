@@ -12,56 +12,107 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Shield, Plus, Search, Edit, Trash2, ArrowLeft } from "lucide-react";
 import {
   getEquipmentSubtypes,
-  deleteEquipmentType,
+  getEquipmentTypes,
+  deleteEquipmentSubtype,
 } from "@/lib/firebase-admin";
-import type { ProductSubtype } from "@/lib/firebase-admin";
+import type {
+  ProductSubtype as EquipmentSubtype,
+  ProductType as EquipmentType,
+} from "@/lib/firebase-admin";
 import { toast } from "sonner";
 
 export default function EquipmentTypesPage() {
-  const [types, setTypes] = useState<ProductSubtype[]>([]);
-  const [filteredSubTypes, setFilteredSubTypes] = useState<ProductSubtype[]>(
+  const [types, setTypes] = useState<EquipmentType[]>([]);
+  const [type, setType] = useState<string>("");
+  const [filteredSubTypes, setFilteredSubTypes] = useState<EquipmentSubtype[]>(
     []
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
+  const [fetchedProductSubtypes, setFetchedProductSubtypes] = useState<
+    EquipmentSubtype[]
+  >([]);
+  const [loadingProductTypes, setLoadingProductTypes] = useState(true);
+  const [loadingProducttypes, setLoadingProductSubtypes] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchTypes();
-  }, []);
-
-  useEffect(() => {
-    const filtered = types.filter(
+    const filtered = filteredSubTypes.filter(
       (type) =>
         type.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         type.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredSubTypes(filtered);
-  }, [types, searchTerm]);
+  }, [filteredSubTypes, searchTerm]);
 
-  const fetchTypes = async () => {
-    try {
-      const data = await getEquipmentSubtypes();
-      setTypes(data);
-    } catch (error) {
-      console.error("Error fetching types:", error);
-      toast.error("Failed to fetch Equipment types");
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    async function fetchTypes() {
+      setLoadingProductTypes(true);
+      setError(null);
+      try {
+        const data = await getEquipmentTypes();
+        if (data) {
+          setTypes(data);
+        } else {
+          setTypes([]);
+          setError("No product types found.");
+        }
+      } catch (err) {
+        console.error("Error fetching product types:", err);
+        setError("Failed to load product types.");
+      } finally {
+        setLoadingProductTypes(false);
+      }
     }
-  };
+    fetchTypes();
+  }, []);
 
-  const handleDelete = async (id: string, name: string) => {
+  useEffect(() => {
+    async function fetchSubTypes(type: string) {
+      setLoadingProductTypes(true);
+      setError(null);
+      try {
+        const data = await getEquipmentSubtypes(type);
+        if (data) {
+          setFilteredSubTypes(data);
+        } else {
+          setFilteredSubTypes([]);
+          setError("No product types found.");
+        }
+      } catch (err) {
+        console.error("Error fetching product types:", err);
+        setError("Failed to load product types.");
+      } finally {
+        setLoadingProductTypes(false);
+      }
+    }
+    fetchSubTypes(type);
+  }, [type]);
+
+  const handleDelete = async (
+    TypeId: string,
+    TypeSubId: string,
+    name: string
+  ) => {
     if (
       window.confirm(
         `Are you sure you want to delete "${name}"? This action cannot be undone.`
       )
     ) {
       try {
-        await deleteEquipmentType(id);
-        setTypes(types.filter((type) => type.id !== id));
+        await deleteEquipmentSubtype(TypeId, TypeSubId);
+        setTypes(types.filter((type) => type.id !== TypeId));
         toast.success("Equipment type deleted successfully");
       } catch (error) {
         console.error("Error deleting type:", error);
@@ -111,13 +162,47 @@ export default function EquipmentTypesPage() {
       </header>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid md:grid-cols-2 gap-6 mb-4">
+          <div className="space-y-2">
+            <Label htmlFor="productType">
+              Product Type <span className="text-red-500">*</span>
+            </Label>
+            <Select
+              value={type}
+              onValueChange={(value) => setType(value)}
+              disabled={loadingProductTypes}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select a product type" />
+              </SelectTrigger>
+              <SelectContent>
+                {loadingProductTypes ? (
+                  <SelectItem value="loading" disabled>
+                    Loading types...
+                  </SelectItem>
+                ) : types.length > 0 ? (
+                  types.map((type) => (
+                    <SelectItem key={type.id} value={type.id}>
+                      {type.name}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <SelectItem value="no-types" disabled>
+                    No product types available
+                  </SelectItem>
+                )}
+              </SelectContent>
+            </Select>
+            {error && <p className="text-red-500 text-sm">{error}</p>}
+          </div>
+        </div>
         {/* Search */}
         <Card className="mb-6">
           <CardContent className="pt-6">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
-                placeholder="Search Equipment types..."
+                placeholder="Search Equipment Subtypes..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
@@ -128,23 +213,25 @@ export default function EquipmentTypesPage() {
 
         {/* Types Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSubTypes.map((type) => (
+          {filteredSubTypes.map((Subtype) => (
             <Card
-              key={type.id}
-              className={`border-2 ${type.theme.borderColor}`}
+              key={Subtype.id}
+              className={`border-2 ${Subtype.theme.borderColor}`}
             >
-              <CardHeader className={type.theme.bgColor}>
+              <CardHeader className={Subtype.theme.bgColor}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-3">
                     <div
-                      className={`w-10 h-10 rounded-full ${type.theme.bgColor} border-2 ${type.theme.borderColor} flex items-center justify-center`}
+                      className={`w-10 h-10 rounded-full ${Subtype.theme.bgColor} border-2 ${Subtype.theme.borderColor} flex items-center justify-center`}
                     >
-                      <Shield className={`h-5 w-5 ${type.theme.iconColor}`} />
+                      <Shield
+                        className={`h-5 w-5 ${Subtype.theme.iconColor}`}
+                      />
                     </div>
-                    <CardTitle className="text-lg">{type.name}</CardTitle>
+                    <CardTitle className="text-lg">{Subtype.name}</CardTitle>
                   </div>
                   <div className="flex space-x-2">
-                    <Link href={`/admin/types/${type.id}/edit`}>
+                    <Link href={`/admin/types/${Subtype.id}/edit`}>
                       <Button variant="ghost" size="sm">
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -152,7 +239,9 @@ export default function EquipmentTypesPage() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => handleDelete(type.id!, type.name)}
+                      onClick={() =>
+                        handleDelete(Subtype.id!, type, Subtype.name)
+                      }
                       className="text-red-600 hover:text-red-700"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -162,14 +251,14 @@ export default function EquipmentTypesPage() {
               </CardHeader>
               <CardContent className="pt-4">
                 <CardDescription className="mb-4">
-                  {type.description}
+                  {Subtype.description}
                 </CardDescription>
                 <div className="flex flex-wrap gap-2">
                   <Badge
                     variant="outline"
-                    className={`${type.theme.iconColor} border-current`}
+                    className={`${Subtype.theme.iconColor} border-current`}
                   >
-                    {type.theme.gradient
+                    {Subtype.theme.gradient
                       .replace("from-", "")
                       .replace("-500", "")
                       .replace(" to-", " → ")
