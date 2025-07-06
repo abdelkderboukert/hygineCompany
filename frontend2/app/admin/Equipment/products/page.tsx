@@ -222,7 +222,7 @@ export default function EquipmentTypesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <Link href="/admin">
+              <Link href="/admin/Equipment">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Dashboard
@@ -230,17 +230,17 @@ export default function EquipmentTypesPage() {
               </Link>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Equipment Types
+                  Equipment Products
                 </h1>
                 <p className="text-sm text-gray-500">
                   Manage Equipment categories
                 </p>
               </div>
             </div>
-            <Link href="/admin/types/new">
+            <Link href="/admin/Equipment/products/new">
               <Button className="bg-blue-600 hover:bg-blue-700">
                 <Plus className="h-4 w-4 mr-2" />
-                New Type
+                New Equipment
               </Button>
             </Link>
           </div>
@@ -400,7 +400,7 @@ export default function EquipmentTypesPage() {
                   : "Get started by creating your first Equipment."}
               </p>
               {!searchTerm && (
-                <Link href="/admin/Equipments/new">
+                <Link href="/admin/Equipments/proucts/new">
                   <Button className="bg-blue-600 hover:bg-blue-700">
                     <Plus className="h-4 w-4 mr-2" />
                     Create Equipment

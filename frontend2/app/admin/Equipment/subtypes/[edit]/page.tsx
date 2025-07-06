@@ -3,12 +3,16 @@
 import type React from "react";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { getEquipmentTypes, type ProductType } from "@/lib/firebase-admin";
+import {
+  getEquipmentTypes,
+  type ProductType,
+  type ProductSubtype as EquipmentSubType,
+} from "@/lib/firebase-admin";
 import {
   Card,
   CardContent,
@@ -25,7 +29,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowLeft, Save } from "lucide-react";
-import { createEquipmentSubtype, uploadFile } from "@/lib/firebase-admin"; // Ensure createProductSubtype is imported
+import {
+  updateEquipmentSubtype,
+  uploadFile,
+  getEquipmentSubtype,
+} from "@/lib/firebase-admin"; // Ensure updateProductSubtype is imported
 import { toast } from "sonner";
 
 const themeOptions = [
@@ -97,15 +105,31 @@ const themeOptions = [
   },
 ];
 
-export default function NewProductTypePage() {
-  const router = useRouter();
+export default function UpdateSubTypePage() {
   const [productTypes, setProductTypes] = useState<ProductType[]>([]);
+  const [EquipmentSubtype, setEquipmentSubtype] =
+    useState<EquipmentSubType | null>(null);
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  //   const [formData, setFormData] = useState({
+  //     name: "",
+  //     description: "",
+  //     typeId: "", // Initialize typeId for the Select input
+  //     productCount: 0, // This might not be strictly needed for a new subtype but keep it if your interface requires it.
+  //     theme: themeOptions[0].value,
+  //   });
+
+  const params = useParams();
+  const SubTypeId = params.edit as string; // Assuming [edit] is your EquipmentId segment
+
+  // Get query parameters (e.g., ?typeid=abc&subtypeid=xyz)
+  const searchParams = useSearchParams();
+  const typeId = searchParams.get("typeid"); // This will be 'abc' or null if not present
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    typeId: "", // Initialize typeId for the Select input
+    typeId: typeId, // Initialize typeId for the Select input
     productCount: 0, // This might not be strictly needed for a new subtype but keep it if your interface requires it.
     theme: themeOptions[0].value,
   });
@@ -128,6 +152,30 @@ export default function NewProductTypePage() {
     fetchProductTypesData();
   }, []); // Empty dependency array means this runs once on mount
 
+  // Fetch product Subtype
+  useEffect(() => {
+    const fetchProductSubTypeData = async () => {
+      try {
+        const Subtype = await getEquipmentSubtype(typeId!, SubTypeId);
+        setEquipmentSubtype(Subtype);
+        // Optionally pre-select the first type if available and no typeId is set
+        if (Subtype) {
+          setFormData({
+            name: Subtype.name,
+            description: Subtype.description,
+            typeId: typeId, // Initialize typeId for the Select input
+            productCount: Subtype.productCount, // This might not be strictly needed for a new subtype but keep it if your interface requires it.
+            theme: Subtype.theme,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching product types:", error);
+        toast.error("Failed to load product types");
+      }
+    };
+    fetchProductSubTypeData();
+  }, []); // Empty dependency array means this runs once on mount
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -147,20 +195,20 @@ export default function NewProductTypePage() {
       }
 
       // Destructure formData to exclude typeId from the data object,
-      // as it's passed as a separate argument to createProductSubtype
+      // as it's passed as a separate argument to updateProductSubtype
       const { typeId, ...restOfData } = formData;
 
-      await createEquipmentSubtype(typeId, {
+      await updateEquipmentSubtype(typeId, SubTypeId, {
         ...restOfData,
         image: imageUrl,
       });
 
-      toast.success("Product subtype created successfully!");
+      toast.success("Product subtype updated successfully!");
       // Redirect to the subtypes listing, perhaps for the selected parent type
       //router.push(`/admin/types/${typeId}/subtypes`);  //Redirect to the subtypes list of the selected parent type
     } catch (error) {
       console.error("Error creating product subtype:", error);
-      toast.error("Failed to create product subtype");
+      toast.error("Failed to update product subtype");
     } finally {
       setLoading(false);
     }
@@ -187,7 +235,7 @@ export default function NewProductTypePage() {
               {/* Back button might go to the list of all Product Types,
                   or if coming from a specific type's detail page, it could go back there.
                   For simplicity, let's keep it to /admin/types for now. */}
-              <Link href="/admin/types">
+              <Link href="/admin/Equipment/subtypes">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Product Types
@@ -195,7 +243,7 @@ export default function NewProductTypePage() {
               </Link>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Create Product Subtype
+                  update Product Subtype
                 </h1>
                 <p className="text-sm text-gray-500">
                   Add a new subcategory within a parent product type
@@ -224,7 +272,7 @@ export default function NewProductTypePage() {
                     <Label htmlFor="typeId">Parent Product Type *</Label>
                     <Select
                       onValueChange={handleTypeIdChange}
-                      value={formData.typeId}
+                      value={formData.typeId!}
                       required
                     >
                       <SelectTrigger>
@@ -366,7 +414,7 @@ export default function NewProductTypePage() {
                   disabled={loading}
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  {loading ? "Creating..." : "Create Product Subtype"}
+                  {loading ? "Creating..." : "update Product Subtype"}
                 </Button>
                 <Link href="/admin/types">
                   <Button type="button" variant="outline" className="w-full">

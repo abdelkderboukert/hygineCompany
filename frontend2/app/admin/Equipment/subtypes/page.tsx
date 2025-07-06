@@ -34,28 +34,20 @@ import { toast } from "sonner";
 
 export default function EquipmentTypesPage() {
   const [types, setTypes] = useState<EquipmentType[]>([]);
-  const [type, setType] = useState<string>("");
-  const [filteredSubTypes, setFilteredSubTypes] = useState<EquipmentSubtype[]>(
-    []
-  );
-  const [searchTerm, setSearchTerm] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [fetchedProductSubtypes, setFetchedProductSubtypes] = useState<
+  const [selectedTypeId, setSelectedTypeId] = useState<string>(""); // Renamed 'type' for clarity
+  const [allSubtypesForSelectedType, setAllSubtypesForSelectedType] = useState<
     EquipmentSubtype[]
-  >([]);
-  const [loadingProductTypes, setLoadingProductTypes] = useState(true);
-  const [loadingProducttypes, setLoadingProductSubtypes] = useState(false);
+  >([]); // Stores all fetched subtypes for the *currently selected* main type
+  const [filteredSubtypes, setFilteredSubtypes] = useState<EquipmentSubtype[]>(
+    []
+  ); // Stores the filtered list based on search term
+  const [searchTerm, setSearchTerm] = useState("");
+  const [loadingInitialData, setLoadingInitialData] = useState(true); // For initial page load
+  const [loadingProductTypes, setLoadingProductTypes] = useState(false); // For just fetching main types
+  const [loadingSubtypes, setLoadingSubtypes] = useState(false); // For just fetching subtypes
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const filtered = filteredSubTypes.filter(
-      (type) =>
-        type.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        type.description.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredSubTypes(filtered);
-  }, [filteredSubTypes, searchTerm]);
-
+  // Effect to fetch initial product types on component mount
   useEffect(() => {
     async function fetchTypes() {
       setLoadingProductTypes(true);
@@ -64,6 +56,10 @@ export default function EquipmentTypesPage() {
         const data = await getEquipmentTypes();
         if (data) {
           setTypes(data);
+          if (data.length > 0) {
+            // Automatically select the first type when types are loaded
+            setSelectedTypeId(data[0].id);
+          }
         } else {
           setTypes([]);
           setError("No product types found.");
@@ -73,36 +69,56 @@ export default function EquipmentTypesPage() {
         setError("Failed to load product types.");
       } finally {
         setLoadingProductTypes(false);
+        setLoadingInitialData(false); // Initial loading is done after types are fetched
       }
     }
     fetchTypes();
-  }, []);
+  }, []); // Empty dependency array means this runs once on mount
 
+  // Effect to fetch subtypes whenever the selected type ID changes
   useEffect(() => {
-    async function fetchSubTypes(type: string) {
-      setLoadingProductTypes(true);
+    async function fetchSubtypesForSelectedType() {
+      if (!selectedTypeId) {
+        setAllSubtypesForSelectedType([]);
+        setFilteredSubtypes([]);
+        return;
+      }
+
+      setLoadingSubtypes(true);
       setError(null);
       try {
-        const data = await getEquipmentSubtypes(type);
+        const data = await getEquipmentSubtypes(selectedTypeId);
         if (data) {
-          setFilteredSubTypes(data);
+          setAllSubtypesForSelectedType(data); // Store all fetched subtypes for the current type
+          setFilteredSubtypes(data); // Initially, filtered list is the full list
         } else {
-          setFilteredSubTypes([]);
-          setError("No product types found.");
+          setAllSubtypesForSelectedType([]);
+          setFilteredSubtypes([]);
+          setError("No equipment subtypes found for this type.");
         }
       } catch (err) {
-        console.error("Error fetching product types:", err);
-        setError("Failed to load product types.");
+        console.error("Error fetching product subtypes:", err);
+        setError("Failed to load product subtypes.");
       } finally {
-        setLoadingProductTypes(false);
+        setLoadingSubtypes(false);
       }
     }
-    fetchSubTypes(type);
-  }, [type]);
+    fetchSubtypesForSelectedType();
+  }, [selectedTypeId]); // Re-run this effect when selectedTypeId changes
+
+  // Effect to filter subtypes based on search term (depends on allSubtypesForSelectedType)
+  useEffect(() => {
+    const filtered = allSubtypesForSelectedType.filter(
+      (subtype) =>
+        subtype.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        subtype.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredSubtypes(filtered);
+  }, [searchTerm, allSubtypesForSelectedType]); // Re-run when searchTerm or the full list changes
 
   const handleDelete = async (
-    TypeId: string,
-    TypeSubId: string,
+    parentTypeId: string, // The ID of the main equipment type
+    subtypeIdToDelete: string, // The ID of the specific subtype to delete
     name: string
   ) => {
     if (
@@ -111,17 +127,22 @@ export default function EquipmentTypesPage() {
       )
     ) {
       try {
-        await deleteEquipmentSubtype(TypeId, TypeSubId);
-        setTypes(types.filter((type) => type.id !== TypeId));
-        toast.success("Equipment type deleted successfully");
+        await deleteEquipmentSubtype(parentTypeId, subtypeIdToDelete);
+        toast.success("Equipment subtype deleted successfully");
+
+        // Update the 'allSubtypesForSelectedType' state to reflect the deletion
+        // The filtering useEffect will then automatically update 'filteredSubtypes'
+        setAllSubtypesForSelectedType((prevSubtypes) =>
+          prevSubtypes.filter((subtype) => subtype.id !== subtypeIdToDelete)
+        );
       } catch (error) {
-        console.error("Error deleting type:", error);
-        toast.error("Failed to delete Equipment type");
+        console.error("Error deleting subtype:", error);
+        toast.error("Failed to delete Equipment subtype");
       }
     }
   };
 
-  if (loading) {
+  if (loadingInitialData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
@@ -136,7 +157,7 @@ export default function EquipmentTypesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <Link href="/admin">
+              <Link href="/admin/Equipment">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Dashboard
@@ -151,10 +172,10 @@ export default function EquipmentTypesPage() {
                 </p>
               </div>
             </div>
-            <Link href="/admin/types/new">
+            <Link href="/admin/Equipment/subtypes/new">
               <Button className="bg-blue-600 hover:bg-blue-700">
                 <Plus className="h-4 w-4 mr-2" />
-                New Type
+                New SubType
               </Button>
             </Link>
           </div>
@@ -168,8 +189,8 @@ export default function EquipmentTypesPage() {
               Product Type <span className="text-red-500">*</span>
             </Label>
             <Select
-              value={type}
-              onValueChange={(value) => setType(value)}
+              value={selectedTypeId}
+              onValueChange={(value) => setSelectedTypeId(value)}
               disabled={loadingProductTypes}
             >
               <SelectTrigger>
@@ -181,11 +202,15 @@ export default function EquipmentTypesPage() {
                     Loading types...
                   </SelectItem>
                 ) : types.length > 0 ? (
-                  types.map((type) => (
-                    <SelectItem key={type.id} value={type.id}>
-                      {type.name}
-                    </SelectItem>
-                  ))
+                  types.map(
+                    (
+                      typeItem // Renamed 'type' to 'typeItem' to avoid conflict with 'type' state
+                    ) => (
+                      <SelectItem key={typeItem.id} value={typeItem.id}>
+                        {typeItem.name}
+                      </SelectItem>
+                    )
+                  )
                 ) : (
                   <SelectItem value="no-types" disabled>
                     No product types available
@@ -206,92 +231,111 @@ export default function EquipmentTypesPage() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="pl-10"
+                disabled={loadingSubtypes} // Disable search if subtypes are loading
               />
             </div>
           </CardContent>
         </Card>
 
         {/* Types Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredSubTypes.map((Subtype) => (
-            <Card
-              key={Subtype.id}
-              className={`border-2 ${Subtype.theme.borderColor}`}
-            >
-              <CardHeader className={Subtype.theme.bgColor}>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div
-                      className={`w-10 h-10 rounded-full ${Subtype.theme.bgColor} border-2 ${Subtype.theme.borderColor} flex items-center justify-center`}
-                    >
-                      <Shield
-                        className={`h-5 w-5 ${Subtype.theme.iconColor}`}
-                      />
+        {loadingSubtypes ? (
+          <div className="min-h-[200px] flex items-center justify-center">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600"></div>
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredSubtypes.map((Subtype) => (
+                <Card
+                  key={Subtype.id}
+                  className={`border-2 ${Subtype.theme.borderColor}`}
+                >
+                  <CardHeader className={Subtype.theme.bgColor}>
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div
+                          className={`w-10 h-10 rounded-full ${Subtype.theme.bgColor} border-2 ${Subtype.theme.borderColor} flex items-center justify-center`}
+                        >
+                          <Shield
+                            className={`h-5 w-5 ${Subtype.theme.iconColor}`}
+                          />
+                        </div>
+                        <CardTitle className="text-lg">
+                          {Subtype.name}
+                        </CardTitle>
+                      </div>
+                      <div className="flex space-x-2">
+                        {/* Corrected Link for editing subtype */}
+                        <Link
+                          href={`/admin/Equipments/${Subtype.id}?typeid=${selectedTypeId}`}
+                        >
+                          <Button variant="ghost" size="sm">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                        </Link>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() =>
+                            handleDelete(
+                              selectedTypeId,
+                              Subtype.id!,
+                              Subtype.name
+                            )
+                          }
+                          className="text-red-600 hover:text-red-700"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
                     </div>
-                    <CardTitle className="text-lg">{Subtype.name}</CardTitle>
-                  </div>
-                  <div className="flex space-x-2">
-                    <Link href={`/admin/types/${Subtype.id}/edit`}>
-                      <Button variant="ghost" size="sm">
-                        <Edit className="h-4 w-4" />
+                  </CardHeader>
+                  <CardContent className="pt-4">
+                    <CardDescription className="mb-4">
+                      {Subtype.description}
+                    </CardDescription>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge
+                        variant="outline"
+                        className={`${Subtype.theme.iconColor} border-current`}
+                      >
+                        {Subtype.theme.gradient
+                          .replace("from-", "")
+                          .replace("-500", "")
+                          .replace(" to-", " → ")
+                          .replace("-700", "")}
+                      </Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {filteredSubtypes.length === 0 && (
+              <Card>
+                <CardContent className="text-center py-12">
+                  <Shield className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">
+                    No Equipment subtypes found
+                  </h3>
+                  <p className="text-gray-500 mb-4">
+                    {searchTerm
+                      ? "Try adjusting your search terms."
+                      : "Get started by creating your first Equipment subtype for this type."}
+                  </p>
+                  {!searchTerm && (
+                    // Corrected Link for creating new subtype
+                    <Link href={`/admin/types/${selectedTypeId}/subtypes/new`}>
+                      <Button className="bg-blue-600 hover:bg-blue-700">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Create Equipment Subtype
                       </Button>
                     </Link>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() =>
-                        handleDelete(Subtype.id!, type, Subtype.name)
-                      }
-                      className="text-red-600 hover:text-red-700"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <CardDescription className="mb-4">
-                  {Subtype.description}
-                </CardDescription>
-                <div className="flex flex-wrap gap-2">
-                  <Badge
-                    variant="outline"
-                    className={`${Subtype.theme.iconColor} border-current`}
-                  >
-                    {Subtype.theme.gradient
-                      .replace("from-", "")
-                      .replace("-500", "")
-                      .replace(" to-", " → ")
-                      .replace("-700", "")}
-                  </Badge>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {filteredSubTypes.length === 0 && (
-          <Card>
-            <CardContent className="text-center py-12">
-              <Shield className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">
-                No Equipment types found
-              </h3>
-              <p className="text-gray-500 mb-4">
-                {searchTerm
-                  ? "Try adjusting your search terms."
-                  : "Get started by creating your first Equipment type."}
-              </p>
-              {!searchTerm && (
-                <Link href="/admin/types/new">
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Create Equipment Type
-                  </Button>
-                </Link>
-              )}
-            </CardContent>
-          </Card>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </>
         )}
       </div>
     </div>

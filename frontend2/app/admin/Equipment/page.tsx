@@ -1,101 +1,121 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { onAuthStateChanged, signOut, type User } from "firebase/auth"
-import { auth, db } from "@/lib/firebase"
-import { collection, getDocs, query, limit } from "firebase/firestore"
-import { Loader2, AlertCircle, Package, Layers, Grid3X3, BarChart, LogOut, Shield } from "lucide-react"
-import Link from "next/link"
-import { Header } from "@/components/Header"
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { onAuthStateChanged, signOut, type User } from "firebase/auth";
+import { auth, db } from "@/lib/firebase";
+import { collection, getDocs, query, limit } from "firebase/firestore";
+import {
+  Loader2,
+  AlertCircle,
+  Package,
+  Layers,
+  Grid3X3,
+  BarChart,
+  LogOut,
+  Shield,
+} from "lucide-react";
+import Link from "next/link";
+import { Header } from "@/components/Header";
 
 export default function AdminDashboard() {
-  const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(true)
-  const router = useRouter()
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
   const [stats, setStats] = useState({
     types: 0,
     subtypes: 0,
     Equipments: 0,
-  })
-  const [recentItems, setRecentItems] = useState([])
-  const [firebaseError, setFirebaseError] = useState<string | null>(null)
-  const [isLoadingData, setIsLoadingData] = useState(true)
+  });
+  const [recentItems, setRecentItems] = useState([]);
+  const [firebaseError, setFirebaseError] = useState<string | null>(null);
+  const [isLoadingData, setIsLoadingData] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setUser(user)
-      setLoading(false)
+      setUser(user);
+      setLoading(false);
 
       if (!user) {
-        router.push("/admin/login")
+        router.push("/admin/login");
       }
-    })
+    });
 
-    return unsubscribe
-  }, [router])
+    return unsubscribe;
+  }, [router]);
 
   useEffect(() => {
     async function fetchStats() {
-      if (!user) return
+      if (!user) return;
 
-      setIsLoadingData(true)
+      setIsLoadingData(true);
       try {
         // Check if Firebase is properly initialized
         if (!db) {
-          throw new Error("Firebase database is not initialized")
+          throw new Error("Firebase database is not initialized");
         }
 
         // Fetch Equipment types count
-        const typesSnapshot = await getDocs(collection(db, "EquipmentTypes"))
-        const typesCount = typesSnapshot.size
+        const typesSnapshot = await getDocs(collection(db, "EquipmentTypes"));
+        const typesCount = typesSnapshot.size;
 
         // Fetch subtypes count
-        const subtypesSnapshot = await getDocs(collection(db, "subtypes"))
-        const subtypesCount = subtypesSnapshot.size
+        const subtypesSnapshot = await getDocs(collection(db, "subtypes"));
+        const subtypesCount = subtypesSnapshot.size;
 
         // Fetch Equipments count
-        const EquipmentsSnapshot = await getDocs(collection(db, "Equipments"))
-        const EquipmentsCount = EquipmentsSnapshot.size
+        const EquipmentsSnapshot = await getDocs(collection(db, "Equipments"));
+        const EquipmentsCount = EquipmentsSnapshot.size;
 
         // Fetch recent items
-        const recentItemsQuery = query(collection(db, "EquipmentTypes"), limit(5))
-        const recentItemsSnapshot = await getDocs(recentItemsQuery)
+        const recentItemsQuery = query(
+          collection(db, "EquipmentTypes"),
+          limit(5)
+        );
+        const recentItemsSnapshot = await getDocs(recentItemsQuery);
         const recentItemsData = recentItemsSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
           type: "Equipment Type",
-        }))
+        }));
 
         setStats({
           types: typesCount,
           subtypes: subtypesCount,
           Equipments: EquipmentsCount,
-        })
+        });
         //@ts-ignore
-        setRecentItems(recentItemsData)
-        setFirebaseError(null)
+        setRecentItems(recentItemsData);
+        setFirebaseError(null);
       } catch (error) {
-        console.error("Error fetching stats:", error)
-        setFirebaseError(error instanceof Error ? error.message : "Unknown error occurred")
+        console.error("Error fetching stats:", error);
+        setFirebaseError(
+          error instanceof Error ? error.message : "Unknown error occurred"
+        );
       } finally {
-        setIsLoadingData(false)
+        setIsLoadingData(false);
       }
     }
 
-    fetchStats()
-  }, [user])
+    fetchStats();
+  }, [user]);
 
   const handleSignOut = async () => {
     try {
-      await signOut(auth)
-      router.push("/admin/login")
+      await signOut(auth);
+      router.push("/admin/login");
     } catch (error) {
-      console.error("Error signing out:", error)
+      console.error("Error signing out:", error);
     }
-  }
+  };
 
   if (loading) {
     return (
@@ -105,11 +125,11 @@ export default function AdminDashboard() {
           <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (!user) {
-    return null // Router will redirect to login
+    return null; // Router will redirect to login
   }
 
   return (
@@ -138,7 +158,7 @@ export default function AdminDashboard() {
           </div>
         </div>
       </header> */}
-      <Header/>
+      <Header />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {firebaseError && (
@@ -149,8 +169,9 @@ export default function AdminDashboard() {
             </div>
             <p className="mt-2">{firebaseError}</p>
             <p className="mt-2 text-sm">
-              Please check your Firebase configuration and environment variables. Make sure you have set up the
-              following environment variables:
+              Please check your Firebase configuration and environment
+              variables. Make sure you have set up the following environment
+              variables:
             </p>
             <ul className="mt-1 list-inside list-disc text-sm">
               <li>NEXT_PUBLIC_FIREBASE_API_KEY</li>
@@ -167,14 +188,22 @@ export default function AdminDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Equipment Types</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                Equipment Types
+              </CardTitle>
               <Layers className="h-4 w-4 text-blue-600" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {isLoadingData ? <Loader2 className="h-6 w-6 animate-spin" /> : stats.types}
+                {isLoadingData ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : (
+                  stats.types
+                )}
               </div>
-              <p className="text-xs text-muted-foreground">Main Equipment categories</p>
+              <p className="text-xs text-muted-foreground">
+                Main Equipment categories
+              </p>
             </CardContent>
           </Card>
           <Card>
@@ -184,9 +213,15 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {isLoadingData ? <Loader2 className="h-6 w-6 animate-spin" /> : stats.subtypes}
+                {isLoadingData ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : (
+                  stats.subtypes
+                )}
               </div>
-              <p className="text-xs text-muted-foreground">Equipment subcategories</p>
+              <p className="text-xs text-muted-foreground">
+                Equipment subcategories
+              </p>
             </CardContent>
           </Card>
           <Card>
@@ -196,9 +231,15 @@ export default function AdminDashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">
-                {isLoadingData ? <Loader2 className="h-6 w-6 animate-spin" /> : stats.Equipments}
+                {isLoadingData ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : (
+                  stats.Equipments
+                )}
               </div>
-              <p className="text-xs text-muted-foreground">Individual Equipments</p>
+              <p className="text-xs text-muted-foreground">
+                Individual Equipments
+              </p>
             </CardContent>
           </Card>
         </div>
@@ -211,25 +252,25 @@ export default function AdminDashboard() {
               <CardDescription>Common administrative tasks</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Link href="/admin/types/new">
+              <Link href="/admin/Equipment/types/new">
                 <Button className="w-full justify-start bg-blue-600 hover:bg-blue-700">
                   <Package className="h-4 w-4 mr-2" />
                   Create New Equipment Type
                 </Button>
               </Link>
-              <Link href="/admin/subtypes/new">
+              <Link href="/admin/Equipment/subtypes/new">
                 <Button className="w-full justify-start bg-green-600 hover:bg-green-700">
                   <Layers className="h-4 w-4 mr-2" />
                   Create New Subtype
                 </Button>
               </Link>
-              <Link href="/admin/Equipments/new">
+              <Link href="/admin/Equipment/products/new">
                 <Button className="w-full justify-start bg-purple-600 hover:bg-purple-700">
                   <Grid3X3 className="h-4 w-4 mr-2" />
                   Create New Equipment
                 </Button>
               </Link>
-              <Link href="/admin/data">
+              <Link href="/admin/Equipment/data">
                 <Button className="w-full justify-start bg-orange-600 hover:bg-orange-700">
                   <BarChart className="h-4 w-4 mr-2" />
                   View All Data
@@ -244,19 +285,19 @@ export default function AdminDashboard() {
               <CardDescription>Manage existing content</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Link href="/admin/types">
+              <Link href="/admin/Equipment/types">
                 <Button variant="outline" className="w-full justify-start">
                   <Layers className="h-4 w-4 mr-2" />
                   Manage Equipment Types
                 </Button>
               </Link>
-              <Link href="/admin/subtypes">
+              <Link href="/admin/Equipment/subtypes">
                 <Button variant="outline" className="w-full justify-start">
                   <Package className="h-4 w-4 mr-2" />
                   Manage Subtypes
                 </Button>
               </Link>
-              <Link href="/admin/Equipments">
+              <Link href="/admin/Equipment/products">
                 <Button variant="outline" className="w-full justify-start">
                   <Grid3X3 className="h-4 w-4 mr-2" />
                   Manage Equipments
@@ -271,19 +312,26 @@ export default function AdminDashboard() {
           <Card className="mt-8">
             <CardHeader>
               <CardTitle>Recent Equipment Types</CardTitle>
-              <CardDescription>Recently created Equipment categories</CardDescription>
+              <CardDescription>
+                Recently created Equipment categories
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 {recentItems.map((item: any) => (
-                  <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg">
+                  <div
+                    key={item.id}
+                    className="flex items-center justify-between p-4 border rounded-lg"
+                  >
                     <div className="flex items-center space-x-4">
                       <div className="w-10 h-10 rounded-full bg-blue-100 border-2 border-blue-200 flex items-center justify-center">
                         <Shield className="h-5 w-5 text-blue-600" />
                       </div>
                       <div>
                         <h3 className="font-medium">{item.name}</h3>
-                        <p className="text-sm text-gray-500">{item.description}</p>
+                        <p className="text-sm text-gray-500">
+                          {item.description}
+                        </p>
                       </div>
                     </div>
                     <Link href={`/admin/types/${item.id}/edit`}>
@@ -299,5 +347,5 @@ export default function AdminDashboard() {
         )}
       </div>
     </div>
-  )
+  );
 }

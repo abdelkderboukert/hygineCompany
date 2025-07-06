@@ -1,19 +1,31 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ArrowLeft, Save } from "lucide-react"
-import { createEquipmentType, uploadFile } from "@/lib/firebase-admin"
-import { toast } from "sonner"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ArrowLeft, Save } from "lucide-react";
+import { createEquipmentType, uploadFile } from "@/lib/firebase-admin";
+import { toast } from "sonner";
 
 const themeOptions = [
   {
@@ -82,51 +94,51 @@ const themeOptions = [
       overlayGradient: "from-cyan-900/70",
     },
   },
-]
+];
 
 export default function NewEquipmentTypePage() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-  const [imageFile, setImageFile] = useState<File | null>(null)
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     description: "",
     theme: themeOptions[0].value,
-  })
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
 
     try {
-      let imageUrl = ""
+      let imageUrl = "";
 
       if (imageFile) {
-        const imagePath = `Equipment-types/${Date.now()}-${imageFile.name}`
-        imageUrl = await uploadFile(imageFile, imagePath)
+        const imagePath = `Equipment-types/${Date.now()}-${imageFile.name}`;
+        imageUrl = await uploadFile(imageFile, imagePath);
       }
 
       await createEquipmentType({
         ...formData,
         image: imageUrl,
-      })
+      });
 
-      toast.success("Equipment type created successfully!")
-      router.push("/admin/types")
+      toast.success("Equipment type created successfully!");
+      router.push("/admin/types");
     } catch (error) {
-      console.error("Error creating Equipment type:", error)
-      toast.error("Failed to create Equipment type")
+      console.error("Error creating Equipment type:", error);
+      toast.error("Failed to create Equipment type");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   const handleThemeChange = (themeName: string) => {
-    const theme = themeOptions.find((t) => t.name === themeName)
+    const theme = themeOptions.find((t) => t.name === themeName);
     if (theme) {
-      setFormData({ ...formData, theme: theme.value })
+      setFormData({ ...formData, theme: theme.value });
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -135,15 +147,19 @@ export default function NewEquipmentTypePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <Link href="/admin/types">
+              <Link href="/admin/Equipment/types">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Types
                 </Button>
               </Link>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Create Equipment Type</h1>
-                <p className="text-sm text-gray-500">Add a new Equipment category</p>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Create Equipment Type
+                </h1>
+                <p className="text-sm text-gray-500">
+                  Add a new Equipment category
+                </p>
               </div>
             </div>
           </div>
@@ -158,7 +174,9 @@ export default function NewEquipmentTypePage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Basic Information</CardTitle>
-                  <CardDescription>Enter the basic details for the Equipment type</CardDescription>
+                  <CardDescription>
+                    Enter the basic details for the Equipment type
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
@@ -166,7 +184,9 @@ export default function NewEquipmentTypePage() {
                     <Input
                       id="name"
                       value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
                       placeholder="e.g., Sterilization Chemicals"
                       required
                     />
@@ -177,7 +197,12 @@ export default function NewEquipmentTypePage() {
                     <Textarea
                       id="description"
                       value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          description: e.target.value,
+                        })
+                      }
                       placeholder="Describe this Equipment category..."
                       rows={3}
                       required
@@ -186,7 +211,10 @@ export default function NewEquipmentTypePage() {
 
                   <div>
                     <Label htmlFor="theme">Theme Color</Label>
-                    <Select onValueChange={handleThemeChange} defaultValue="Blue">
+                    <Select
+                      onValueChange={handleThemeChange}
+                      defaultValue="Blue"
+                    >
                       <SelectTrigger>
                         <SelectValue placeholder="Select a theme color" />
                       </SelectTrigger>
@@ -194,7 +222,9 @@ export default function NewEquipmentTypePage() {
                         {themeOptions.map((theme) => (
                           <SelectItem key={theme.name} value={theme.name}>
                             <div className="flex items-center space-x-2">
-                              <div className={`w-4 h-4 rounded-full bg-gradient-to-r ${theme.value.gradient}`}></div>
+                              <div
+                                className={`w-4 h-4 rounded-full bg-gradient-to-r ${theme.value.gradient}`}
+                              ></div>
                               <span>{theme.name}</span>
                             </div>
                           </SelectItem>
@@ -210,7 +240,9 @@ export default function NewEquipmentTypePage() {
                         id="image"
                         type="file"
                         accept="image/*"
-                        onChange={(e) => setImageFile(e.target.files?.[0] || null)}
+                        onChange={(e) =>
+                          setImageFile(e.target.files?.[0] || null)
+                        }
                         className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                       />
                     </div>
@@ -224,20 +256,29 @@ export default function NewEquipmentTypePage() {
               <Card className={`border-2 ${formData.theme.borderColor}`}>
                 <CardHeader>
                   <CardTitle>Preview</CardTitle>
-                  <CardDescription>How this will appear on the website</CardDescription>
+                  <CardDescription>
+                    How this will appear on the website
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className={`p-4 rounded-lg ${formData.theme.bgColor} border ${formData.theme.borderColor}`}>
+                  <div
+                    className={`p-4 rounded-lg ${formData.theme.bgColor} border ${formData.theme.borderColor}`}
+                  >
                     <div className="flex items-center space-x-3 mb-3">
                       <div
                         className={`w-8 h-8 rounded-full ${formData.theme.bgColor} border ${formData.theme.borderColor} flex items-center justify-center`}
                       >
-                        <div className={`w-4 h-4 rounded-full bg-gradient-to-r ${formData.theme.gradient}`}></div>
+                        <div
+                          className={`w-4 h-4 rounded-full bg-gradient-to-r ${formData.theme.gradient}`}
+                        ></div>
                       </div>
-                      <h3 className="font-medium">{formData.name || "Equipment Type Name"}</h3>
+                      <h3 className="font-medium">
+                        {formData.name || "Equipment Type Name"}
+                      </h3>
                     </div>
                     <p className="text-sm text-gray-600 mb-3">
-                      {formData.description || "Equipment type description will appear here..."}
+                      {formData.description ||
+                        "Equipment type description will appear here..."}
                     </p>
                     <div
                       className={`inline-block px-2 py-1 rounded text-xs ${formData.theme.iconColor} border ${formData.theme.borderColor}`}
@@ -249,7 +290,11 @@ export default function NewEquipmentTypePage() {
               </Card>
 
               <div className="mt-6 space-y-3">
-                <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
+                <Button
+                  type="submit"
+                  className="w-full bg-blue-600 hover:bg-blue-700"
+                  disabled={loading}
+                >
                   <Save className="h-4 w-4 mr-2" />
                   {loading ? "Creating..." : "Create Equipment Type"}
                 </Button>
@@ -264,5 +309,5 @@ export default function NewEquipmentTypePage() {
         </form>
       </div>
     </div>
-  )
+  );
 }
