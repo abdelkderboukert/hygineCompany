@@ -2,12 +2,17 @@
 
 import type React from "react";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  getProductTypes as getEquipmentTypes,
+  type ProductType,
+  type ProductSubtype as EquipmentSubType,
+} from "@/lib/firebase-admin";
 import {
   Card,
   CardContent,
@@ -24,7 +29,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ArrowLeft, Save } from "lucide-react";
-import { createProductType, uploadFile } from "@/lib/firebase-admin";
+import {
+  updateProductSubtype as updateEquipmentSubtype,
+  uploadFile,
+  getProductSubtype as getEquipmentSubtype,
+} from "@/lib/firebase-admin"; // Ensure updateProductSubtype is imported
 import { toast } from "sonner";
 
 const themeOptions = [
@@ -96,38 +105,110 @@ const themeOptions = [
   },
 ];
 
-export default function NewProductTypePage() {
-  const router = useRouter();
+export default function UpdateSubTypePage() {
+  const [productTypes, setProductTypes] = useState<ProductType[]>([]);
+  const [EquipmentSubtype, setEquipmentSubtype] =
+    useState<EquipmentSubType | null>(null);
   const [loading, setLoading] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  //   const [formData, setFormData] = useState({
+  //     name: "",
+  //     description: "",
+  //     typeId: "", // Initialize typeId for the Select input
+  //     productCount: 0, // This might not be strictly needed for a new subtype but keep it if your interface requires it.
+  //     theme: themeOptions[0].value,
+  //   });
+
+  const params = useParams();
+  const SubTypeId = params.edit as string; // Assuming [edit] is your EquipmentId segment
+
+  // Get query parameters (e.g., ?typeid=abc&subtypeid=xyz)
+  const searchParams = useSearchParams();
+  const typeId = searchParams.get("typeid"); // This will be 'abc' or null if not present
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    typeId: typeId, // Initialize typeId for the Select input
+    productCount: 0, // This might not be strictly needed for a new subtype but keep it if your interface requires it.
     theme: themeOptions[0].value,
   });
+
+  // Fetch product types on component mount
+  useEffect(() => {
+    const fetchProductTypesData = async () => {
+      try {
+        const types = await getEquipmentTypes();
+        setProductTypes(types);
+        // Optionally pre-select the first type if available and no typeId is set
+        if (types.length > 0 && !formData.typeId) {
+          setFormData((prev) => ({ ...prev, typeId: types[0].id || "" }));
+        }
+      } catch (error) {
+        console.error("Error fetching product types:", error);
+        toast.error("Failed to load product types");
+      }
+    };
+    fetchProductTypesData();
+  }, []); // Empty dependency array means this runs once on mount
+
+  // Fetch product Subtype
+  useEffect(() => {
+    const fetchProductSubTypeData = async () => {
+      try {
+        const Subtype = await getEquipmentSubtype(typeId!, SubTypeId);
+        setEquipmentSubtype(Subtype);
+        // Optionally pre-select the first type if available and no typeId is set
+        if (Subtype) {
+          setFormData({
+            name: Subtype.name,
+            description: Subtype.description,
+            typeId: typeId, // Initialize typeId for the Select input
+            productCount: Subtype.productCount, // This might not be strictly needed for a new subtype but keep it if your interface requires it.
+            theme: Subtype.theme,
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching product types:", error);
+        toast.error("Failed to load product types");
+      }
+    };
+    fetchProductSubTypeData();
+  }, []); // Empty dependency array means this runs once on mount
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
+    if (!formData.typeId) {
+      toast.error("Please select a parent product type.");
+      setLoading(false);
+      return;
+    }
+
     try {
       let imageUrl = "";
 
       if (imageFile) {
-        const imagePath = `product-types/${Date.now()}-${imageFile.name}`;
+        const imagePath = `product-subtypes/${Date.now()}-${imageFile.name}`; // Adjusted path for subtypes
         imageUrl = await uploadFile(imageFile, imagePath);
       }
 
-      await createProductType({
-        ...formData,
+      // Destructure formData to exclude typeId from the data object,
+      // as it's passed as a separate argument to updateProductSubtype
+      const { typeId, ...restOfData } = formData;
+
+      await updateEquipmentSubtype(typeId, SubTypeId, {
+        ...restOfData,
         image: imageUrl,
       });
 
-      toast.success("Product type created successfully!");
-      router.push("/admin/product/types");
+      toast.success("Product subtype updated successfully!");
+      // Redirect to the subtypes listing, perhaps for the selected parent type
+      //router.push(`/admin/types/${typeId}/subtypes`);  //Redirect to the subtypes list of the selected parent type
     } catch (error) {
-      console.error("Error creating product type:", error);
-      toast.error("Failed to create product type");
+      console.error("Error creating product subtype:", error);
+      toast.error("Failed to update product subtype");
     } finally {
       setLoading(false);
     }
@@ -140,6 +221,10 @@ export default function NewProductTypePage() {
     }
   };
 
+  const handleTypeIdChange = (typeId: string) => {
+    setFormData({ ...formData, typeId });
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -147,18 +232,21 @@ export default function NewProductTypePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-3">
-              <Link href="/admin/product/types">
+              {/* Back button might go to the list of all Product Types,
+                  or if coming from a specific type's detail page, it could go back there.
+                  For simplicity, let's keep it to /admin/types for now. */}
+              <Link href="/admin/Product/subtypes">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
-                  Back to Types
+                  Back to Product Types
                 </Button>
               </Link>
               <div>
                 <h1 className="text-2xl font-bold text-gray-900">
-                  Create Product Type
+                  update Product Subtype
                 </h1>
                 <p className="text-sm text-gray-500">
-                  Add a new product category
+                  Add a new subcategory within a parent product type
                 </p>
               </div>
             </div>
@@ -173,14 +261,38 @@ export default function NewProductTypePage() {
             <div className="lg:col-span-2">
               <Card>
                 <CardHeader>
-                  <CardTitle>Basic Information</CardTitle>
+                  <CardTitle>Subtype Information</CardTitle>
                   <CardDescription>
-                    Enter the basic details for the product type
+                    Enter the details for the new product subtype
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
+                  {/* Select for Parent Product Type */}
                   <div>
-                    <Label htmlFor="name">Name *</Label>
+                    <Label htmlFor="typeId">Parent Product Type *</Label>
+                    <Select
+                      onValueChange={handleTypeIdChange}
+                      value={formData.typeId!}
+                      required
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a parent product type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {productTypes
+                          .filter((type) => type.id) // Filter out types without an id
+                          .map((type) => (
+                            <SelectItem key={type.id!} value={type.id!}>
+                              {type.name}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* Subtype Name */}
+                  <div>
+                    <Label htmlFor="name">Subtype Name *</Label>
                     <Input
                       id="name"
                       value={formData.name}
@@ -192,6 +304,7 @@ export default function NewProductTypePage() {
                     />
                   </div>
 
+                  {/* Subtype Description */}
                   <div>
                     <Label htmlFor="description">Description *</Label>
                     <Textarea
@@ -203,17 +316,21 @@ export default function NewProductTypePage() {
                           description: e.target.value,
                         })
                       }
-                      placeholder="Describe this product category..."
+                      placeholder="Describe this product subtype..."
                       rows={3}
                       required
                     />
                   </div>
 
+                  {/* Theme Color */}
                   <div>
                     <Label htmlFor="theme">Theme Color</Label>
                     <Select
                       onValueChange={handleThemeChange}
-                      defaultValue="Blue"
+                      value={
+                        themeOptions.find((opt) => opt.value === formData.theme)
+                          ?.name || themeOptions[0].name
+                      }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select a theme color" />
@@ -233,8 +350,9 @@ export default function NewProductTypePage() {
                     </Select>
                   </div>
 
+                  {/* Category Image (Subtype Image) */}
                   <div>
-                    <Label htmlFor="image">Category Image</Label>
+                    <Label htmlFor="image">Subtype Image</Label>
                     <div className="mt-2">
                       <input
                         id="image"
@@ -257,7 +375,7 @@ export default function NewProductTypePage() {
                 <CardHeader>
                   <CardTitle>Preview</CardTitle>
                   <CardDescription>
-                    How this will appear on the website
+                    How this subtype will appear on the website
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -273,12 +391,12 @@ export default function NewProductTypePage() {
                         ></div>
                       </div>
                       <h3 className="font-medium">
-                        {formData.name || "Product Type Name"}
+                        {formData.name || "Product Subtype Name"}
                       </h3>
                     </div>
                     <p className="text-sm text-gray-600 mb-3">
                       {formData.description ||
-                        "Product type description will appear here..."}
+                        "Product subtype description will appear here..."}
                     </p>
                     <div
                       className={`inline-block px-2 py-1 rounded text-xs ${formData.theme.iconColor} border ${formData.theme.borderColor}`}
@@ -296,9 +414,9 @@ export default function NewProductTypePage() {
                   disabled={loading}
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  {loading ? "Creating..." : "Create Product Type"}
+                  {loading ? "Creating..." : "update Product Subtype"}
                 </Button>
-                <Link href="/admin/product/types">
+                <Link href="/admin/types">
                   <Button type="button" variant="outline" className="w-full">
                     Cancel
                   </Button>

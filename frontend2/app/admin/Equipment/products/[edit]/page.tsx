@@ -214,14 +214,15 @@ export default function EditEquipmentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoadingEquipment, setIsLoadingEquipment] = useState(true); // New state for loading Equipment data
 
-  const [fetchedEquipmentTypes, setFetchedEquipmentTypes] = useState<EquipmentType[]>(
-    []
-  );
+  const [fetchedEquipmentTypes, setFetchedEquipmentTypes] = useState<
+    EquipmentType[]
+  >([]);
   const [fetchedEquipmentSubtypes, setFetchedEquipmentSubtypes] = useState<
     EquipmentSubtype[]
   >([]);
   const [loadingEquipmentTypes, setLoadingEquipmentTypes] = useState(true);
-  const [loadingEquipmentSubtypes, setLoadingEquipmentSubtypes] = useState(false);
+  const [loadingEquipmentSubtypes, setLoadingEquipmentSubtypes] =
+    useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // --- Utility Functions ---
@@ -740,7 +741,9 @@ export default function EditEquipmentPage() {
                     onValueChange={(value) =>
                       updateFormData("EquipmentSubtype", value)
                     }
-                    disabled={!formData.EquipmentType || loadingEquipmentSubtypes}
+                    disabled={
+                      !formData.EquipmentType || loadingEquipmentSubtypes
+                    }
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select a Equipment subtype" />

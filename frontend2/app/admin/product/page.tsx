@@ -211,19 +211,19 @@ export default function AdminDashboard() {
               <CardDescription>Common administrative tasks</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Link href="/admin/types/new">
+              <Link href="/admin/product/types/new">
                 <Button className="w-full justify-start bg-blue-600 hover:bg-blue-700">
                   <Package className="h-4 w-4 mr-2" />
                   Create New Product Type
                 </Button>
               </Link>
-              <Link href="/admin/subtypes/new">
+              <Link href="/admin/product/subtypes/new">
                 <Button className="w-full justify-start bg-green-600 hover:bg-green-700">
                   <Layers className="h-4 w-4 mr-2" />
                   Create New Subtype
                 </Button>
               </Link>
-              <Link href="/admin/products/new">
+              <Link href="/admin/product/products/new">
                 <Button className="w-full justify-start bg-purple-600 hover:bg-purple-700">
                   <Grid3X3 className="h-4 w-4 mr-2" />
                   Create New Product
@@ -244,19 +244,19 @@ export default function AdminDashboard() {
               <CardDescription>Manage existing content</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <Link href="/admin/types">
+              <Link href="/admin/product/types">
                 <Button variant="outline" className="w-full justify-start">
                   <Layers className="h-4 w-4 mr-2" />
                   Manage Product Types
                 </Button>
               </Link>
-              <Link href="/admin/subtypes">
+              <Link href="/admin/product/subtypes">
                 <Button variant="outline" className="w-full justify-start">
                   <Package className="h-4 w-4 mr-2" />
                   Manage Subtypes
                 </Button>
               </Link>
-              <Link href="/admin/products">
+              <Link href="/admin/product/products">
                 <Button variant="outline" className="w-full justify-start">
                   <Grid3X3 className="h-4 w-4 mr-2" />
                   Manage Products
@@ -286,7 +286,7 @@ export default function AdminDashboard() {
                         <p className="text-sm text-gray-500">{item.description}</p>
                       </div>
                     </div>
-                    <Link href={`/admin/types/${item.id}/edit`}>
+                    <Link href={`/admin/product/types/${item.id}/edit`}>
                       <Button variant="outline" size="sm">
                         Edit
                       </Button>

@@ -157,7 +157,7 @@ export default function NewProductTypePage() {
 
       toast.success("Product subtype created successfully!");
       // Redirect to the subtypes listing, perhaps for the selected parent type
-      router.push(`/admin/types/${typeId}/subtypes`); // Redirect to the subtypes list of the selected parent type
+      // router.push(`/admin/types/${typeId}/subtypes`); // Redirect to the subtypes list of the selected parent type
     } catch (error) {
       console.error("Error creating product subtype:", error);
       toast.error("Failed to create product subtype");
@@ -187,7 +187,7 @@ export default function NewProductTypePage() {
               {/* Back button might go to the list of all Product Types,
                   or if coming from a specific type's detail page, it could go back there.
                   For simplicity, let's keep it to /admin/types for now. */}
-              <Link href="/admin/types">
+              <Link href="/admin/product/types">
                 <Button variant="ghost" size="sm">
                   <ArrowLeft className="h-4 w-4 mr-2" />
                   Back to Product Types
@@ -365,7 +365,7 @@ export default function NewProductTypePage() {
                   <Save className="h-4 w-4 mr-2" />
                   {loading ? "Creating..." : "Create Product Subtype"}
                 </Button>
-                <Link href="/admin/types">
+                <Link href="/admin/product/types">
                   <Button type="button" variant="outline" className="w-full">
                     Cancel
                   </Button>
