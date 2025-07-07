@@ -124,7 +124,7 @@ export default function NewEquipmentTypePage() {
       });
 
       toast.success("Equipment type created successfully!");
-      router.push("/admin/types");
+      router.push("/admin/Equipment/types");
     } catch (error) {
       console.error("Error creating Equipment type:", error);
       toast.error("Failed to create Equipment type");
@@ -298,7 +298,7 @@ export default function NewEquipmentTypePage() {
                   <Save className="h-4 w-4 mr-2" />
                   {loading ? "Creating..." : "Create Equipment Type"}
                 </Button>
-                <Link href="/admin/types">
+                <Link href="/admin/Equipment/types">
                   <Button type="button" variant="outline" className="w-full">
                     Cancel
                   </Button>

@@ -14,33 +14,62 @@ import { Header } from "@/components/Header";
 // Sample Equipment sectors data with different themes
 const EquipmentSectors = [
   {
-    id: "pSVKtoCNmJocgpPTYmYa",
-    name: "Clean-in-Place / Sterilize-in-Place",
+    id: "yXNrTqweBpLChkGzJf56",
+    name: "Hygiène des personnes",
     description:
-      "Professional chemical solutions for sterilization across various industries",
+      "Équipements préservant la propreté et la sécurité individuelles, tels que les distributeurs de savon, les gels hydro-alcooliques et autres articles de protection individuelle",
     image: "/placeholder.svg?height=300&width=400",
-    activators: ["disinfectants", "sanitizers", "sterilants"],
+    activators: ["distributeurs de savon", "désinfectants", "EPI", "soins des mains"],
     theme: {
-      gradient: "from-blue-500 to-blue-700",
-      bgColor: "bg-blue-50",
-      iconColor: "text-blue-600",
-      borderColor: "border-blue-200",
-      hoverColor: "hover:bg-blue-600",
+      gradient: "from-pink-500 to-pink-700",
+      bgColor: "bg-pink-50",
+      iconColor: "text-pink-600",
+      borderColor: "border-pink-200",
+      hoverColor: "hover:bg-pink-600",
     },
   },
   {
-    id: "G2bxJGI8T8AibUtZtwkD",
-    name: "Clean-Out-of-Place (COP)",
+    id: "XoAfRnsVptd7uZqLEc91",
+    name: "Essuyage et séchage des mains",
     description:
-      "Nettoyage des équipements et composants qui ne peuvent pas être nettoyés sur place, nécessitant un démontage et un nettoyage dans une zone dédiée.",
+      "Solutions rapides et hygiéniques pour le séchage des mains : distributeurs de papier essuie-tout, sèche-mains électriques, rouleaux d'essuyage et accessoires associés",
+    image: "/placeholder.svg?height=300&width=400",
+    activators: ["distributeurs de papier essuie-tout", "sèche-mains", "rouleaux d'essuyage"],
+    theme: {
+      gradient: "from-yellow-500 to-yellow-700",
+      bgColor: "bg-yellow-50",
+      iconColor: "text-yellow-600",
+      borderColor: "border-yellow-200",
+      hoverColor: "hover:bg-yellow-600",
+    },
+  },
+  {
+    id: "mD9WqgYuVz5NbK0PslRE",
+    name: "Hygiène des sanitaires",
+    description:
+      "Équipements pour le nettoyage et la désinfection des toilettes et des lavabos : distributeurs de papier toilette, brosses, supports muraux, désodorisants et poubelles",
     image: "/placeholder.svg?height=300&width=400",
     activators: [
-      "nettoyants-alcalins",
-      "nettoyants-acides",
-      "eau-purifiee",
-      // "action-mecanique",
-      // "temperature",
+      "distributeurs de papier toilette",
+      "brosses de toilettes",
+      "désodorisants",
+      "poubelles",
     ],
+    theme: {
+      gradient: "from-teal-500 to-teal-700",
+      bgColor: "bg-teal-50",
+      iconColor: "text-teal-600",
+      borderColor: "border-teal-200",
+      hoverColor: "hover:bg-teal-600",
+    },
+  },
+  {
+    id: "q0nBcMSPwU3BeiZs8mVa",
+    name: "Hygiène et entretien des sols",
+    description:
+      "Produits et machines professionnels pour l'entretien des sols : autolaveuses, balais professionnels, chariots de nettoyage, raclettes, seaux, serpillères et détergents",
+    image: "/placeholder.svg?height=300&width=400",
+    activators: ["autolaveuses", "serpillères", "balais", "détergents pour sols"],
     theme: {
       gradient: "from-green-500 to-green-700",
       bgColor: "bg-green-50",
@@ -50,63 +79,68 @@ const EquipmentSectors = [
     },
   },
   {
-    id: "djHzgM7n8JA7I8AEmNeC",
-    name: "Hygiène Corporelle",
+    id: "K7eHca4LUDvG15xwPpYQ",
+    name: "Divers équipements",
     description:
-      "Ensemble des pratiques et des soins destinés à maintenir la propreté du corps, prévenir les maladies et favoriser le bien-être physique et mental.",
+      "Une large sélection d'outils complémentaires pour garder n'importe quel environnement propre et organisé",
     image: "/placeholder.svg?height=300&width=400",
-    activators: ["savon", "shampoing", "dentifrice"],
+    activators: ["outils utilitaires", "organisateurs", "aides au rangement"],
     theme: {
-      gradient: "from-cyan-500 to-cyan-700",
-      bgColor: "bg-cyan-50",
-      iconColor: "text-cyan-600",
-      borderColor: "border-cyan-200",
-      hoverColor: "hover:bg-cyan-600",
+      gradient: "from-gray-500 to-gray-700",
+      bgColor: "bg-gray-50",
+      iconColor: "text-gray-600",
+      borderColor: "border-gray-200",
+      hoverColor: "hover:bg-gray-600",
     },
   },
   {
-    id: "mL4fIyquLQWct4oprf4M",
-    name: "Collectivité",
+    id: "Zv2Ubx8E3tRMkGqAoWiL",
+    name: "Cireuse à chaussures",
     description:
-      "Un groupe d'individus partageant des caractéristiques, des intérêts, un territoire ou des objectifs communs, et interdépendants au sein d'une structure sociale.",
+      "Machines automatiques qui nettoient et polissent les chaussures – parfaites pour les bureaux, les hôtels et les lieux publics",
     image: "/placeholder.svg?height=300&width=400",
-    activators: ["citoyens", "résidents", "organisations-publiques"],
+    activators: ["cireuses à chaussures", "lustrage", "brillance"],
     theme: {
-      gradient: "from-purple-500 to-purple-700",
-      bgColor: "bg-purple-50",
-      iconColor: "text-purple-600",
-      borderColor: "border-purple-200",
-      hoverColor: "hover:bg-purple-600",
+      gradient: "from-amber-500 to-amber-700",
+      bgColor: "bg-amber-50",
+      iconColor: "text-amber-600",
+      borderColor: "border-amber-200",
+      hoverColor: "hover:bg-amber-600",
     },
   },
   {
-    id: "AKf0XnxFSybJEiGKbANm",
-    name: "Additifs",
+    id: "s5cTf9nF0QeVUyXlDzP4",
+    name: "Brosses et Outils de Nettoyage",
     description:
-      "Substances ajoutées intentionnellement à un produit (alimentaire, cosmétique, industriel, etc.) en faible quantité pour modifier ses caractéristiques (conservation, goût, texture, couleur, stabilité) ou faciliter sa fabrication, sans être consommées seules comme ingrédients principaux.",
+      "Gamme complète de brosses industrielles, balais, raclettes, grattoirs et autres outils pour chaque surface et chaque environnement",
     image: "/placeholder.svg?height=300&width=400",
-    activators: ["conservateurs", "colorants", "exhausteurs-de-gout"],
-    theme: {
-      gradient: "from-orange-500 to-orange-700",
-      bgColor: "bg-orange-50",
-      iconColor: "text-orange-600",
-      borderColor: "border-orange-200",
-      hoverColor: "hover:bg-orange-600",
-    },
-  },
-  {
-    id: "Mb0qxk60dAdiPwu7eKL3",
-    name: "Agricole",
-    description:
-      "Relatif à l'agriculture, l'ensemble des activités humaines qui transforment le milieu naturel pour produire des ressources végétales (cultures) et animales (élevage) utiles aux besoins de l'homme (alimentation, fibres, énergie).",
-    image: "/placeholder.svg?height=300&width=400",
-    activators: ["cultures", "elevage", "machinisme-agricole"],
+    activators: ["brosses industrielles", "grattoirs", "raclettes"],
     theme: {
       gradient: "from-red-500 to-red-700",
       bgColor: "bg-red-50",
       iconColor: "text-red-600",
       borderColor: "border-red-200",
       hoverColor: "hover:bg-red-600",
+    },
+  },
+  {
+    id: "p4Lh8YcF1kWzE6qGoR2J",
+    name: "Industrie agroalimentaire",
+    description:
+      "Équipements spécialisés respectant les normes d'hygiène strictes de l'industrie alimentaire : brosses HACCP, seaux de qualité alimentaire, équipements en acier inoxydable et outils à code couleur pour éviter la contamination croisée",
+    image: "/placeholder.svg?height=300&width=400",
+    activators: [
+      "brosses HACCP",
+      "seaux de qualité alimentaire",
+      "acier inoxydable",
+      "outils à code couleur",
+    ],
+    theme: {
+      gradient: "from-purple-500 to-purple-700",
+      bgColor: "bg-purple-50",
+      iconColor: "text-purple-600",
+      borderColor: "border-purple-200",
+      hoverColor: "hover:bg-purple-600",
     },
   },
 ];
@@ -124,19 +158,19 @@ export default function EquipmentCatalogPage() {
             </div>
             <nav className="hidden md:flex space-x-8">
               <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors">
-                Home
+                Accueil
               </Link>
               <Link href="/Equipments" className="text-blue-600 font-medium">
-                Equipments
+                Équipements
               </Link>
               <Link href="/suppliers" className="text-gray-700 hover:text-blue-600 transition-colors">
-                Suppliers
+                Fournisseurs
               </Link>
               <Link href="/#contact" className="text-gray-700 hover:text-blue-600 transition-colors">
                 Contact
               </Link>
             </nav>
-            <Button className="bg-blue-600 hover:bg-blue-700">Get Quote</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700">Obtenir un devis</Button>
           </div>
         </div>
       </header> */}
@@ -147,11 +181,12 @@ export default function EquipmentCatalogPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Equipment Catalog
+              Catalogue d'équipements
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Browse our comprehensive range of sterilization chemicals and
-              equipment for all industry needs
+              Parcourez notre gamme complète de produits chimiques et
+              d'équipements de stérilisation pour tous les besoins de
+              l'industrie
             </p>
           </div>
         </div>
@@ -195,7 +230,7 @@ export default function EquipmentCatalogPage() {
                   </CardDescription>
                   <div className="space-y-3">
                     <p className="text-sm font-medium text-gray-800">
-                      Activator Categories:
+                      Catégories d'activateurs:
                     </p>
                     <div className="grid grid-cols-1 gap-2">
                       {sector.activators.map((activator) => (
@@ -226,7 +261,7 @@ export default function EquipmentCatalogPage() {
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
                     >
-                      Browse Equipments
+                      Parcourir les équipements
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -243,19 +278,19 @@ export default function EquipmentCatalogPage() {
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Need Help Finding the Right Equipment?
+                Besoin d'aide pour trouver le bon équipement ?
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Our Equipment specialists can help you find the perfect
-                sterilization solution for your specific needs
+                Nos spécialistes en équipement peuvent vous aider à trouver la
+                solution de stérilisation parfaite pour vos besoins spécifiques
               </p>
             </div>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                Contact a Specialist
+                Contacter un spécialiste
               </Button>
               <Button size="lg" variant="outline">
-                Download Full Catalog
+                Télécharger le catalogue complet
               </Button>
             </div>
           </div>
@@ -272,19 +307,19 @@ export default function EquipmentCatalogPage() {
                 <span className="text-xl font-bold">HygieneMax</span>
               </div>
               <p className="text-gray-400">
-                Your trusted partner for premium sterilization chemicals and
-                equipment.
+                Votre partenaire de confiance pour les produits chimiques et
+                équipements de stérilisation de première qualité.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Equipments</h3>
+              <h3 className="font-semibold mb-4">Équipements</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link
                     href="/Equipments/sterilization-chemicals"
                     className="hover:text-white transition-colors"
                   >
-                    Sterilization Chemicals
+                    Produits chimiques de stérilisation
                   </Link>
                 </li>
                 <li>
@@ -292,7 +327,7 @@ export default function EquipmentCatalogPage() {
                     href="/Equipments/cleaning-chemicals"
                     className="hover:text-white transition-colors"
                   >
-                    Cleaning Chemicals
+                    Produits chimiques de nettoyage
                   </Link>
                 </li>
                 <li>
@@ -300,7 +335,7 @@ export default function EquipmentCatalogPage() {
                     href="/Equipments/sterilization-equipment"
                     className="hover:text-white transition-colors"
                   >
-                    Sterilization Equipment
+                    Équipement de stérilisation
                   </Link>
                 </li>
                 <li>
@@ -308,17 +343,17 @@ export default function EquipmentCatalogPage() {
                     href="/Equipments"
                     className="hover:text-white transition-colors"
                   >
-                    View All Equipments
+                    Voir tous les équipements
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Company</h3>
+              <h3 className="font-semibold mb-4">Entreprise</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="/" className="hover:text-white transition-colors">
-                    Home
+                    Accueil
                   </Link>
                 </li>
                 <li>
@@ -326,7 +361,7 @@ export default function EquipmentCatalogPage() {
                     href="/suppliers"
                     className="hover:text-white transition-colors"
                   >
-                    Suppliers
+                    Fournisseurs
                   </Link>
                 </li>
                 <li>
@@ -334,7 +369,7 @@ export default function EquipmentCatalogPage() {
                     href="/#about"
                     className="hover:text-white transition-colors"
                   >
-                    About Us
+                    À propos de nous
                   </Link>
                 </li>
                 <li>
@@ -352,29 +387,29 @@ export default function EquipmentCatalogPage() {
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Help Center
+                    Centre d'aide
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Equipment Guides
+                    Guides d'équipement
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Warranty
+                    Garantie
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Returns
+                    Retours
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 HygieneMax. All rights reserved.</p>
+            <p>&copy; 2024 HygieneMax. Tous droits réservés.</p>
           </div>
         </div>
       </footer>

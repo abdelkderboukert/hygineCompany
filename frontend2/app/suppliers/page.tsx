@@ -19,167 +19,168 @@ import {
   ArrowLeft,
   Filter,
 } from "lucide-react";
+import { Header } from "@/components/Header";
 
 // const suppliers = [
 //   {
 //     id: 1,
 //     name: "CleanTech Industries",
-//     location: "Germany",
-//     specialty: "Cleaning Equipment",
+//     location: "Allemagne",
+//     specialty: "Équipement de nettoyage",
 //     since: "2018",
-//     badge: "Premium Partner",
+//     badge: "Partenaire Premium",
 //     badgeColor: "bg-blue-100 text-blue-800",
 //     description:
-//       "Leading manufacturer of industrial cleaning equipment and sanitization systems",
+//       "Fabricant leader d'équipements de nettoyage industriel et de systèmes de désinfection",
 //     products: [
-//       "Industrial Cleaners",
-//       "Sanitization Systems",
-//       "Floor Care Equipment",
+//       "Nettoyants industriels",
+//       "Systèmes de désinfection",
+//       "Équipement d'entretien des sols",
 //     ],
-//     certifications: ["ISO 9001", "CE Marking", "German Quality Standard"],
+//     certifications: ["ISO 9001", "Marquage CE", "Norme de qualité allemande"],
 //   },
 //   {
 //     id: 2,
 //     name: "SafeGuard Solutions",
-//     location: "USA",
-//     specialty: "PPE & Sanitizers",
+//     location: "États-Unis",
+//     specialty: "EPI et désinfectants",
 //     since: "2020",
-//     badge: "Certified Partner",
+//     badge: "Partenaire Certifié",
 //     badgeColor: "bg-green-100 text-green-800",
 //     description:
-//       "Specialized in protective equipment and personal hygiene products",
-//     products: ["Face Masks", "Hand Sanitizers", "Protective Gloves"],
-//     certifications: ["FDA Approved", "NIOSH Certified", "ISO 13485"],
+//       "Spécialisé dans les équipements de protection individuelle et les produits d'hygiène personnelle",
+//     products: ["Masques faciaux", "Désinfectants pour les mains", "Gants de protection"],
+//     certifications: ["Approuvé par la FDA", "Certifié NIOSH", "ISO 13485"],
 //   },
 //   {
 //     id: 3,
 //     name: "EcoClean Manufacturing",
 //     location: "Canada",
-//     specialty: "Eco Products",
+//     specialty: "Produits écologiques",
 //     since: "2019",
-//     badge: "Eco Partner",
+//     badge: "Partenaire Écologique",
 //     badgeColor: "bg-purple-100 text-purple-800",
 //     description:
-//       "Sustainable and eco-friendly hygiene products and biodegradable solutions",
+//       "Produits d'hygiène durables et respectueux de l'environnement et solutions biodégradables",
 //     products: [
-//       "Biodegradable Cleaners",
-//       "Eco Paper Products",
-//       "Green Sanitizers",
+//       "Nettoyants biodégradables",
+//       "Produits en papier écologiques",
+//       "Désinfectants verts",
 //     ],
 //     certifications: ["Green Seal", "EcoLogo", "USDA BioPreferred"],
 //   },
 //   {
 //     id: 4,
 //     name: "MedHygiene Corp",
-//     location: "Switzerland",
-//     specialty: "Medical Hygiene",
+//     location: "Suisse",
+//     specialty: "Hygiène médicale",
 //     since: "2017",
-//     badge: "Medical Grade",
+//     badge: "Qualité Médicale",
 //     badgeColor: "bg-red-100 text-red-800",
-//     description: "Medical-grade disinfectants and hospital hygiene solutions",
+//     description: "Désinfectants de qualité médicale et solutions d'hygiène hospitalière",
 //     products: [
-//       "Hospital Disinfectants",
-//       "Surgical Sanitizers",
-//       "Medical Equipment Cleaners",
+//       "Désinfectants hospitaliers",
+//       "Désinfectants chirurgicaux",
+//       "Nettoyants pour équipements médicaux",
 //     ],
-//     certifications: ["FDA Approved", "WHO Standards", "Swiss Medic"],
+//     certifications: ["Approuvé par la FDA", "Normes OMS", "Swiss Medic"],
 //   },
 //   {
 //     id: 5,
 //     name: "PaperPlus Industries",
-//     location: "Finland",
-//     specialty: "Paper Products",
+//     location: "Finlande",
+//     specialty: "Produits en papier",
 //     since: "2016",
-//     badge: "Volume Partner",
+//     badge: "Partenaire Volume",
 //     badgeColor: "bg-yellow-100 text-yellow-800",
 //     description:
-//       "High-quality paper products and dispensing systems for commercial use",
-//     products: ["Toilet Paper", "Paper Towels", "Dispensing Systems"],
-//     certifications: ["FSC Certified", "PEFC", "EU Ecolabel"],
+//       "Produits en papier de haute qualité et systèmes de distribution pour usage commercial",
+//     products: ["Papier toilette", "Essuie-tout", "Systèmes de distribution"],
+//     certifications: ["Certifié FSC", "PEFC", "Écolabel européen"],
 //   },
 //   {
 //     id: 6,
 //     name: "WasteTech Solutions",
-//     location: "Netherlands",
-//     specialty: "Waste Management",
+//     location: "Pays-Bas",
+//     specialty: "Gestion des déchets",
 //     since: "2021",
-//     badge: "Innovation Partner",
+//     badge: "Partenaire Innovation",
 //     badgeColor: "bg-gray-100 text-gray-800",
-//     description: "Advanced waste management systems and recycling solutions",
-//     products: ["Smart Bins", "Recycling Systems", "Waste Compactors"],
-//     certifications: ["ISO 14001", "WEEE Compliant", "Dutch Quality Mark"],
+//     description: "Systèmes avancés de gestion des déchets et solutions de recyclage",
+//     products: ["Poubelles intelligentes", "Systèmes de recyclage", "Compacteurs de déchets"],
+//     certifications: ["ISO 14001", "Conforme DEEE", "Marque de qualité néerlandaise"],
 //   },
 //   {
 //     id: 7,
 //     name: "AquaPure Systems",
-//     location: "Japan",
-//     specialty: "Water Treatment",
+//     location: "Japon",
+//     specialty: "Traitement de l'eau",
 //     since: "2015",
-//     badge: "Technology Partner",
+//     badge: "Partenaire Technologique",
 //     badgeColor: "bg-cyan-100 text-cyan-800",
 //     description:
-//       "Advanced water purification and treatment systems for hygiene applications",
-//     products: ["Water Purifiers", "UV Sterilizers", "Filtration Systems"],
-//     certifications: ["JIS Standards", "NSF Certified", "ISO 9001"],
+//       "Systèmes avancés de purification et de traitement de l'eau pour les applications d'hygiène",
+//     products: ["Purificateurs d'eau", "Stérilisateurs UV", "Systèmes de filtration"],
+//     certifications: ["Normes JIS", "Certifié NSF", "ISO 9001"],
 //   },
 //   {
 //     id: 8,
 //     name: "ChemSafe Industries",
-//     location: "United Kingdom",
-//     specialty: "Chemical Solutions",
+//     location: "Royaume-Uni",
+//     specialty: "Solutions chimiques",
 //     since: "2014",
-//     badge: "Premium Partner",
+//     badge: "Partenaire Premium",
 //     badgeColor: "bg-blue-100 text-blue-800",
 //     description:
-//       "Professional-grade chemical solutions and industrial disinfectants",
+//       "Solutions chimiques de qualité professionnelle et désinfectants industriels",
 //     products: [
-//       "Industrial Disinfectants",
-//       "Chemical Cleaners",
-//       "Specialty Chemicals",
+//       "Désinfectants industriels",
+//       "Nettoyants chimiques",
+//       "Produits chimiques spécialisés",
 //     ],
-//     certifications: ["REACH Compliant", "CLP Regulation", "British Standards"],
+//     certifications: ["Conforme REACH", "Règlement CLP", "Normes britanniques"],
 //   },
 //   {
 //     id: 9,
 //     name: "TextileCare Pro",
-//     location: "Italy",
-//     specialty: "Textile Hygiene",
+//     location: "Italie",
+//     specialty: "Hygiène textile",
 //     since: "2019",
-//     badge: "Specialized Partner",
+//     badge: "Partenaire Spécialisé",
 //     badgeColor: "bg-indigo-100 text-indigo-800",
 //     description:
-//       "Specialized in textile hygiene products and laundry solutions",
-//     products: ["Laundry Detergents", "Fabric Sanitizers", "Stain Removers"],
+//       "Spécialisé dans les produits d'hygiène textile et les solutions de blanchisserie",
+//     products: ["Détergents pour le linge", "Désinfectants pour tissus", "Détachants"],
 //     certifications: [
 //       "OEKO-TEX",
-//       "EU Ecolabel",
-//       "Italian Quality Certification",
+//       "Écolabel européen",
+//       "Certification de qualité italienne",
 //     ],
 //   },
 //   {
 //     id: 10,
 //     name: "AirFresh Technologies",
-//     location: "South Korea",
-//     specialty: "Air Purification",
+//     location: "Corée du Sud",
+//     specialty: "Purification de l'air",
 //     since: "2020",
-//     badge: "Innovation Partner",
+//     badge: "Partenaire Innovation",
 //     badgeColor: "bg-gray-100 text-gray-800",
-//     description: "Cutting-edge air purification and odor control systems",
-//     products: ["Air Purifiers", "HEPA Filters", "Odor Control Systems"],
-//     certifications: ["HEPA Certified", "Energy Star", "Korean Standards"],
+//     description: "Systèmes de purification de l'air et de contrôle des odeurs de pointe",
+//     products: ["Purificateurs d'air", "Filtres HEPA", "Systèmes de contrôle des odeurs"],
+//     certifications: ["Certifié HEPA", "Energy Star", "Normes coréennes"],
 //   },
 //   {
 //     id: 11,
 //     name: "FloorCare Specialists",
-//     location: "Australia",
-//     specialty: "Floor Care",
+//     location: "Australie",
+//     specialty: "Entretien des sols",
 //     since: "2016",
-//     badge: "Certified Partner",
+//     badge: "Partenaire Certifié",
 //     badgeColor: "bg-green-100 text-green-800",
-//     description: "Professional floor care products and maintenance equipment",
-//     products: ["Floor Cleaners", "Polishing Systems", "Maintenance Equipment"],
+//     description: "Produits professionnels d'entretien des sols et équipements de maintenance",
+//     products: ["Nettoyants pour sols", "Systèmes de polissage", "Équipement de maintenance"],
 //     certifications: [
-//       "Australian Standards",
+//       "Normes australiennes",
 //       "Green Building Council",
 //       "ISO 9001",
 //     ],
@@ -188,51 +189,51 @@ import {
 //     id: 12,
 //     name: "BioSafe Solutions",
 //     location: "France",
-//     specialty: "Biological Safety",
+//     specialty: "Sécurité biologique",
 //     since: "2018",
-//     badge: "Medical Grade",
+//     badge: "Qualité Médicale",
 //     badgeColor: "bg-red-100 text-red-800",
-//     description: "Biological safety products and laboratory hygiene solutions",
-//     products: ["Biocides", "Lab Disinfectants", "Safety Equipment"],
-//     certifications: ["ANSM Approved", "EU BPR", "French Standards"],
+//     description: "Produits de sécurité biologique et solutions d'hygiène de laboratoire",
+//     products: ["Biocides", "Désinfectants de laboratoire", "Équipement de sécurité"],
+//     certifications: ["Approuvé par l'ANSM", "Règlement UE BPR", "Normes françaises"],
 //   },
 //   {
 //     id: 13,
 //     name: "SmartDispense Tech",
-//     location: "Sweden",
-//     specialty: "Dispensing Systems",
+//     location: "Suède",
+//     specialty: "Systèmes de distribution",
 //     since: "2017",
-//     badge: "Technology Partner",
+//     badge: "Partenaire Technologique",
 //     badgeColor: "bg-cyan-100 text-cyan-800",
-//     description: "Smart dispensing systems and IoT-enabled hygiene solutions",
-//     products: ["Smart Dispensers", "IoT Sensors", "Automated Systems"],
-//     certifications: ["CE Marking", "Nordic Swan", "Swedish Standards"],
+//     description: "Systèmes de distribution intelligents et solutions d'hygiène compatibles IoT",
+//     products: ["Distributeurs intelligents", "Capteurs IoT", "Systèmes automatisés"],
+//     certifications: ["Marquage CE", "Cygne nordique", "Normes suédoises"],
 //   },
 //   {
 //     id: 14,
 //     name: "GreenClean Innovations",
-//     location: "Denmark",
-//     specialty: "Green Technology",
+//     location: "Danemark",
+//     specialty: "Technologie verte",
 //     since: "2021",
-//     badge: "Eco Partner",
+//     badge: "Partenaire Écologique",
 //     badgeColor: "bg-purple-100 text-purple-800",
 //     description:
-//       "Innovative green cleaning technologies and sustainable solutions",
-//     products: ["Green Cleaners", "Sustainable Packaging", "Bio-based Products"],
-//     certifications: ["Nordic Ecolabel", "Cradle to Cradle", "Danish Standards"],
+//       "Technologies de nettoyage vertes innovantes et solutions durables",
+//     products: ["Nettoyants verts", "Emballages durables", "Produits biosourcés"],
+//     certifications: ["Écolabel nordique", "Cradle to Cradle", "Normes danoises"],
 //   },
 //   {
 //     id: 15,
 //     name: "IndustrialHygiene Corp",
-//     location: "Brazil",
-//     specialty: "Industrial Solutions",
+//     location: "Brésil",
+//     specialty: "Solutions industrielles",
 //     since: "2015",
-//     badge: "Volume Partner",
+//     badge: "Partenaire Volume",
 //     badgeColor: "bg-yellow-100 text-yellow-800",
 //     description:
-//       "Large-scale industrial hygiene solutions for manufacturing facilities",
-//     products: ["Industrial Cleaners", "Safety Equipment", "Bulk Solutions"],
-//     certifications: ["ANVISA Approved", "Brazilian Standards", "ISO 45001"],
+//       "Solutions d'hygiène industrielle à grande échelle pour les installations de fabrication",
+//     products: ["Nettoyants industriels", "Équipement de sécurité", "Solutions en vrac"],
+//     certifications: ["Approuvé par l'ANVISA", "Normes brésiliennes", "ISO 45001"],
 //   },
 // ];
 
@@ -240,7 +241,7 @@ export default function SuppliersPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
+      {/* <header className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-2">
@@ -254,19 +255,19 @@ export default function SuppliersPage() {
                 href="/"
                 className="text-gray-700 hover:text-blue-600 transition-colors"
               >
-                Home
+                Accueil
               </Link>
               <Link
                 href="/#products"
                 className="text-gray-700 hover:text-blue-600 transition-colors"
               >
-                Products
+                Produits
               </Link>
               <Link
                 href="/#about"
                 className="text-gray-700 hover:text-blue-600 transition-colors"
               >
-                About
+                À propos
               </Link>
               <Link
                 href="/#contact"
@@ -275,10 +276,11 @@ export default function SuppliersPage() {
                 Contact
               </Link>
             </nav>
-            <Button className="bg-blue-600 hover:bg-blue-700">Get Quote</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700">Obtenir un devis</Button>
           </div>
         </div>
-      </header>
+      </header> */}
+      <Header />
 
       {/* Page Header */}
       <section className="bg-gradient-to-br from-blue-50 to-green-50 py-16">
@@ -289,37 +291,38 @@ export default function SuppliersPage() {
               className="flex items-center text-blue-600 hover:text-blue-700 transition-colors"
             >
               <ArrowLeft className="h-5 w-5 mr-2" />
-              Back to Home
+              Retour à l'accueil
             </Link>
           </div>
           <div className="text-center">
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Our Global Suppliers
+              Nos fournisseurs mondiaux
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Meet our trusted network of suppliers from around the world,
-              providing the highest quality hygiene products and equipment
+              Découvrez notre réseau de fournisseurs de confiance du monde
+              entier, fournissant des produits et équipements d'hygiène de la
+              plus haute qualité
             </p>
 
             {/* Stats */}
             <div className="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
               <div className="bg-white rounded-lg p-6 shadow-md">
                 <div className="text-3xl font-bold text-blue-600 mb-2">15+</div>
-                <div className="text-gray-600">Suppliers Shown</div>
+                <div className="text-gray-600">Fournisseurs affichés</div>
               </div>
               <div className="bg-white rounded-lg p-6 shadow-md">
                 <div className="text-3xl font-bold text-green-600 mb-2">12</div>
-                <div className="text-gray-600">Countries</div>
+                <div className="text-gray-600">Pays</div>
               </div>
               <div className="bg-white rounded-lg p-6 shadow-md">
                 <div className="text-3xl font-bold text-purple-600 mb-2">8</div>
-                <div className="text-gray-600">Specialties</div>
+                <div className="text-gray-600">Spécialités</div>
               </div>
               <div className="bg-white rounded-lg p-6 shadow-md">
                 <div className="text-3xl font-bold text-orange-600 mb-2">
                   99.8%
                 </div>
-                <div className="text-gray-600">Quality Rating</div>
+                <div className="text-gray-600">Note de qualité</div>
               </div>
             </div>
           </div>
@@ -334,23 +337,23 @@ export default function SuppliersPage() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <Input
                 type="text"
-                placeholder="Search suppliers..."
+                placeholder="Rechercher des fournisseurs..."
                 className="pl-10 pr-4 py-2 w-full"
               />
             </div>
             <div className="flex gap-2 flex-wrap">
               <Button variant="outline" size="sm">
                 <Filter className="h-4 w-4 mr-2" />
-                All Suppliers
+                Tous les fournisseurs
               </Button>
               <Button variant="outline" size="sm">
-                Premium Partners
+                Partenaires Premium
               </Button>
               <Button variant="outline" size="sm">
-                Eco Partners
+                Partenaires Écologiques
               </Button>
               <Button variant="outline" size="sm">
-                Medical Grade
+                Qualité Médicale
               </Button>
             </div>
           </div>
@@ -386,7 +389,7 @@ export default function SuppliersPage() {
                     </div>
                     <div className="flex items-center text-sm text-gray-600">
                       <Calendar className="h-4 w-4 mr-2 text-gray-400" />
-                      <span>Partner since {supplier.since}</span>
+                      <span>Partenaire depuis {supplier.since}</span>
                     </div>
                     <div className="flex items-center text-sm text-gray-600">
                       <Award className="h-4 w-4 mr-2 text-gray-400" />
@@ -395,7 +398,7 @@ export default function SuppliersPage() {
                   </div>
 
                   <div className="mb-4">
-                    <h4 className="font-semibold text-sm text-gray-900 mb-2">Key Products:</h4>
+                    <h4 className="font-semibold text-sm text-gray-900 mb-2">Produits clés:</h4>
                     <div className="flex flex-wrap gap-1">
                       {supplier.products.slice(0, 3).map((product, index) => (
                         <Badge key={index} variant="secondary" className="text-xs">
@@ -415,7 +418,7 @@ export default function SuppliersPage() {
                       ))}
                       {supplier.certifications.length > 2 && (
                         <Badge variant="outline" className="text-xs">
-                          +{supplier.certifications.length - 2} more
+                          +{supplier.certifications.length - 2} de plus
                         </Badge>
                       )}
                     </div>
@@ -425,7 +428,7 @@ export default function SuppliersPage() {
                     variant="outline"
                     className="w-full group-hover:bg-blue-600 group-hover:text-white transition-colors"
                   >
-                    View Details
+                    Voir les détails
                   </Button>
                 </CardContent>
               </Card>
@@ -435,7 +438,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/heute-removebg-preview.png"
-                    alt="Supplier 1 Logo"
+                    alt="Logo du fournisseur 1"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -448,20 +451,20 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Leading manufacturer of industrial cleaning equipment and
-                  sanitization systems
+                  Fabricant leader d'équipements de nettoyage industriel et de
+                  systèmes de désinfection
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Germany</span>
+                    <span>Localisation:</span>
+                    <span>Allemagne</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>Cleaning Equipment</span>
+                    <span>Spécialité:</span>
+                    <span>Équipement de nettoyage</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2018</span>
                   </div>
                 </div>
@@ -473,7 +476,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Lechler_Company-Logo-removebg-preview.png?height=80&width=120"
-                    alt="Supplier 2 Logo"
+                    alt="Logo du fournisseur 2"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -486,19 +489,19 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Manufacturing of precision spray nozzles
+                  Fabrication de buses de pulvérisation de précision
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Germany</span>
+                    <span>Localisation:</span>
+                    <span>Allemagne</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>spray technology</span>
+                    <span>Spécialité:</span>
+                    <span>Technologie de pulvérisation</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2020</span>
                   </div>
                 </div>
@@ -510,7 +513,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Logo_CFSBrands-Jofel-2023Curvas-01.webp?height=80&width=120"
-                    alt="Supplier 3 Logo"
+                    alt="Logo du fournisseur 3"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -523,20 +526,20 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Production, marketing, and distribution of professional
-                  cleaning and hygiene systems and equipment
+                  Production, commercialisation et distribution de systèmes et
+                  équipements de nettoyage et d'hygiène professionnels
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
+                    <span>Localisation:</span>
                     <span>France</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>hygiene systems and equipment</span>
+                    <span>Spécialité:</span>
+                    <span>systèmes et équipements d'hygiène</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2019</span>
                   </div>
                 </div>
@@ -548,7 +551,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Logo_DELABIE.png?height=80&width=120"
-                    alt="Supplier 4 Logo"
+                    alt="Logo du fournisseur 4"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -561,20 +564,20 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  They are known for durable, ergonomic, safe, and hygienic
-                  products designed for intensive use
+                  Ils sont connus pour leurs produits durables, ergonomiques,
+                  sûrs et hygiéniques conçus pour un usage intensif
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
+                    <span>Localisation:</span>
                     <span>France</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>sanitary equipment</span>
+                    <span>Spécialité:</span>
+                    <span>équipements sanitaires</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2017</span>
                   </div>
                 </div>
@@ -586,7 +589,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/ramex.png?height=80&width=120"
-                    alt="Supplier 5 Logo"
+                    alt="Logo du fournisseur 5"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -599,23 +602,23 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Manufacturing of professional cleaning equipment and
-                  accessories
+                  Fabrication d'équipements et accessoires de nettoyage
+                  professionnels
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Italy</span>
+                    <span>Localisation:</span>
+                    <span>Italie</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
+                    <span>Spécialité:</span>
                     <span>
-                      Manufacturing of professional cleaning equipment and
-                      accessories
+                      Fabrication d'équipements et accessoires de nettoyage
+                      professionnels
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2016</span>
                   </div>
                 </div>
@@ -627,7 +630,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Tork-Logo-700x394.webp?height=80&width=120"
-                    alt="Supplier 6 Logo"
+                    alt="Logo du fournisseur 6"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -640,19 +643,20 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Advanced waste management systems and recycling solutions
+                  Systèmes avancés de gestion des déchets et solutions de
+                  recyclage
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Sweden</span>
+                    <span>Localisation:</span>
+                    <span>Suède</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>Professional hygiene solutions and products</span>
+                    <span>Spécialité:</span>
+                    <span>Solutions et produits d'hygiène professionnels</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2021</span>
                   </div>
                 </div>
@@ -663,7 +667,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/heute-removebg-preview.png"
-                    alt="Supplier 1 Logo"
+                    alt="Logo du fournisseur 1"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -676,20 +680,20 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Leading manufacturer of industrial cleaning equipment and
-                  sanitization systems
+                  Fabricant leader d'équipements de nettoyage industriel et de
+                  systèmes de désinfection
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Germany</span>
+                    <span>Localisation:</span>
+                    <span>Allemagne</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>Cleaning Equipment</span>
+                    <span>Spécialité:</span>
+                    <span>Équipement de nettoyage</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2018</span>
                   </div>
                 </div>
@@ -701,7 +705,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Lechler_Company-Logo-removebg-preview.png?height=80&width=120"
-                    alt="Supplier 2 Logo"
+                    alt="Logo du fournisseur 2"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -714,19 +718,19 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Manufacturing of precision spray nozzles
+                  Fabrication de buses de pulvérisation de précision
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Germany</span>
+                    <span>Localisation:</span>
+                    <span>Allemagne</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>spray technology</span>
+                    <span>Spécialité:</span>
+                    <span>technologie de pulvérisation</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2020</span>
                   </div>
                 </div>
@@ -738,7 +742,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Logo_CFSBrands-Jofel-2023Curvas-01.webp?height=80&width=120"
-                    alt="Supplier 3 Logo"
+                    alt="Logo du fournisseur 3"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -751,20 +755,20 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Production, marketing, and distribution of professional
-                  cleaning and hygiene systems and equipment
+                  Production, commercialisation et distribution de systèmes et
+                  équipements de nettoyage et d'hygiène professionnels
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
+                    <span>Localisation:</span>
                     <span>France</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>hygiene systems and equipment</span>
+                    <span>Spécialité:</span>
+                    <span>systèmes et équipements d'hygiène</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2019</span>
                   </div>
                 </div>
@@ -776,7 +780,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Logo_DELABIE.png?height=80&width=120"
-                    alt="Supplier 4 Logo"
+                    alt="Logo du fournisseur 4"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -789,20 +793,20 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  They are known for durable, ergonomic, safe, and hygienic
-                  products designed for intensive use
+                  Ils sont connus pour leurs produits durables, ergonomiques,
+                  sûrs et hygiéniques conçus pour un usage intensif
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
+                    <span>Localisation:</span>
                     <span>France</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>sanitary equipment</span>
+                    <span>Spécialité:</span>
+                    <span>équipements sanitaires</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2017</span>
                   </div>
                 </div>
@@ -814,7 +818,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/ramex.png?height=80&width=120"
-                    alt="Supplier 5 Logo"
+                    alt="Logo du fournisseur 5"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -827,23 +831,23 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Manufacturing of professional cleaning equipment and
-                  accessories
+                  Fabrication d'équipements et accessoires de nettoyage
+                  professionnels
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Italy</span>
+                    <span>Localisation:</span>
+                    <span>Italie</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
+                    <span>Spécialité:</span>
                     <span>
-                      Manufacturing of professional cleaning equipment and
-                      accessories
+                      Fabrication d'équipements et accessoires de nettoyage
+                      professionnels
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2016</span>
                   </div>
                 </div>
@@ -855,7 +859,7 @@ export default function SuppliersPage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Tork-Logo-700x394.webp?height=80&width=120"
-                    alt="Supplier 6 Logo"
+                    alt="Logo du fournisseur 6"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -868,19 +872,20 @@ export default function SuppliersPage() {
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Advanced waste management systems and recycling solutions
+                  Systèmes avancés de gestion des déchets et solutions de
+                  recyclage
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Sweden</span>
+                    <span>Localisation:</span>
+                    <span>Suède</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>Professional hygiene solutions and products</span>
+                    <span>Spécialité:</span>
+                    <span>Solutions et produits d'hygiène professionnels</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2021</span>
                   </div>
                 </div>
@@ -894,11 +899,12 @@ export default function SuppliersPage() {
       <section className="py-16 bg-blue-600">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold text-white mb-4">
-            Interested in Becoming a Supplier?
+            Intéressé à devenir fournisseur ?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Join our global network of trusted suppliers and help us deliver
-            quality hygiene solutions worldwide
+            Rejoignez notre réseau mondial de fournisseurs de confiance et
+            aidez-nous à fournir des solutions d'hygiène de qualité dans le
+            monde entier
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
@@ -906,14 +912,14 @@ export default function SuppliersPage() {
               variant="secondary"
               className="bg-white text-blue-600 hover:bg-gray-100"
             >
-              Apply as Supplier
+              Postuler en tant que fournisseur
             </Button>
             <Button
               size="lg"
               variant="outline"
               className="border-white text-white hover:bg-white hover:text-blue-600"
             >
-              Download Requirements
+              Télécharger les exigences
             </Button>
           </div>
         </div>
@@ -929,40 +935,41 @@ export default function SuppliersPage() {
                 <span className="text-xl font-bold">HygieneMax</span>
               </div>
               <p className="text-gray-400">
-                Your trusted partner for premium hygiene products and equipment.
+                Votre partenaire de confiance pour les produits et équipements
+                d'hygiène de première qualité.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Products</h3>
+              <h3 className="font-semibold mb-4">Produits</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Hand Sanitizers
+                    Désinfectants pour les mains
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Cleaning Equipment
+                    Équipement de nettoyage
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Protective Gear
+                    Équipement de protection
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Disinfectants
+                    Désinfectants
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Company</h3>
+              <h3 className="font-semibold mb-4">Entreprise</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="/" className="hover:text-white transition-colors">
-                    Home
+                    Accueil
                   </Link>
                 </li>
                 <li>
@@ -970,17 +977,17 @@ export default function SuppliersPage() {
                     href="/suppliers"
                     className="hover:text-white transition-colors"
                   >
-                    Suppliers
+                    Fournisseurs
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Careers
+                    Carrières
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    News
+                    Actualités
                   </Link>
                 </li>
               </ul>
@@ -990,29 +997,29 @@ export default function SuppliersPage() {
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Help Center
+                    Centre d'aide
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Product Guides
+                    Guides produits
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Warranty
+                    Garantie
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Returns
+                    Retours
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 HygieneMax. All rights reserved.</p>
+            <p>&copy; 2024 HygieneMax. Tous droits réservés.</p>
           </div>
         </div>
       </footer>

@@ -15,11 +15,11 @@ import { Header } from "@/components/Header";
 const productSectors = [
   {
     id: "pSVKtoCNmJocgpPTYmYa",
-    name: "Clean-in-Place / Sterilize-in-Place",
+    name: "Nettoyage en Place / Stérilisation en Place",
     description:
-      "Professional chemical solutions for sterilization across various industries",
+      "Solutions chimiques professionnelles pour la stérilisation dans diverses industries",
     image: "/placeholder.svg?height=300&width=400",
-    activators: ["disinfectants", "sanitizers", "sterilants"],
+    activators: ["désinfectants", "désinfectants pour les mains", "stérilisants"],
     theme: {
       gradient: "from-blue-500 to-blue-700",
       bgColor: "bg-blue-50",
@@ -30,7 +30,7 @@ const productSectors = [
   },
   {
     id: "G2bxJGI8T8AibUtZtwkD",
-    name: "Clean-Out-of-Place (COP)",
+    name: "Nettoyage Hors Place (COP)",
     description:
       "Nettoyage des équipements et composants qui ne peuvent pas être nettoyés sur place, nécessitant un démontage et un nettoyage dans une zone dédiée.",
     image: "/placeholder.svg?height=300&width=400",
@@ -100,7 +100,7 @@ const productSectors = [
     description:
       "Relatif à l'agriculture, l'ensemble des activités humaines qui transforment le milieu naturel pour produire des ressources végétales (cultures) et animales (élevage) utiles aux besoins de l'homme (alimentation, fibres, énergie).",
     image: "/placeholder.svg?height=300&width=400",
-    activators: ["cultures", "elevage", "machinisme-agricole"],
+    activators: ["cultures", "élevage", "machinisme-agricole"],
     theme: {
       gradient: "from-red-500 to-red-700",
       bgColor: "bg-red-50",
@@ -124,19 +124,19 @@ export default function ProductCatalogPage() {
             </div>
             <nav className="hidden md:flex space-x-8">
               <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors">
-                Home
+                Accueil
               </Link>
               <Link href="/products" className="text-blue-600 font-medium">
-                Products
+                Produits
               </Link>
               <Link href="/suppliers" className="text-gray-700 hover:text-blue-600 transition-colors">
-                Suppliers
+                Fournisseurs
               </Link>
               <Link href="/#contact" className="text-gray-700 hover:text-blue-600 transition-colors">
                 Contact
               </Link>
             </nav>
-            <Button className="bg-blue-600 hover:bg-blue-700">Get Quote</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700">Obtenir un devis</Button>
           </div>
         </div>
       </header> */}
@@ -147,11 +147,12 @@ export default function ProductCatalogPage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
-              Product Catalog
+              Catalogue de produits
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Browse our comprehensive range of sterilization chemicals and
-              equipment for all industry needs
+              Parcourez notre gamme complète de produits chimiques et
+              d'équipements de stérilisation pour tous les besoins de
+              l'industrie
             </p>
           </div>
         </div>
@@ -195,7 +196,7 @@ export default function ProductCatalogPage() {
                   </CardDescription>
                   <div className="space-y-3">
                     <p className="text-sm font-medium text-gray-800">
-                      Activator Categories:
+                      Catégories d'activateurs:
                     </p>
                     <div className="grid grid-cols-1 gap-2">
                       {sector.activators.map((activator) => (
@@ -226,7 +227,7 @@ export default function ProductCatalogPage() {
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
                     >
-                      Browse Products
+                      Parcourir les produits
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
                   </Link>
@@ -243,19 +244,19 @@ export default function ProductCatalogPage() {
           <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Need Help Finding the Right Product?
+                Besoin d'aide pour trouver le bon produit ?
               </h2>
               <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-                Our product specialists can help you find the perfect
-                sterilization solution for your specific needs
+                Nos spécialistes produits peuvent vous aider à trouver la
+                solution de stérilisation parfaite pour vos besoins spécifiques
               </p>
             </div>
             <div className="flex flex-col md:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                Contact a Specialist
+                Contacter un spécialiste
               </Button>
               <Button size="lg" variant="outline">
-                Download Full Catalog
+                Télécharger le catalogue complet
               </Button>
             </div>
           </div>
@@ -272,19 +273,19 @@ export default function ProductCatalogPage() {
                 <span className="text-xl font-bold">HygieneMax</span>
               </div>
               <p className="text-gray-400">
-                Your trusted partner for premium sterilization chemicals and
-                equipment.
+                Votre partenaire de confiance pour les produits chimiques et
+                équipements de stérilisation de première qualité.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Products</h3>
+              <h3 className="font-semibold mb-4">Produits</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link
                     href="/products/sterilization-chemicals"
                     className="hover:text-white transition-colors"
                   >
-                    Sterilization Chemicals
+                    Produits chimiques de stérilisation
                   </Link>
                 </li>
                 <li>
@@ -292,7 +293,7 @@ export default function ProductCatalogPage() {
                     href="/products/cleaning-chemicals"
                     className="hover:text-white transition-colors"
                   >
-                    Cleaning Chemicals
+                    Produits chimiques de nettoyage
                   </Link>
                 </li>
                 <li>
@@ -300,7 +301,7 @@ export default function ProductCatalogPage() {
                     href="/products/sterilization-equipment"
                     className="hover:text-white transition-colors"
                   >
-                    Sterilization Equipment
+                    Équipement de stérilisation
                   </Link>
                 </li>
                 <li>
@@ -308,17 +309,17 @@ export default function ProductCatalogPage() {
                     href="/products"
                     className="hover:text-white transition-colors"
                   >
-                    View All Products
+                    Voir tous les produits
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Company</h3>
+              <h3 className="font-semibold mb-4">Entreprise</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="/" className="hover:text-white transition-colors">
-                    Home
+                    Accueil
                   </Link>
                 </li>
                 <li>
@@ -326,7 +327,7 @@ export default function ProductCatalogPage() {
                     href="/suppliers"
                     className="hover:text-white transition-colors"
                   >
-                    Suppliers
+                    Fournisseurs
                   </Link>
                 </li>
                 <li>
@@ -334,7 +335,7 @@ export default function ProductCatalogPage() {
                     href="/#about"
                     className="hover:text-white transition-colors"
                   >
-                    About Us
+                    À propos de nous
                   </Link>
                 </li>
                 <li>
@@ -352,29 +353,29 @@ export default function ProductCatalogPage() {
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Help Center
+                    Centre d'aide
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Product Guides
+                    Guides produits
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Warranty
+                    Garantie
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Returns
+                    Retours
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 HygieneMax. All rights reserved.</p>
+            <p>&copy; 2024 HygieneMax. Tous droits réservés.</p>
           </div>
         </div>
       </footer>

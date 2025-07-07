@@ -66,9 +66,9 @@ export default function HomePage() {
 
     const data = await response.json();
     if (response.ok) {
-      alert("Email sent successfully!");
+      alert("Email sent successfully!"); // Email envoyé avec succès !
     } else {
-      alert("Error sending email: " + data.error);
+      alert("Error sending email: " + data.error); // Erreur lors de l'envoi de l'email :
     }
   };
   return (
@@ -83,19 +83,19 @@ export default function HomePage() {
             </div>
             <nav className="hidden md:flex space-x-8">
               <Link href="#home" className="text-gray-700 hover:text-blue-600 transition-colors">
-                Home
+                Accueil
               </Link>
               <Link href="#products" className="text-gray-700 hover:text-blue-600 transition-colors">
-                Products
+                Produits
               </Link>
               <Link href="#about" className="text-gray-700 hover:text-blue-600 transition-colors">
-                About
+                À propos
               </Link>
               <Link href="#contact" className="text-gray-700 hover:text-blue-600 transition-colors">
                 Contact
               </Link>
             </nav>
-            <Button className="bg-blue-600 hover:bg-blue-700">Get Quote</Button>
+            <Button className="bg-blue-600 hover:bg-blue-700">Obtenir un devis</Button>
           </div>
         </div>
       </header> */}
@@ -109,29 +109,30 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <Badge className="mb-4 bg-blue-100 text-blue-800 hover:bg-blue-100">
-                Professional Hygiene Solutions
+                Solutions d'hygiène professionnelles
               </Badge>
               <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 mb-6">
-                Premium Hygiene Products & Equipment
+                Produits et équipements d'hygiène de première qualité
               </h1>
               <p className="text-xl text-gray-600 mb-8">
-                Providing businesses and institutions with top-quality hygiene
-                products and equipment. From sanitizers to industrial cleaning
-                equipment, we ensure the highest standards of cleanliness.
+                Fournir aux entreprises et institutions des produits et équipements
+                d'hygiène de qualité supérieure. Des désinfectants aux équipements
+                de nettoyage industriels, nous assurons les normes de propreté les
+                plus élevées.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                  <Link href="#products">View Products</Link>
+                  <Link href="#products">Voir les produits</Link>
                 </Button>
                 <Button size="lg" variant="outline">
-                  Contact Sales
+                  Contacter le service commercial
                 </Button>
               </div>
             </div>
             <div className="relative">
               <Image
                 src="/main2.jpg"
-                alt="Hygiene products and equipment"
+                alt="Produits et équipements d'hygiène"
                 width={600}
                 height={500}
                 className="rounded-lg shadow-2xl"
@@ -146,47 +147,47 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Why Choose Hygindust?
+              Pourquoi choisir Hygindust ?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We provide comprehensive hygiene solutions with unmatched quality
-              and service
+              Nous fournissons des solutions d'hygiène complètes avec une qualité
+              et un service inégalés
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="text-center border-0 shadow-lg">
               <CardHeader>
                 <Shield className="h-12 w-12 text-blue-600 mx-auto mb-4" />
-                <CardTitle>Certified Quality</CardTitle>
+                <CardTitle>Qualité Certifiée</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-base">
-                  All our products meet international hygiene and safety
-                  standards with proper certifications
+                  Tous nos produits respectent les normes internationales
+                  d'hygiène et de sécurité avec les certifications appropriées
                 </CardDescription>
               </CardContent>
             </Card>
             <Card className="text-center border-0 shadow-lg">
               <CardHeader>
                 <Truck className="h-12 w-12 text-green-600 mx-auto mb-4" />
-                <CardTitle>Fast Delivery</CardTitle>
+                <CardTitle>Livraison Rapide</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-base">
-                  Quick and reliable delivery service to ensure your hygiene
-                  supplies never run out
+                  Service de livraison rapide et fiable pour s'assurer que vos
+                  fournitures d'hygiène ne manquent jamais
                 </CardDescription>
               </CardContent>
             </Card>
             <Card className="text-center border-0 shadow-lg">
               <CardHeader>
                 <Award className="h-12 w-12 text-purple-600 mx-auto mb-4" />
-                <CardTitle>Expert Support</CardTitle>
+                <CardTitle>Support Expert</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-base">
-                  Professional consultation and ongoing support for all your
-                  hygiene equipment needs
+                  Consultation professionnelle et support continu pour tous vos
+                  besoins en équipement d'hygiène
                 </CardDescription>
               </CardContent>
             </Card>
@@ -199,11 +200,11 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Our Product Categories
+              Nos catégories de produits
             </h2>
             <p className="text-xl text-gray-600">
-              Comprehensive range of hygiene products and equipment for every
-              need
+              Gamme complète de produits et équipements d'hygiène pour tous les
+              besoins
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
@@ -211,23 +212,23 @@ export default function HomePage() {
               <CardHeader>
                 <Image
                   src="/bidon.png?height=200&width=300"
-                  alt="Hand sanitizers"
+                  alt="Désinfectants pour les mains"
                   width={300}
                   height={200}
                   className="rounded-lg mb-4 mx-auto w-full"
                 />
-                <CardTitle>Cleaning Products</CardTitle>
+                <CardTitle>Produits de Nettoyage</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription className="mb-4">
-                  Premium quality hand sanitizers, antibacterial soaps, and
-                  dispensers for all environments
+                  Désinfectants pour les mains de qualité supérieure, savons
+                  antibactériens et distributeurs pour tous les environnements
                 </CardDescription>
                 <Button
                   variant="outline"
                   className="w-full group-hover:bg-blue-600 group-hover:text-white transition-colors"
                 >
-                  <Link href="/products/">View Products</Link>
+                  <Link href="/products/">Voir les produits</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -236,23 +237,23 @@ export default function HomePage() {
               <CardHeader>
                 <Image
                   src="/equp.png?height=200&width=300"
-                  alt="Cleaning equipment"
+                  alt="Équipement de nettoyage"
                   width={300}
                   height={200}
                   className="rounded-lg mb-4 mx-auto w-full"
                 />
-                <CardTitle>Cleaning Equipment</CardTitle>
+                <CardTitle>Équipement de Nettoyage</CardTitle>
               </CardHeader>
               <CardContent>
                 <CardDescription className="mb-4">
-                  Industrial-grade cleaning machines, vacuum cleaners, and
-                  maintenance equipment
+                  Machines de nettoyage de qualité industrielle, aspirateurs et
+                  équipement d'entretien
                 </CardDescription>
                 <Button
                   variant="outline"
                   className="w-full group-hover:bg-blue-600 group-hover:text-white transition-colors"
                 >
-                  <Link href="/Equipment/">View Products</Link>
+                  <Link href="/Equipment/">Voir les produits</Link>
                 </Button>
               </CardContent>
             </Card>
@@ -266,22 +267,23 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
-                About Hygindut
+                À propos d'Hygindust
               </h2>
               <p className="text-lg text-gray-600 mb-6">
-                With over 15 years of experience in the hygiene industry,
-                Hygindut has been the trusted partner for businesses, healthcare
-                facilities, schools, and institutions across the region.
+                Avec plus de 15 ans d'expérience dans l'industrie de l'hygiène,
+                Hygindust est le partenaire de confiance des entreprises, des
+                établissements de santé, des écoles et des institutions de la
+                région.
               </p>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="h-6 w-6 text-green-600 mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-gray-900">
-                      Quality Assurance
+                      Assurance Qualité
                     </h3>
                     <p className="text-gray-600">
-                      All products undergo rigorous quality testing
+                      Tous les produits subissent des tests de qualité rigoureux
                     </p>
                   </div>
                 </div>
@@ -289,10 +291,10 @@ export default function HomePage() {
                   <CheckCircle className="h-6 w-6 text-green-600 mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-gray-900">
-                      Competitive Pricing
+                      Prix Compétitifs
                     </h3>
                     <p className="text-gray-600">
-                      Best prices without compromising on quality
+                      Les meilleurs prix sans compromettre la qualité
                     </p>
                   </div>
                 </div>
@@ -300,22 +302,22 @@ export default function HomePage() {
                   <CheckCircle className="h-6 w-6 text-green-600 mt-0.5" />
                   <div>
                     <h3 className="font-semibold text-gray-900">
-                      Custom Solutions
+                      Solutions Personnalisées
                     </h3>
                     <p className="text-gray-600">
-                      Tailored hygiene programs for your specific needs
+                      Programmes d'hygiène adaptés à vos besoins spécifiques
                     </p>
                   </div>
                 </div>
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                  <Link href="/about">About Us</Link>
+                  <Link href="/about">À propos de nous</Link>
                 </Button>
               </div>
             </div>
             <div>
               <Image
                 src="/IMG_4530.jpg"
-                alt="About Hygindut"
+                alt="À propos d'Hygindust"
                 width={500}
                 height={400}
                 className="rounded-lg shadow-lg"
@@ -330,11 +332,11 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Our Trusted Suppliers
+              Nos Fournisseurs de Confiance
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              We partner with leading manufacturers worldwide to bring you the
-              highest quality hygiene products
+              Nous collaborons avec des fabricants leaders mondiaux pour vous
+              offrir les produits d'hygiène de la plus haute qualité
             </p>
           </div>
 
@@ -345,7 +347,7 @@ export default function HomePage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/heute-removebg-preview.png"
-                    alt="Supplier 1 Logo"
+                    alt="Logo du fournisseur 1"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -353,25 +355,25 @@ export default function HomePage() {
                 </div>
                 <CardTitle className="text-xl">HEUTE</CardTitle>
                 <Badge className="bg-blue-100 text-blue-800">
-                  {/* Premium Partner */}
+                  {/* Partenaire Premium */}
                 </Badge>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Leading manufacturer of industrial cleaning equipment and
-                  sanitization systems
+                  Fabricant leader d'équipements de nettoyage industriel et de
+                  systèmes de désinfection
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Germany</span>
+                    <span>Localisation:</span>
+                    <span>Allemagne</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>Cleaning Equipment</span>
+                    <span>Spécialité:</span>
+                    <span>Équipement de nettoyage</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2018</span>
                   </div>
                 </div>
@@ -383,7 +385,7 @@ export default function HomePage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Lechler_Company-Logo-removebg-preview.png?height=80&width=120"
-                    alt="Supplier 2 Logo"
+                    alt="Logo du fournisseur 2"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -391,24 +393,24 @@ export default function HomePage() {
                 </div>
                 <CardTitle className="text-xl">Lechler</CardTitle>
                 <Badge className="bg-green-100 text-green-800">
-                  {/* Certified Partner */}
+                  {/* Partenaire Certifié */}
                 </Badge>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Manufacturing of precision spray nozzles
+                  Fabrication de buses de pulvérisation de précision
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Germany</span>
+                    <span>Localisation:</span>
+                    <span>Allemagne</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>spray technology</span>
+                    <span>Spécialité:</span>
+                    <span>Technologie de pulvérisation</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2020</span>
                   </div>
                 </div>
@@ -420,7 +422,7 @@ export default function HomePage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Logo_CFSBrands-Jofel-2023Curvas-01.webp?height=80&width=120"
-                    alt="Supplier 3 Logo"
+                    alt="Logo du fournisseur 3"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -428,25 +430,25 @@ export default function HomePage() {
                 </div>
                 <CardTitle className="text-xl">Jofel CFS</CardTitle>
                 <Badge className="bg-purple-100 text-purple-800">
-                  {/* Eco Partner */}
+                  {/* Partenaire Écologique */}
                 </Badge>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Production, marketing, and distribution of professional
-                  cleaning and hygiene systems and equipment
+                  Production, commercialisation et distribution de systèmes et
+                  équipements de nettoyage et d'hygiène professionnels
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
+                    <span>Localisation:</span>
                     <span>France</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>hygiene systems and equipment</span>
+                    <span>Spécialité:</span>
+                    <span>Systèmes et équipements d'hygiène</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2019</span>
                   </div>
                 </div>
@@ -458,7 +460,7 @@ export default function HomePage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Logo_DELABIE.png?height=80&width=120"
-                    alt="Supplier 4 Logo"
+                    alt="Logo du fournisseur 4"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -466,25 +468,25 @@ export default function HomePage() {
                 </div>
                 <CardTitle className="text-xl">DELABIE</CardTitle>
                 <Badge className="bg-red-100 text-red-800">
-                  {/* Medical Grade*/}
+                  {/* Qualité Médicale */}
                 </Badge>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  They are known for durable, ergonomic, safe, and hygienic
-                  products designed for intensive use
+                  Ils sont connus pour leurs produits durables, ergonomiques,
+                  sûrs et hygiéniques conçus pour un usage intensif
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
+                    <span>Localisation:</span>
                     <span>France</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>sanitary equipment</span>
+                    <span>Spécialité:</span>
+                    <span>Équipements sanitaires</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2017</span>
                   </div>
                 </div>
@@ -496,7 +498,7 @@ export default function HomePage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/ramex.png?height=80&width=120"
-                    alt="Supplier 5 Logo"
+                    alt="Logo du fournisseur 5"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -504,28 +506,28 @@ export default function HomePage() {
                 </div>
                 <CardTitle className="text-xl">Ramex</CardTitle>
                 <Badge className="bg-yellow-100 text-yellow-800">
-                  {/* Volume Partner */}
+                  {/* Partenaire Volume */}
                 </Badge>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Manufacturing of professional cleaning equipment and
-                  accessories
+                  Fabrication d'équipements et accessoires de nettoyage
+                  professionnels
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Italy</span>
+                    <span>Localisation:</span>
+                    <span>Italie</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
+                    <span>Spécialité:</span>
                     <span>
-                      Manufacturing of professional cleaning equipment and
-                      accessories
+                      Fabrication d'équipements et accessoires de nettoyage
+                      professionnels
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2016</span>
                   </div>
                 </div>
@@ -537,7 +539,7 @@ export default function HomePage() {
                 <div className="w-24 h-24 mx-auto mb-4 bg-white rounded-lg shadow-md flex items-center justify-center">
                   <Image
                     src="/Tork-Logo-700x394.webp?height=80&width=120"
-                    alt="Supplier 6 Logo"
+                    alt="Logo du fournisseur 6"
                     width={120}
                     height={80}
                     className="max-w-full max-h-full object-contain"
@@ -545,24 +547,25 @@ export default function HomePage() {
                 </div>
                 <CardTitle className="text-xl">Tork</CardTitle>
                 <Badge className="bg-gray-100 text-gray-800">
-                  {/* Innovation Partner */}
+                  {/* Partenaire Innovation */}
                 </Badge>
               </CardHeader>
               <CardContent>
                 <CardDescription className="text-center mb-4">
-                  Advanced waste management systems and recycling solutions
+                  Systèmes avancés de gestion des déchets et solutions de
+                  recyclage
                 </CardDescription>
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex justify-between">
-                    <span>Location:</span>
-                    <span>Sweden</span>
+                    <span>Localisation:</span>
+                    <span>Suède</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Speciality:</span>
-                    <span>Professional hygiene solutions and products</span>
+                    <span>Spécialité:</span>
+                    <span>Solutions et produits d'hygiène professionnels</span>
                   </div>
                   <div className="flex justify-between">
-                    <span>Since:</span>
+                    <span>Depuis:</span>
                     <span>2021</span>
                   </div>
                 </div>
@@ -574,32 +577,32 @@ export default function HomePage() {
           <div className="bg-white rounded-2xl shadow-lg p-8">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Our Global Network
+                Notre Réseau Mondial
               </h3>
               <p className="text-gray-600">
-                Building partnerships worldwide to serve you better
+                Construire des partenariats mondiaux pour mieux vous servir
               </p>
             </div>
             <div className="grid md:grid-cols-4 gap-8 text-center">
               <div>
                 <div className="text-3xl font-bold text-blue-600 mb-2">10+</div>
-                <div className="text-gray-600">Trusted Suppliers</div>
+                <div className="text-gray-600">Fournisseurs de Confiance</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-green-600 mb-2">15</div>
-                <div className="text-gray-600">Countries</div>
+                <div className="text-gray-600">Pays</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-purple-600 mb-2">
                   500+
                 </div>
-                <div className="text-gray-600">Products Available</div>
+                <div className="text-gray-600">Produits Disponibles</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-orange-600 mb-2">
                   99.8%
                 </div>
-                <div className="text-gray-600">Quality Rating</div>
+                <div className="text-gray-600">Note de Qualité</div>
               </div>
             </div>
           </div>
@@ -608,7 +611,7 @@ export default function HomePage() {
           <div className="text-center mt-12">
             <Link href="/suppliers">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700 px-8">
-                View All Suppliers
+                Voir tous les fournisseurs
                 <svg
                   className="ml-2 h-5 w-5"
                   fill="none"
@@ -633,28 +636,28 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Become Our Supplier
+              Devenez Notre Fournisseur
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Join our network of trusted suppliers and help us deliver quality
-              hygiene solutions worldwide
+              Rejoignez notre réseau de fournisseurs de confiance et aidez-nous à
+              offrir des solutions d'hygiène de qualité dans le monde entier
             </p>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                Supplier Requirements
+                Exigences pour les fournisseurs
               </h3>
               <div className="space-y-4">
                 <div className="flex items-start space-x-3">
                   <CheckCircle className="h-6 w-6 text-green-600 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-gray-900">
-                      Quality Certifications
+                      Certifications de Qualité
                     </h4>
                     <p className="text-gray-600">
-                      ISO 9001, FDA, CE, or equivalent quality certifications
+                      ISO 9001, FDA, CE, ou certifications de qualité équivalentes
                     </p>
                   </div>
                 </div>
@@ -662,11 +665,11 @@ export default function HomePage() {
                   <CheckCircle className="h-6 w-6 text-green-600 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-gray-900">
-                      Production Capacity
+                      Capacité de Production
                     </h4>
                     <p className="text-gray-600">
-                      Ability to meet large-scale orders and maintain consistent
-                      supply
+                      Capacité à répondre aux commandes à grande échelle et à
+                      maintenir un approvisionnement constant
                     </p>
                   </div>
                 </div>
@@ -674,10 +677,11 @@ export default function HomePage() {
                   <CheckCircle className="h-6 w-6 text-green-600 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-gray-900">
-                      Compliance Standards
+                      Normes de Conformité
                     </h4>
                     <p className="text-gray-600">
-                      Adherence to international hygiene and safety regulations
+                      Adhésion aux réglementations internationales d'hygiène et de
+                      sécurité
                     </p>
                   </div>
                 </div>
@@ -685,10 +689,10 @@ export default function HomePage() {
                   <CheckCircle className="h-6 w-6 text-green-600 mt-0.5" />
                   <div>
                     <h4 className="font-semibold text-gray-900">
-                      Competitive Pricing
+                      Prix Compétitifs
                     </h4>
                     <p className="text-gray-600">
-                      Competitive wholesale pricing with volume discounts
+                      Prix de gros compétitifs avec des réductions pour volume
                     </p>
                   </div>
                 </div>
@@ -697,7 +701,7 @@ export default function HomePage() {
             <div>
               <Image
                 src="/IMG_4560.png?height=400&width=500"
-                alt="Supplier partnership"
+                alt="Partenariat fournisseur"
                 width={500}
                 height={400}
                 className="rounded-lg shadow-lg"
@@ -708,10 +712,10 @@ export default function HomePage() {
           <div className="bg-blue-50 rounded-2xl p-8">
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Supplier Benefits
+                Avantages Fournisseurs
               </h3>
               <p className="text-gray-600">
-                What you get when you partner with Hygindut
+                Ce que vous obtenez en vous associant à Hygindut
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
@@ -720,10 +724,10 @@ export default function HomePage() {
                   <Truck className="h-6 w-6 text-white" />
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-2">
-                  Global Distribution
+                  Distribution Mondiale
                 </h4>
                 <p className="text-gray-600 text-sm">
-                  Access to our extensive distribution network
+                  Accès à notre vaste réseau de distribution
                 </p>
               </div>
               <div className="text-center">
@@ -731,10 +735,10 @@ export default function HomePage() {
                   <Award className="h-6 w-6 text-white" />
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-2">
-                  Long-term Contracts
+                  Contrats à Long Terme
                 </h4>
                 <p className="text-gray-600 text-sm">
-                  Stable, long-term partnership agreements
+                  Accords de partenariat stables et à long terme
                 </p>
               </div>
               <div className="text-center">
@@ -742,16 +746,16 @@ export default function HomePage() {
                   <Shield className="h-6 w-6 text-white" />
                 </div>
                 <h4 className="font-semibold text-gray-900 mb-2">
-                  Brand Support
+                  Soutien de Marque
                 </h4>
                 <p className="text-gray-600 text-sm">
-                  Marketing and promotional support
+                  Soutien marketing et promotionnel
                 </p>
               </div>
             </div>
             <div className="text-center mt-8">
               <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                Apply as Supplier
+                Postuler en tant que fournisseur
               </Button>
             </div>
           </div>
@@ -763,19 +767,19 @@ export default function HomePage() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
-              Contact Us
+              Nous Contacter
             </h2>
             <p className="text-xl text-gray-600">
-              Get in touch with our team for quotes, support, or partnership
-              opportunities
+              Contactez notre équipe pour des devis, du support ou des
+              opportunités de partenariat
             </p>
           </div>
-          {/*  frrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr */}
+          {/* frrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr */}
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Contact Form */}
             <div className="bg-white rounded-2xl shadow-lg p-8">
               <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                Send us a Message
+                Envoyez-nous un Message
               </h3>
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-4">
@@ -784,7 +788,7 @@ export default function HomePage() {
                       htmlFor="firstName"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      First Name *
+                      Prénom *
                     </label>
                     <input
                       type="text"
@@ -794,7 +798,7 @@ export default function HomePage() {
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="John"
+                      placeholder="Jean"
                     />
                   </div>
                   <div>
@@ -802,7 +806,7 @@ export default function HomePage() {
                       htmlFor="lastName"
                       className="block text-sm font-medium text-gray-700 mb-2"
                     >
-                      Last Name *
+                      Nom de famille *
                     </label>
                     <input
                       type="text"
@@ -810,7 +814,7 @@ export default function HomePage() {
                       name="lastName"
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="Doe"
+                      placeholder="Dupont"
                     />
                   </div>
                 </div>
@@ -820,7 +824,7 @@ export default function HomePage() {
                     htmlFor="email"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Email Address *
+                    Adresse e-mail *
                   </label>
                   <input
                     type="email"
@@ -830,7 +834,7 @@ export default function HomePage() {
                     onChange={handleChange}
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="john@company.com"
+                    placeholder="jean@entreprise.com"
                   />
                 </div>
 
@@ -839,7 +843,7 @@ export default function HomePage() {
                     htmlFor="company"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Company Name
+                    Nom de l'entreprise
                   </label>
                   <input
                     type="text"
@@ -848,7 +852,7 @@ export default function HomePage() {
                     value={formData.company}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Your Company"
+                    placeholder="Votre entreprise"
                   />
                 </div>
 
@@ -857,7 +861,7 @@ export default function HomePage() {
                     htmlFor="phone"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Phone Number
+                    Numéro de téléphone
                   </label>
                   <input
                     type="tel"
@@ -875,7 +879,7 @@ export default function HomePage() {
                     htmlFor="subject"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Subject *
+                    Sujet *
                   </label>
                   <select
                     id="subject"
@@ -883,15 +887,15 @@ export default function HomePage() {
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
-                    <option value="">Select a subject</option>
-                    <option value="product-inquiry">Product Inquiry</option>
-                    <option value="bulk-order">Bulk Order Quote</option>
+                    <option value="">Sélectionnez un sujet</option>
+                    <option value="product-inquiry">Demande de produit</option>
+                    <option value="bulk-order">Devis pour commande en gros</option>
                     <option value="supplier-application">
-                      Supplier Application
+                      Demande de fournisseur
                     </option>
-                    <option value="technical-support">Technical Support</option>
-                    <option value="partnership">Partnership Opportunity</option>
-                    <option value="other">Other</option>
+                    <option value="technical-support">Support technique</option>
+                    <option value="partnership">Opportunité de partenariat</option>
+                    <option value="other">Autre</option>
                   </select>
                 </div>
 
@@ -910,7 +914,7 @@ export default function HomePage() {
                     rows={5}
                     required
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                    placeholder="Tell us about your requirements..."
+                    placeholder="Décrivez-nous vos besoins..."
                   ></textarea>
                 </div>
 
@@ -919,7 +923,7 @@ export default function HomePage() {
                   size="lg"
                   className="w-full bg-blue-600 hover:bg-blue-700"
                 >
-                  Send Message
+                  Envoyer le message
                 </Button>
               </form>
             </div>
@@ -928,7 +932,7 @@ export default function HomePage() {
             <div className="space-y-8">
               <div className="bg-white rounded-2xl shadow-lg p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6">
-                  Get in Touch
+                  Nous Contacter
                 </h3>
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
@@ -936,11 +940,11 @@ export default function HomePage() {
                       <Phone className="h-6 w-6 text-blue-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Phone</h4>
+                      <h4 className="font-semibold text-gray-900">Téléphone</h4>
                       <p className="text-gray-600">+213 (0) 7 70 10 51 21</p>
                       <p className="text-gray-600">+213 (0) 7 70 10 51 21</p>
                       <p className="text-sm text-gray-500">
-                        Mon-Fri 8AM-4PM EST
+                        Lun-Ven 8h-16h HNE
                       </p>
                     </div>
                   </div>
@@ -962,9 +966,9 @@ export default function HomePage() {
                       <MapPin className="h-6 w-6 text-purple-600" />
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Address</h4>
-                      <p className="text-gray-600">Village benramdan</p>
-                      <p className="text-gray-600">Ilot 102 n°2 chbli</p>
+                      <h4 className="font-semibold text-gray-900">Adresse</h4>
+                      <p className="text-gray-600">Village Benramdan</p>
+                      <p className="text-gray-600">Ilot 102 n°2 Chbli</p>
                       <p className="text-gray-600">Wilaya Blida</p>
                     </div>
                   </div>
@@ -973,11 +977,11 @@ export default function HomePage() {
 
               <div className="bg-blue-600 rounded-2xl shadow-lg p-8 text-white">
                 <h3 className="text-2xl font-bold mb-4">
-                  Need Immediate Assistance?
+                  Besoin d'aide immédiate ?
                 </h3>
                 <p className="mb-6">
-                  Our sales team is ready to help you find the right hygiene
-                  solutions for your business.
+                  Notre équipe commerciale est prête à vous aider à trouver les
+                  bonnes solutions d'hygiène pour votre entreprise.
                 </p>
                 <div className="space-y-3">
                   <Button
@@ -985,14 +989,14 @@ export default function HomePage() {
                     size="lg"
                     className="w-full bg-white text-blue-600 hover:bg-gray-100"
                   >
-                    Schedule a Call
+                    Planifier un appel
                   </Button>
                   <Button
                     variant="outline"
                     size="lg"
                     className="w-full border-white text-white hover:bg-white hover:text-blue-600"
                   >
-                    Request Quote
+                    Demander un devis
                   </Button>
                 </div>
               </div>
@@ -1011,50 +1015,51 @@ export default function HomePage() {
                 <span className="text-xl font-bold">Hygindust</span>
               </div>
               <p className="text-gray-400">
-                Your trusted partner for premium hygiene products and equipment.
+                Votre partenaire de confiance pour les produits et équipements
+                d'hygiène de première qualité.
               </p>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Products</h3>
+              <h3 className="font-semibold mb-4">Produits</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Hand Sanitizers
+                    Désinfectants pour les mains
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Cleaning Equipment
+                    Équipement de nettoyage
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Protective Gear
+                    Équipement de protection
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Disinfectants
+                    Désinfectants
                   </Link>
                 </li>
               </ul>
             </div>
             <div>
-              <h3 className="font-semibold mb-4">Company</h3>
+              <h3 className="font-semibold mb-4">Entreprise</h3>
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    About Us
+                    À propos de nous
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Careers
+                    Carrières
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    News
+                    Actualités
                   </Link>
                 </li>
                 <li>
@@ -1069,29 +1074,29 @@ export default function HomePage() {
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Help Center
+                    Centre d'aide
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Product Guides
+                    Guides produits
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Warranty
+                    Garantie
                   </Link>
                 </li>
                 <li>
                   <Link href="#" className="hover:text-white transition-colors">
-                    Returns
+                    Retours
                   </Link>
                 </li>
               </ul>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 Hygindust. All rights reserved.</p>
+            <p>&copy; 2024 Hygindust. Tous droits réservés.</p>
           </div>
         </div>
       </footer>
