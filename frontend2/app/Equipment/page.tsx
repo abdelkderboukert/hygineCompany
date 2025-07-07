@@ -14,12 +14,17 @@ import { Header } from "@/components/Header";
 // Sample Equipment sectors data with different themes
 const EquipmentSectors = [
   {
-    id: "yXNrTqweBpLChkGzJf56",
+    id: "z6Qj0cQ0RnCkugc4aS9d",
     name: "Hygiène des personnes",
     description:
       "Équipements préservant la propreté et la sécurité individuelles, tels que les distributeurs de savon, les gels hydro-alcooliques et autres articles de protection individuelle",
     image: "/placeholder.svg?height=300&width=400",
-    activators: ["distributeurs de savon", "désinfectants", "EPI", "soins des mains"],
+    activators: [
+      "distributeurs de savon",
+      "désinfectants",
+      "EPI",
+      "soins des mains",
+    ],
     theme: {
       gradient: "from-pink-500 to-pink-700",
       bgColor: "bg-pink-50",
@@ -29,12 +34,16 @@ const EquipmentSectors = [
     },
   },
   {
-    id: "XoAfRnsVptd7uZqLEc91",
+    id: "ghA4zwh1vNBnyEzpQvRr",
     name: "Essuyage et séchage des mains",
     description:
       "Solutions rapides et hygiéniques pour le séchage des mains : distributeurs de papier essuie-tout, sèche-mains électriques, rouleaux d'essuyage et accessoires associés",
     image: "/placeholder.svg?height=300&width=400",
-    activators: ["distributeurs de papier essuie-tout", "sèche-mains", "rouleaux d'essuyage"],
+    activators: [
+      "distributeurs de papier essuie-tout",
+      "sèche-mains",
+      "rouleaux d'essuyage",
+    ],
     theme: {
       gradient: "from-yellow-500 to-yellow-700",
       bgColor: "bg-yellow-50",
@@ -44,7 +53,7 @@ const EquipmentSectors = [
     },
   },
   {
-    id: "mD9WqgYuVz5NbK0PslRE",
+    id: "muPwFNBOLnvi24ESXNHN",
     name: "Hygiène des sanitaires",
     description:
       "Équipements pour le nettoyage et la désinfection des toilettes et des lavabos : distributeurs de papier toilette, brosses, supports muraux, désodorisants et poubelles",
@@ -64,12 +73,17 @@ const EquipmentSectors = [
     },
   },
   {
-    id: "q0nBcMSPwU3BeiZs8mVa",
+    id: "vK8j23X85Vk8NsmEq4uJ",
     name: "Hygiène et entretien des sols",
     description:
       "Produits et machines professionnels pour l'entretien des sols : autolaveuses, balais professionnels, chariots de nettoyage, raclettes, seaux, serpillères et détergents",
     image: "/placeholder.svg?height=300&width=400",
-    activators: ["autolaveuses", "serpillères", "balais", "détergents pour sols"],
+    activators: [
+      "autolaveuses",
+      "serpillères",
+      "balais",
+      "détergents pour sols",
+    ],
     theme: {
       gradient: "from-green-500 to-green-700",
       bgColor: "bg-green-50",
@@ -79,7 +93,7 @@ const EquipmentSectors = [
     },
   },
   {
-    id: "K7eHca4LUDvG15xwPpYQ",
+    id: "1UTT1vN4pUY4sSTBwwWA",
     name: "Divers équipements",
     description:
       "Une large sélection d'outils complémentaires pour garder n'importe quel environnement propre et organisé",
@@ -94,7 +108,7 @@ const EquipmentSectors = [
     },
   },
   {
-    id: "Zv2Ubx8E3tRMkGqAoWiL",
+    id: "rMkhCqG7dO9muzuFuQeQ",
     name: "Cireuse à chaussures",
     description:
       "Machines automatiques qui nettoient et polissent les chaussures – parfaites pour les bureaux, les hôtels et les lieux publics",
@@ -109,7 +123,7 @@ const EquipmentSectors = [
     },
   },
   {
-    id: "s5cTf9nF0QeVUyXlDzP4",
+    id: "9xCQnGDgWp2gcoditZtz",
     name: "Brosses et Outils de Nettoyage",
     description:
       "Gamme complète de brosses industrielles, balais, raclettes, grattoirs et autres outils pour chaque surface et chaque environnement",
@@ -124,7 +138,7 @@ const EquipmentSectors = [
     },
   },
   {
-    id: "p4Lh8YcF1kWzE6qGoR2J",
+    id: "3yUKKQ33WivZITTFZPws",
     name: "Industrie agroalimentaire",
     description:
       "Équipements spécialisés respectant les normes d'hygiène strictes de l'industrie alimentaire : brosses HACCP, seaux de qualité alimentaire, équipements en acier inoxydable et outils à code couleur pour éviter la contamination croisée",
@@ -257,7 +271,7 @@ export default function EquipmentCatalogPage() {
                       ))}
                     </div>
                   </div>
-                  <Link href={`/Equipments/${sector.id}`}>
+                  <Link href={`/Equipment/${sector.id}`}>
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
                     >
