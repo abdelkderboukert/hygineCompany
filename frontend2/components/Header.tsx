@@ -124,24 +124,24 @@ export function Header() {
               href="/"
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
-              home
+              accueil
             </Link>
 
             {/* Products Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center text-gray-700 hover:text-blue-600 transition-colors">
-                products
+                produits
                 <ChevronDown className="ml-1 h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-64">
                 {loading ? (
-                  <DropdownMenuItem disabled>loading</DropdownMenuItem>
+                  <DropdownMenuItem disabled>chargement</DropdownMenuItem>
                 ) : productTypes.length > 0 ? (
                   <>
                     <DropdownMenuItem asChild>
                       <Link href="/products" className="w-full">
                         <div className="flex flex-col">
-                          <span className="font-medium">viewAll products</span>
+                          <span className="font-medium">Voir tous les produits</span>
                         </div>
                       </Link>
                     </DropdownMenuItem>
@@ -180,23 +180,23 @@ export function Header() {
               href="/suppliers"
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
-              suppliers
+              fournisseurs
             </Link> */}
             {/* Equipments Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center text-gray-700 hover:text-blue-600 transition-colors">
-                Equipments
+                Équipements
                 <ChevronDown className="ml-1 h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-64">
                 {loading ? (
-                  <DropdownMenuItem disabled>loading</DropdownMenuItem>
+                  <DropdownMenuItem disabled>chargement</DropdownMenuItem>
                 ) : equipmentTypes.length > 0 ? (
                   <>
                     <DropdownMenuItem asChild>
                       <Link href="/Equipment" className="w-full">
                         <div className="flex flex-col">
-                          <span className="font-medium">viewAll products</span>
+                          <span className="font-medium">Voir tous les produits</span>
                         </div>
                       </Link>
                     </DropdownMenuItem>
@@ -234,7 +234,7 @@ export function Header() {
               href="/about"
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
-              about
+              à propos
             </Link>
             <Link
               href="/#contact"
@@ -250,7 +250,7 @@ export function Header() {
               variant="ghost"
               size="icon"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
               aria-expanded={mobileMenuOpen}
               className="text-gray-700"
             >
