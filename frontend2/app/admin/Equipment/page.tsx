@@ -334,7 +334,7 @@ export default function AdminDashboard() {
                         </p>
                       </div>
                     </div>
-                    <Link href={`/admin/types/${item.id}/edit`}>
+                    <Link href={`/admin/Equipment/types/${item.id}`}>
                       <Button variant="outline" size="sm">
                         Edit
                       </Button>

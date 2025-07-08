@@ -139,7 +139,7 @@ export default function EquipmentTypesPage() {
                     <CardTitle className="text-lg">{type.name}</CardTitle>
                   </div>
                   <div className="flex space-x-2">
-                    <Link href={`/admin/types/${type.id}/edit`}>
+                    <Link href={`/admin/Equipment/types/${type.id}`}>
                       <Button variant="ghost" size="sm">
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -189,7 +189,7 @@ export default function EquipmentTypesPage() {
                   : "Get started by creating your first Equipment type."}
               </p>
               {!searchTerm && (
-                <Link href="/admin/types/new">
+                <Link href="/admin/Equipment/types/new">
                   <Button className="bg-blue-600 hover:bg-blue-700">
                     <Plus className="h-4 w-4 mr-2" />
                     Create Equipment Type
