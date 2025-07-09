@@ -141,7 +141,9 @@ export function Header() {
                     <DropdownMenuItem asChild>
                       <Link href="/products" className="w-full">
                         <div className="flex flex-col">
-                          <span className="font-medium">Voir tous les produits</span>
+                          <span className="font-medium">
+                            Voir tous les produits
+                          </span>
                         </div>
                       </Link>
                     </DropdownMenuItem>
@@ -196,7 +198,9 @@ export function Header() {
                     <DropdownMenuItem asChild>
                       <Link href="/Equipment" className="w-full">
                         <div className="flex flex-col">
-                          <span className="font-medium">Voir tous les produits</span>
+                          <span className="font-medium">
+                            Voir tous les produits
+                          </span>
                         </div>
                       </Link>
                     </DropdownMenuItem>
@@ -231,7 +235,7 @@ export function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
             <Link
-              href="/about"
+              href="/" // This link is a placeholder, replace with actual route "about"
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
               à propos

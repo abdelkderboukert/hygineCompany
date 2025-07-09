@@ -322,49 +322,8 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-2">
-              <Shield className="h-8 w-8 text-blue-600" />
-              <span className="text-2xl font-bold text-gray-900">
-                HygienDust
-              </span>
-            </div>
-            <nav className="hidden md:flex space-x-8">
-              <Link
-                href="/"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                Accueil
-              </Link>
-              <Link
-                href="/products"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                Produits
-              </Link>
-              <Link href="/about" className="text-blue-600 font-medium">
-                À propos
-              </Link>
-              <Link
-                href="/suppliers"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                Fournisseurs
-              </Link>
-              <Link
-                href="/#contact"
-                className="text-gray-700 hover:text-blue-600 transition-colors"
-              >
-                Contact
-              </Link>
-            </nav>
-            {/* <Button className="bg-blue-600 hover:bg-blue-700">Obtenir un devis</Button> */}
-          </div>
-        </div>
-      </header>
-      {/* <Header /> */}
+      
+      <Header /> 
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 to-green-50 py-20">
@@ -683,7 +642,7 @@ export default function AboutPage() {
       </section>
 
       {/* Leadership Team */}
-      <section className="py-20 bg-white">
+      {/* <section className="py-20 bg-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
@@ -724,7 +683,7 @@ export default function AboutPage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Global Presence */}
       <section className="py-20 bg-blue-600">

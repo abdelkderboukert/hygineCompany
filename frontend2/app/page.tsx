@@ -115,10 +115,10 @@ export default function HomePage() {
                 Produits et équipements d'hygiène de première qualité
               </h1>
               <p className="text-xl text-gray-600 mb-8">
-                Fournir aux entreprises et institutions des produits et équipements
-                d'hygiène de qualité supérieure. Des désinfectants aux équipements
-                de nettoyage industriels, nous assurons les normes de propreté les
-                plus élevées.
+                Fournir aux entreprises et institutions des produits et
+                équipements d'hygiène de qualité supérieure. Des désinfectants
+                aux équipements de nettoyage industriels, nous assurons les
+                normes de propreté les plus élevées.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
@@ -150,8 +150,8 @@ export default function HomePage() {
               Pourquoi choisir Hygindust ?
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Nous fournissons des solutions d'hygiène complètes avec une qualité
-              et un service inégalés
+              Nous fournissons des solutions d'hygiène complètes avec une
+              qualité et un service inégalés
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
@@ -310,7 +310,11 @@ export default function HomePage() {
                   </div>
                 </div>
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-                  <Link href="/about">À propos de nous</Link>
+                  <Link
+                    href="/" // This link is a placeholder, replace with actual route "about"
+                  >
+                    À propos de nous
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -639,8 +643,8 @@ export default function HomePage() {
               Devenez Notre Fournisseur
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Rejoignez notre réseau de fournisseurs de confiance et aidez-nous à
-              offrir des solutions d'hygiène de qualité dans le monde entier
+              Rejoignez notre réseau de fournisseurs de confiance et aidez-nous
+              à offrir des solutions d'hygiène de qualité dans le monde entier
             </p>
           </div>
 
@@ -657,7 +661,8 @@ export default function HomePage() {
                       Certifications de Qualité
                     </h4>
                     <p className="text-gray-600">
-                      ISO 9001, FDA, CE, ou certifications de qualité équivalentes
+                      ISO 9001, FDA, CE, ou certifications de qualité
+                      équivalentes
                     </p>
                   </div>
                 </div>
@@ -680,8 +685,8 @@ export default function HomePage() {
                       Normes de Conformité
                     </h4>
                     <p className="text-gray-600">
-                      Adhésion aux réglementations internationales d'hygiène et de
-                      sécurité
+                      Adhésion aux réglementations internationales d'hygiène et
+                      de sécurité
                     </p>
                   </div>
                 </div>
@@ -889,12 +894,16 @@ export default function HomePage() {
                   >
                     <option value="">Sélectionnez un sujet</option>
                     <option value="product-inquiry">Demande de produit</option>
-                    <option value="bulk-order">Devis pour commande en gros</option>
+                    <option value="bulk-order">
+                      Devis pour commande en gros
+                    </option>
                     <option value="supplier-application">
                       Demande de fournisseur
                     </option>
                     <option value="technical-support">Support technique</option>
-                    <option value="partnership">Opportunité de partenariat</option>
+                    <option value="partnership">
+                      Opportunité de partenariat
+                    </option>
                     <option value="other">Autre</option>
                   </select>
                 </div>
