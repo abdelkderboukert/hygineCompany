@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -114,8 +115,16 @@ export function Header() {
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 z-10">
-            <Shield className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-900">Hygindust</span>
+            {/* <Shield className="h-8 w-8 text-blue-600" />
+            <span className="text-2xl font-bold text-gray-900">Hygindust</span> */}
+            <Image
+              src="/logo.jpg" // Cleaned up src
+              alt="Hygindust Logo"
+              width={167} // Keep these explicit props
+              height={40} // Keep these explicit props
+              className="overflow-hidden rounded-none" // Added rounded corners
+              style={{ objectFit: "contain" }} // Ensures the image fits well
+            />
           </Link>
 
           {/* Desktop Navigation */}
