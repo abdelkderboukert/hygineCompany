@@ -270,7 +270,7 @@ export default function ProductCatalogPage() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Shield className="h-6 w-6 text-blue-400" />
-                <span className="text-xl font-bold">HygieneMax</span>
+                <span className="text-xl font-bold">Hygindust</span>
               </div>
               <p className="text-gray-400">
                 Votre partenaire de confiance pour les produits chimiques et

@@ -11,7 +11,7 @@ export default function ProductNotFound() {
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center space-x-2">
               <Shield className="h-8 w-8 text-blue-600" />
-              <span className="text-2xl font-bold text-gray-900">HygieneMax</span>
+              <span className="text-2xl font-bold text-gray-900">Hygindust</span>
             </div>
             <nav className="hidden md:flex space-x-8">
               <Link href="/" className="text-gray-700 hover:text-blue-600 transition-colors">
