@@ -125,7 +125,7 @@ export default function HomePage() {
                   <Link href="#products">Voir les produits</Link>
                 </Button>
                 <Button size="lg" variant="outline">
-                  Contacter le service commercial
+                  <Link href={"#contact"}>Contacter le service commercial</Link>
                 </Button>
               </div>
             </div>
