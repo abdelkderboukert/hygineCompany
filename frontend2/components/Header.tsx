@@ -133,13 +133,13 @@ export function Header() {
               href="/"
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
-              accueil
+              Accueil
             </Link>
 
             {/* Products Dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger className="flex items-center text-gray-700 hover:text-blue-600 transition-colors">
-                produits
+                Produits
                 <ChevronDown className="ml-1 h-4 w-4" />
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-64">
@@ -247,13 +247,13 @@ export function Header() {
               href="/" // This link is a placeholder, replace with actual route "about"
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
-              à propos
+              A propos
             </Link>
             <Link
               href="/#contact"
               className="text-gray-700 hover:text-blue-600 transition-colors"
             >
-              contact
+              Contact
             </Link>
           </nav>
 
