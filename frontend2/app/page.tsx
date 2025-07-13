@@ -875,7 +875,7 @@ export default function HomePage() {
                     value={formData.phoneNumber}
                     onChange={handleChange}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="+1 (555) 123-4567"
+                    placeholder="+213 (555) 123-4567"
                   />
                 </div>
 
