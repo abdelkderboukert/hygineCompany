@@ -330,7 +330,7 @@ export default function EquipmentCatalogPage() {
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link
-                    href="/Equipments/sterilization-chemicals"
+                    href="/Equipment/sterilization-chemicals"
                     className="hover:text-white transition-colors"
                   >
                     Produits chimiques de stérilisation
@@ -338,7 +338,7 @@ export default function EquipmentCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/Equipments/cleaning-chemicals"
+                    href="/Equipment/cleaning-chemicals"
                     className="hover:text-white transition-colors"
                   >
                     Produits chimiques de nettoyage
@@ -346,7 +346,7 @@ export default function EquipmentCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/Equipments/sterilization-equipment"
+                    href="/Equipment/sterilization-equipment"
                     className="hover:text-white transition-colors"
                   >
                     Équipement de stérilisation
@@ -354,7 +354,7 @@ export default function EquipmentCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/Equipments"
+                    href="/Equipment"
                     className="hover:text-white transition-colors"
                   >
                     Voir tous les équipements

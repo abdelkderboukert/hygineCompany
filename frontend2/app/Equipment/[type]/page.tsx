@@ -314,7 +314,7 @@ export default function EquipmentCatalogPage() {
                       ))}
                     </div> */}
                   </div>
-                  <Link href={`/Equipments/${fetchedEquipmentType.id}/${sector.id}`}>
+                  <Link href={`/Equipment/${fetchedEquipmentType.id}/${sector.id}`}>
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
                     >

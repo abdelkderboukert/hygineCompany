@@ -190,7 +190,7 @@ export default function EquipmentCatalogPage() {
                     </p>
                   </div>
                   <Link
-                    href={`/Equipments/${fetchedEquipmentType.id}/${fetchedEquipmentSubType?.id}/${sector.id}`}
+                    href={`/Equipment/${fetchedEquipmentType.id}/${fetchedEquipmentSubType?.id}/${sector.id}`}
                   >
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
@@ -250,7 +250,7 @@ export default function EquipmentCatalogPage() {
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <Link
-                    href="/Equipments/sterilization-chemicals"
+                    href="/Equipment/sterilization-chemicals"
                     className="hover:text-white transition-colors"
                   >
                     Sterilization Chemicals
@@ -258,7 +258,7 @@ export default function EquipmentCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/Equipments/cleaning-chemicals"
+                    href="/Equipment/cleaning-chemicals"
                     className="hover:text-white transition-colors"
                   >
                     Cleaning Chemicals
@@ -266,7 +266,7 @@ export default function EquipmentCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/Equipments/sterilization-equipment"
+                    href="/Equipment/sterilization-equipment"
                     className="hover:text-white transition-colors"
                   >
                     Sterilization Equipment
@@ -274,7 +274,7 @@ export default function EquipmentCatalogPage() {
                 </li>
                 <li>
                   <Link
-                    href="/Equipments"
+                    href="/Equipment"
                     className="hover:text-white transition-colors"
                   >
                     View All Equipments

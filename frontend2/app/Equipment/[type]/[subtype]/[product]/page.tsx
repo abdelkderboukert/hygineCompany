@@ -36,14 +36,13 @@ interface EquipmentDetailPageProps {
   Product: Product;
 }
 
-
 export default function EquipmentDetailPage() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedSize, setSelectedSize] = useState(0);
   const params = useParams();
   const EquipmentTypeParam = params.type as string;
   const EquipmentSubtypeParam = params.subtype as string;
-  const EquipmentParam = params.Equipment as string;
+  const EquipmentParam = params.product as string;
 
   const [fetchedEquipmentType, setFetchedEquipmentType] =
     useState<ProductType | null>(null);
@@ -64,6 +63,7 @@ export default function EquipmentDetailPage() {
   const firestoreEquipmentId = EquipmentParam
     ? decodeURIComponent(EquipmentParam)
     : null;
+
 
   useEffect(() => {
     async function fetchEquipmentTypeData() {
@@ -247,7 +247,9 @@ export default function EquipmentDetailPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Package className={`w-5 h-5 ${Equipment?.theme.iconColor}`} />
+                  <Package
+                    className={`w-5 h-5 ${Equipment?.theme.iconColor}`}
+                  />
                   Available Sizes
                 </CardTitle>
               </CardHeader>
@@ -364,7 +366,9 @@ export default function EquipmentDetailPage() {
                   <CardTitle>Application</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700">{Equipment?.usage.application}</p>
+                  <p className="text-gray-700">
+                    {Equipment?.usage.application}
+                  </p>
                 </CardContent>
               </Card>
 
@@ -459,7 +463,9 @@ export default function EquipmentDetailPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <FileText className={`w-5 h-5 ${Equipment?.theme.iconColor}`} />
+                  <FileText
+                    className={`w-5 h-5 ${Equipment?.theme.iconColor}`}
+                  />
                   Available Documents
                 </CardTitle>
               </CardHeader>
@@ -478,7 +484,9 @@ export default function EquipmentDetailPage() {
                         <div className="flex items-center gap-3">
                           <Download
                             className={`w-5 h-5 ${
-                              value ? Equipment?.theme.iconColor : "text-gray-400"
+                              value
+                                ? Equipment?.theme.iconColor
+                                : "text-gray-400"
                             }`}
                           />
                           <div className="text-left">
