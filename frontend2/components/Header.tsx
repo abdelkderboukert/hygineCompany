@@ -118,7 +118,7 @@ export function Header() {
             {/* <Shield className="h-8 w-8 text-blue-600" />
             <span className="text-2xl font-bold text-gray-900">Hygindust</span> */}
             <Image
-              src="/logo.jpg" // Cleaned up src
+              src="/logo.ico" // Cleaned up src
               alt="Hygindust Logo"
               width={167} // Keep these explicit props
               height={40} // Keep these explicit props

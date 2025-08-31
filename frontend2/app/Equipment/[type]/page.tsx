@@ -314,7 +314,7 @@ export default function EquipmentCatalogPage() {
                       ))}
                     </div> */}
                   </div>
-                  <Link href={`/Equipments/${fetchedEquipmentType.id}/${sector.id}`}>
+                  <Link href={`/Equipment/${fetchedEquipmentType.id}/${sector.id}`}>
                     <Button
                       className={`w-full ${sector.theme.hoverColor} group-hover:text-white transition-all duration-300 bg-white text-gray-700 border-2 ${sector.theme.borderColor} hover:border-transparent`}
                     >
@@ -361,7 +361,7 @@ export default function EquipmentCatalogPage() {
             <div>
               <div className="flex items-center space-x-2 mb-4">
                 <Shield className="h-6 w-6 text-blue-400" />
-                <span className="text-xl font-bold">HygieneMax</span>
+                <span className="text-xl font-bold">Hygindust</span>
               </div>
               <p className="text-gray-400">
                 Your trusted partner for premium sterilization chemicals and
