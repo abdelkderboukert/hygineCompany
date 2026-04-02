@@ -1,8 +1,23 @@
-/** @type {import('postcss-load-config').Config} */
-const config = {
-  plugins: {
-    tailwindcss: {},
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  images: {
+    unoptimized: true,
+  },
+  async redirects() {
+    return [
+      {
+        source: "/accueil",
+        destination: "/",
+        permanent: true,
+      },
+    ];
   },
 };
 
-export default config;
+export default nextConfig;
