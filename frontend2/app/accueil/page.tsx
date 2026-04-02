@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 
 export default function AccueilPage() {
-  redirect("/");
+  redirect("/"); // just test
   // The rest of your component will not be rendered
-  return null;
 }
