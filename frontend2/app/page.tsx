@@ -720,7 +720,7 @@ export default function HomePage() {
                 Avantages Fournisseurs
               </h3>
               <p className="text-gray-600">
-                Ce que vous obtenez en vous associant à Hygindut
+                Ce que vous obtenez en vous associant à Hygindust
               </p>
             </div>
             <div className="grid md:grid-cols-3 gap-6">
@@ -964,9 +964,9 @@ export default function HomePage() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Email</h4>
-                      <p className="text-gray-600">comercial1@hygindut.com</p>
-                      <p className="text-gray-600">comercial2@hygindut.com</p>
-                      <p className="text-gray-600">contact@hygindut.com</p>
+                      <p className="text-gray-600">comercial1@hygindust.com</p>
+                      <p className="text-gray-600">comercial2@hygindust.com</p>
+                      <p className="text-gray-600">contact@hygindust.com</p>
                     </div>
                   </div>
 
